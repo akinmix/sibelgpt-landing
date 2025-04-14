@@ -1,64 +1,54 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SibelGPT'ye Hoşgeldiniz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>SibelGPT 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      padding: 0;
       background-color: #1a1a1a;
       color: #ffffff;
       font-family: 'Inter', sans-serif;
-      text-align: center;
     }
-    .header {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      font-weight: 700;
-      font-size: 18px;
+    header {
+      background-color: #121212;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2c2c2c;
+    }
+    header h1 {
+      font-size: 20px;
       color: #a020f0;
-      background-color: #ffffff10;
-      padding: 8px 16px;
-      border-radius: 12px;
+      margin: 0;
     }
-    h1 {
-      margin-top: 100px;
-      font-size: 36px;
+    nav a {
       color: #ffffff;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
     }
-    .intro {
+    .container {
       max-width: 800px;
-      margin: 20px auto 40px;
-      font-size: 18px;
-      line-height: 1.6;
-      color: #dddddd;
-    }
-    button.start-btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #a020f0;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #chat-box {
       margin: 60px auto;
-      max-width: 800px;
       padding: 40px;
       background-color: #1f1f1f;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
     }
-    #chat-box p {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #ffffff;
+    .container h2 {
+      color: #a020f0;
+      font-size: 28px;
+    }
+    .container p {
+      font-size: 18px;
+      color: #ccc;
+      margin-top: 10px;
+      line-height: 1.6;
     }
     #user-input {
       width: 90%;
@@ -66,10 +56,9 @@
       font-size: 18px;
       border-radius: 12px;
       border: none;
-      margin-bottom: 20px;
-      font-family: 'Inter', sans-serif;
+      margin: 30px 0 20px 0;
     }
-    button.send-btn {
+    button {
       background-color: #8b5cf6;
       color: white;
       padding: 12px 24px;
@@ -85,32 +74,42 @@
       font-size: 16px;
       min-height: 30px;
     }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #888;
+      font-size: 14px;
+      border-top: 1px solid #2c2c2c;
+      margin-top: 60px;
+    }
   </style>
 </head>
 <body>
 
-  <div class="header">SibelGPT 1.0</div>
+  <header>
+    <h1>SibelGPT 1.0</h1>
+    <nav>
+      <a href="#">Giriş Yap</a>
+      <a href="#">Üye Ol</a>
+    </nav>
+  </header>
 
-  <h1>SibelGPT'ye Hoş Geldiniz!</h1>
-  
-  <div class="intro">
-    <strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.  
-    Numerolojiyle kadersel kodlarınıza dokunur, gayrimenkul yatırımlarınızı sezgiyle şekillendirir,  
-    borsa ve para piyasalarında rasyonel analizler sunar.  
-    <br><br>
-    <strong>Soru sorun, içgörü alın, vizyon kazanın.</strong>  
-    ✨ SibelGPT ile sadece bilgiye değil, farkındalığa da ulaşın.
-  </div>
+  <div class="container">
+    <h2>Hoş Geldiniz!</h2>
+    <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen, yapay zeka destekli bir dijital danışmandır.</p>
+    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. </p>
+    <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+    <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
 
-  <button class="start-btn">Sohbete Başla</button>
-
-  <div id="chat-box">
-    <p>SibelGPT'ye sor:</p>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-    <br>
-    <button class="send-btn" onclick="sendMessage()">Gönder</button>
+    <button onclick="sendMessage()">Gönder</button>
+
     <div id="chat-response"></div>
   </div>
+
+  <footer>
+    © 2025 SibelGPT – Tüm Hakları Saklıdır. Powered by ChatGPT
+  </footer>
 
   <script>
     async function sendMessage() {
@@ -127,7 +126,9 @@
       try {
         const result = await fetch("/api/chat", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({ message: input })
         });
 
@@ -149,3 +150,4 @@
 
 </body>
 </html>
+     
