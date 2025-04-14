@@ -62,40 +62,43 @@
   </div>
 
   <script>
-    async function sendMessage() {
-      const input = document.getElementById("user-input").value;
-      const responseDiv = document.getElementById("chat-response");
+  <script>
+  async function sendMessage() {
+    const input = document.getElementById("user-input").value;
+    const responseDiv = document.getElementById("chat-response");
 
-      if (input.trim() === "") {
-        responseDiv.innerHTML = "Lütfen bir soru yazın.";
-        return;
+    if (input.trim() === "") {
+      responseDiv.innerHTML = "Lütfen bir soru yazın.";
+      return;
+    }
+
+    responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
+
+    try {
+      const result = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await result.json();
+
+      if (result.ok) {
+        responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
+      } else {
+        responseDiv.innerHTML = `Hata: ${data.error}`;
       }
 
-      responseDiv.innerHTML = "Yükleniyor... ⏳";
+      document.getElementById("user-input").value = "";
 
-      try {
-        const result = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Aşağıdaki satırda API anahtarı GÜVENLİ ŞEKİLDE sunucu tarafına taşınmalı!
-            // "Authorization": "Bearer sk-XXX" ← ASLA BURAYA YAPIŞTIRMA
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: input }],
-            temperature: 0.7
-          })
-        });
+    } catch (error) {
+      responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
+    }
+  }
+</script>
 
-        const data = await result.json();
-        const reply = data.choices?.[0]?.message?.content || "Cevap alınamadı.";
-
-        responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${reply}`;
-        document.getElementById("user-input").value = "";
-
-      } catch (error) {
-        responseDiv.innerHTML = "Bir hata oluştu: " + error.message;
       }
     }
   <script src="chat.js"></script>
