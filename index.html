@@ -1,45 +1,65 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SibelGPT – Yapay Zeka ile Sohbet Et</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SibelGPT - Yapay Zeka ile Akıllı Danışmanlık</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(120deg, #1c002c, #2d006b);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #1c1c3a, #4b006e);
       color: white;
-      font-family: 'Arial', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
     }
+
     h1 {
-      font-size: 3rem;
+      font-size: 3em;
+      margin-bottom: 0.3em;
     }
+
     p {
-      font-size: 1.2rem;
+      font-size: 1.3em;
       max-width: 600px;
+      margin: 0 auto 2em;
     }
-    button {
-      margin-top: 30px;
-      padding: 15px 25px;
-      font-size: 1rem;
-      background-color: #9f5fff;
+
+    .button {
+      background-color: #9c27b0;
       color: white;
+      padding: 14px 28px;
       border: none;
-      border-radius: 8px;
+      border-radius: 30px;
+      font-size: 1em;
       cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background-color: #7b1fa2;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.8em;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
   <h1>Hoş Geldin, SibelGPT!</h1>
-  <p>Gayrimenkul, numeroloji, borsa ve yapay zeka konularında sorularını yanıtlamak için buradayım.</p>
-  <button>Sohbete Başla</button>
+  <p>Gayrimenkul, numeroloji, borsa ve yapay zeka konularında sana özel danışmanlık için buradayım.</p>
+  <a href="#" class="button">Sohbete Başla</a>
+
+  <footer>
+    © 2025 SibelGPT – Tüm Hakları Saklıdır.
+  </footer>
 </body>
 </html>
