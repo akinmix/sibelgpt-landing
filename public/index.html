@@ -9,38 +9,56 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #1a1a1a;
-      color: #fff;
       font-family: 'Inter', sans-serif;
-      text-align: center;
-    }
-
-    .hero-banner {
-      width: 100%;
-      height: 250px;
-      background: linear-gradient(145deg, #3c1e5c, #1e0f3d);
-      background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-      background-repeat: repeat;
-      background-size: cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .hero-text {
-      text-align: center;
+      background: linear-gradient(180deg, #2a144d, #1a1a1a);
       color: #fff;
+      background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+      background-repeat: repeat;
+      background-size: contain;
     }
 
-    .hero-text h1 {
+    .version-label {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #a020f0;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .auth-buttons {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .auth-buttons button {
+      background-color: #8b5cf6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .hero {
+      text-align: center;
+      padding-top: 100px;
+      padding-bottom: 30px;
+    }
+
+    .hero h1 {
       font-size: 36px;
-      margin: 0;
-      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
 
-    .hero-text p {
-      margin-top: 10px;
+    .hero p {
       font-size: 18px;
       font-style: italic;
       color: #d1c4e9;
@@ -48,21 +66,22 @@
 
     .intro {
       max-width: 800px;
-      margin: 40px auto;
+      margin: 30px auto;
       padding: 0 20px;
       font-size: 18px;
       line-height: 1.6;
-      color: #ddd;
+      color: #e0d9f5;
+      text-align: center;
     }
 
     #chat-box {
-      margin: 60px auto;
+      margin: 50px auto;
       max-width: 800px;
       padding: 40px;
-      background-color: #1f1f1f;
+      background-color: rgba(0, 0, 0, 0.4);
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     input#user-input {
@@ -75,7 +94,7 @@
       font-family: 'Inter', sans-serif;
     }
 
-    button {
+    button.send {
       background-color: #8b5cf6;
       color: white;
       padding: 12px 24px;
@@ -94,51 +113,42 @@
     }
 
     footer {
-      margin-top: 80px;
+      margin-top: 60px;
       padding: 20px;
       font-size: 14px;
-      color: #888;
+      color: #999;
       border-top: 1px solid #333;
-    }
-
-    .version-label {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 14px;
-      color: #bbb;
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 5px 10px;
-      border-radius: 8px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+
   <div class="version-label">SibelGPT 1.0</div>
 
-  <div class="hero-banner">
-    <div class="hero-text">
-      <h1>Hoş Geldiniz!</h1>
-      <p>Yapay zekanın içgörüyle buluştuğu yer...</p>
-    </div>
+  <div class="auth-buttons">
+    <button>Üye Ol</button>
+    <button>Giriş Yap</button>
+  </div>
+
+  <div class="hero">
+    <h1>Hoş Geldiniz!</h1>
+    <p>Yapay zekanın içgörüyle buluştuğu yer...</p>
   </div>
 
   <div class="intro">
     <p>
-      <strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. <br>
-      Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. <br><br>
-      💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor. <br><br>
+      <strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.<br>
+      Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.<br><br>
+      💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.<br><br>
       <strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong>
     </p>
   </div>
 
   <div id="chat-box">
-    <p style="color:#fff; font-size: 20px; margin-bottom: 20px;">SibelGPT'ye sor:</p>
-
+    <p style="font-size: 20px; margin-bottom: 20px;">SibelGPT'ye sor:</p>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-
-    <button onclick="sendMessage()">Gönder</button>
-
+    <button class="send" onclick="sendMessage()">Gönder</button>
     <div id="chat-response"></div>
   </div>
 
