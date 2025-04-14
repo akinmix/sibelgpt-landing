@@ -81,6 +81,44 @@
 
     document.getElementById("user-input").value = "";
   }
+<script>
+  async function sendMessage() {
+    const input = document.getElementById("user-input").value;
+    const responseDiv = document.getElementById("chat-response");
+
+    if (input.trim() === "") {
+      responseDiv.innerHTML = "Lütfen bir soru yazın.";
+      return;
+    }
+
+    responseDiv.innerHTML = "Yükleniyor... ⏳";
+
+    try {
+      const result = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "// "Authorization": "Bearer sk-...."  // OpenAI API key buraya gelecekti ama frontend'de tutulmamalı
+
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: input }],
+          temperature: 0.7
+        })
+      });
+
+      const data = await result.json();
+      const reply = data.choices?.[0]?.message?.content || "Cevap alınamadı.";
+
+      responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${reply}`;
+      document.getElementById("user-input").value = "";
+
+    } catch (error) {
+      responseDiv.innerHTML = "Bir hata oluştu: " + error.message;
+    }
+  }
+</script>
 </script>
 </body>
 </html>
