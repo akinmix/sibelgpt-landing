@@ -62,45 +62,42 @@
   </div>
 
   <script>
-  <script>
-  async function sendMessage() {
-    const input = document.getElementById("user-input").value;
-    const responseDiv = document.getElementById("chat-response");
+    async function sendMessage() {
+      const input = document.getElementById("user-input").value;
+      const responseDiv = document.getElementById("chat-response");
 
-    if (input.trim() === "") {
-      responseDiv.innerHTML = "Lütfen bir soru yazın.";
-      return;
-    }
-
-    responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
-
-    try {
-      const result = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: input })
-      });
-
-      const data = await result.json();
-
-      if (result.ok) {
-        responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
-      } else {
-        responseDiv.innerHTML = `Hata: ${data.error}`;
+      if (input.trim() === "") {
+        responseDiv.innerHTML = "Lütfen bir soru yazın.";
+        return;
       }
 
-      document.getElementById("user-input").value = "";
+      responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
 
-    } catch (error) {
-      responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
-    }
-  }
-</script>
+      try {
+        const result = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: input })
+        });
 
+        const data = await result.json();
+
+        if (result.ok) {
+          responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
+        } else {
+          responseDiv.innerHTML = `Hata: ${data.error}`;
+        }
+
+        document.getElementById("user-input").value = "";
+
+      } catch (error) {
+        responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
       }
     }
+  </script>
+
   <script src="chat.js"></script>
 </body>
 </html>
