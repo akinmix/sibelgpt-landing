@@ -3,106 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SibelGPT'ye Hoşgeldiniz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>SibelGPT'ye Hoş Geldiniz</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(180deg, #2a144d, #1a1a1a);
-      color: #fff;
-      background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
-      background-repeat: repeat;
-      background-size: contain;
+      background: linear-gradient(to bottom, #1a1a40, #2e0854);
+      color: #ffffff;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    .version-label {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 14px;
-      color: #fff;
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.3;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
       background-color: #a020f0;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 8px;
       font-weight: bold;
-    }
-
-    .auth-buttons {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-    }
-
-    .auth-buttons button {
-      background-color: #8b5cf6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      margin-left: 10px;
       font-size: 14px;
+    }
+
+    .nav-buttons button {
+      background-color: #a020f0;
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin-left: 10px;
       font-weight: 600;
       cursor: pointer;
     }
 
     .hero {
       text-align: center;
-      padding-top: 100px;
-      padding-bottom: 30px;
+      margin-top: 50px;
+      z-index: 2;
+      position: relative;
     }
 
     .hero h1 {
-      font-size: 36px;
+      font-size: 40px;
       margin-bottom: 10px;
     }
 
     .hero p {
-      font-size: 18px;
       font-style: italic;
       color: #d1c4e9;
     }
 
-    .intro {
+    .intro-text {
       max-width: 800px;
-      margin: 30px auto;
-      padding: 0 20px;
+      margin: 40px auto 0 auto;
+      text-align: center;
       font-size: 18px;
       line-height: 1.6;
-      color: #e0d9f5;
-      text-align: center;
+    }
+
+    .intro-text strong {
+      display: block;
+      font-size: 20px;
+      margin-top: 20px;
     }
 
     #chat-box {
-      margin: 50px auto;
-      max-width: 800px;
+      margin: 60px auto;
+      max-width: 700px;
       padding: 40px;
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 2;
     }
 
-    input#user-input {
+    #chat-box input {
       width: 90%;
-      padding: 15px 20px;
-      font-size: 18px;
+      padding: 15px;
       border-radius: 12px;
       border: none;
+      font-size: 16px;
       margin-bottom: 20px;
-      font-family: 'Inter', sans-serif;
     }
 
-    button.send {
-      background-color: #8b5cf6;
+    #chat-box button {
+      background-color: #a020f0;
       color: white;
       padding: 12px 24px;
       font-size: 16px;
       border: none;
       border-radius: 10px;
+      font-weight: bold;
       cursor: pointer;
-      font-weight: 600;
     }
 
     #chat-response {
@@ -113,47 +124,47 @@
     }
 
     footer {
-      margin-top: 60px;
+      text-align: center;
       padding: 20px;
       font-size: 14px;
-      color: #999;
-      border-top: 1px solid #333;
-      text-align: center;
+      color: #888;
+      margin-top: 40px;
     }
   </style>
 </head>
+
 <body>
+  <div class="stars"></div>
 
-  <div class="version-label">SibelGPT 1.0</div>
+  <header>
+    <div class="brand">SibelGPT 1.0</div>
+    <div class="nav-buttons">
+      <button>Üye Ol</button>
+      <button>Giriş Yap</button>
+    </div>
+  </header>
 
-  <div class="auth-buttons">
-    <button>Üye Ol</button>
-    <button>Giriş Yap</button>
-  </div>
-
-  <div class="hero">
+  <section class="hero">
     <h1>Hoş Geldiniz!</h1>
-    <p>Yapay zekanın içgörüyle buluştuğu yer...</p>
-  </div>
+    <p>Yapay zekanın içgörüsüyle buluştuğun yer...</p>
+  </section>
 
-  <div class="intro">
-    <p>
-      <strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.<br>
-      Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.<br><br>
-      💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.<br><br>
-      <strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong>
-    </p>
-  </div>
+  <section class="intro-text">
+    <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. <br>
+    Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
+    <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+    <strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong>
+  </section>
 
   <div id="chat-box">
-    <p style="font-size: 20px; margin-bottom: 20px;">SibelGPT'ye sor:</p>
+    <p style="margin-bottom: 20px; font-size: 18px;">SibelGPT'ye sor:</p>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-    <button class="send" onclick="sendMessage()">Gönder</button>
+    <button onclick="sendMessage()">Gönder</button>
     <div id="chat-response"></div>
   </div>
 
   <footer>
-    Tüm Hakları Saklıdır. | Powered by ChatGPT & OpenAI
+    © 2025 SibelGPT. Tüm hakları saklıdır. Powered by ChatGPT
   </footer>
 
   <script>
