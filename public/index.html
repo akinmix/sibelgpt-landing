@@ -11,5 +11,27 @@
   <button style="margin-top:20px; padding:10px 20px; background:#a020f0; color:#fff; border:none; border-radius:5px;">
     Sohbete Başla
   </button>
+<div id="chat-box" style="margin-top:30px; max-width: 600px; margin-left: auto; margin-right: auto; background: #ffffff12; padding: 20px; border-radius: 10px;">
+  <p style="color:white;">Yapay zekaya sor:</p>
+  <input type="text" id="user-input" placeholder="Sorunuzu yazın..." style="width: 100%; padding: 10px; border-radius: 5px; border: none; margin-bottom: 10px;">
+  <button onclick="sendMessage()" style="background-color: #a020f0; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Gönder</button>
+  <div id="chat-response" style="margin-top: 15px; color: #aaa;"></div>
+</div>
+<script>
+  function sendMessage() {
+    const input = document.getElementById("user-input").value;
+    const responseDiv = document.getElementById("chat-response");
+
+    if (input.trim() === "") {
+      responseDiv.innerHTML = "Lütfen bir soru yazın.";
+      return;
+    }
+
+    // Şimdilik basit yanıt
+    responseDiv.innerHTML = `Sorunuz: "${input}" <br> Yanıt: Bu özellik çok yakında aktif olacak!`;
+
+    document.getElementById("user-input").value = "";
+  }
+</script>
 </body>
 </html>
