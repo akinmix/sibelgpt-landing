@@ -7,254 +7,261 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Inter', sans-serif;
-      color: white;
+      color: #fff;
       background: linear-gradient(to bottom, #09090A, #161521);
       overflow-x: hidden;
-      position: relative;
-      text-align: center;
     }
 
-    /* Parallax yıldızlar */
-    #stars {
+    .stars, .numbers {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      background: transparent;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: twinkle 4s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .number {
+      position: absolute;
+      font-size: 2rem;
+      color: #a855f7;
+      opacity: 0;
+      animation: fadeInOut 6s infinite;
+      font-weight: bold;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: scale(0.8);}
+      50% { opacity: 0.6; transform: scale(1);}
+      100% { opacity: 0; transform: scale(0.8);}
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
     }
 
     .badge {
-      position: fixed;
-      top: 20px;
-      left: 20px;
       background-color: #3B0764;
+      color: white;
       padding: 6px 12px;
-      border-radius: 12px;
+      border-radius: 6px;
       font-size: 14px;
-      font-weight: 600;
     }
 
-    .top-buttons {
-      position: fixed;
-      top: 20px;
-      right: 20px;
+    .menu {
+      display: flex;
+      gap: 10px;
     }
 
-    .top-buttons button {
+    .menu button {
       background-color: #3B0764;
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      margin-left: 10px;
-      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
       cursor: pointer;
+      font-weight: bold;
     }
 
-    h1 {
+    .hero {
+      text-align: center;
+      padding-top: 50px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
       font-size: 36px;
-      margin-top: 100px;
       margin-bottom: 10px;
     }
 
-    h2 {
-      font-size: 18px;
+    .hero p.lead {
       font-style: italic;
+      font-size: 18px;
       color: #c084fc;
       margin-bottom: 30px;
     }
 
-    .description {
-      max-width: 800px;
-      margin: 0 auto 40px auto;
-      font-size: 18px;
+    .info {
+      max-width: 700px;
+      margin: auto;
+      font-size: 16px;
       line-height: 1.6;
     }
 
-    .chat-box {
-      max-width: 700px;
-      margin: 0 auto 100px auto;
-      background-color: #2c2c2c;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    .info p {
+      margin-bottom: 10px;
     }
 
-    input[type="text"] {
+    .info strong {
+      color: #fff;
+    }
+
+    .info .highlight {
+      font-weight: bold;
+      color: #f9fafb;
+    }
+
+    .chat-box {
+      background-color: #2a2a2a;
+      margin: 60px auto;
+      max-width: 700px;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chat-box input {
       width: 90%;
       padding: 15px;
+      border-radius: 12px;
+      border: none;
       font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
       margin-bottom: 20px;
-      background-color: #1f1f1f;
+      background: #1f1f1f;
       color: white;
     }
 
-    button {
+    .chat-box button {
       background-color: #3B0764;
       color: white;
       padding: 12px 24px;
       border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
+      font-size: 15px;
     }
 
-    #chat-response {
+    .response {
       margin-top: 30px;
+      color: #d1d5db;
       min-height: 30px;
-      font-size: 16px;
-      color: #ccc;
-    }
-
-    .loader {
-      border: 4px solid #3B0764;
-      border-top: 4px solid white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 10px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
     }
 
     footer {
       text-align: center;
-      padding: 30px;
+      font-size: 13px;
       color: #888;
-      font-size: 14px;
+      padding: 20px;
+      z-index: 1;
+      position: relative;
     }
   </style>
 </head>
 <body>
 
-  <!-- Parallax yıldız arka plan -->
-  <canvas id="stars"></canvas>
+  <!-- Parlayan yıldızlar -->
+  <div class="stars" id="stars"></div>
 
-  <!-- Üst köşe bileşenleri -->
-  <div class="badge">SibelGPT 1.0</div>
-  <div class="top-buttons">
-    <button>Üye Ol</button>
-    <button>Giriş Yap</button>
-  </div>
+  <!-- Fade-in-out sayılar -->
+  <div class="numbers" id="numbers"></div>
 
-  <!-- Başlık ve açıklama -->
-  <h1>Hoş Geldiniz!</h1>
-  <h2>Yapay zekanın içgörüsüyle buluştuğun yer...</h2>
+  <header>
+    <div class="badge">SibelGPT 1.0</div>
+    <div class="menu">
+      <button>Üye Ol</button>
+      <button>Giriş Yap</button>
+    </div>
+  </header>
 
-  <div class="description">
-    <strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.<br>
-    Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.<br><br>
-    💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.<br><br>
-    <strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong>
-  </div>
+  <section class="hero">
+    <h1>Hoş Geldiniz!</h1>
+    <p class="lead">Yapay zekanın içgörüsüyle buluştuğunuz yer...</p>
+    <div class="info">
+      <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
+      <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
+      <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+      <p class="highlight">SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</p>
+    </div>
+  </section>
 
-  <!-- Sohbet kutusu -->
   <div class="chat-box">
-    <p style="font-size: 20px; font-weight: 600;">SibelGPT'ye sor:</p>
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın..."/>
-    <br>
+    <h3>SibelGPT'ye sor:</h3>
+    <input type="text" id="user-input" placeholder="Sorunuzu yazın...">
     <button onclick="sendMessage()">Gönder</button>
-    <div id="chat-response"></div>
+    <div class="response" id="chat-response"></div>
   </div>
 
   <footer>
-    © 2025 SibelGPT | Powered by ChatGPT
+    © 2025 SibelGPT. Powered by OpenAI.
   </footer>
 
-  <!-- JavaScript -->
+  <!-- Script -->
   <script>
-    async function sendMessage() {
+    function sendMessage() {
       const input = document.getElementById("user-input").value;
       const responseDiv = document.getElementById("chat-response");
 
-      if (input.trim() === "") {
+      if (!input.trim()) {
         responseDiv.innerHTML = "Lütfen bir soru yazın.";
         return;
       }
 
-      responseDiv.innerHTML = '<div class="loader"></div> SibelGPT yanıtlıyor...';
+      responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
 
-      try {
-        const result = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input })
-        });
-
-        const data = await result.json();
-
-        if (result.ok) {
-          responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
-        } else {
-          responseDiv.innerHTML = `Hata: ${data.error}`;
-        }
-
+      fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: input })
+      })
+      .then(res => res.json())
+      .then(data => {
+        responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
         document.getElementById("user-input").value = "";
-
-      } catch (error) {
-        responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
-      }
+      })
+      .catch(err => {
+        responseDiv.innerHTML = "Bir hata oluştu: " + err.message;
+      });
     }
 
-    // Parallax yıldızlar
-    const canvas = document.getElementById("stars");
-    const ctx = canvas.getContext("2d");
-    let width, height;
-    let stars = [];
-
-    function resizeCanvas() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+    // Dinamik yıldız üretimi
+    const starsContainer = document.getElementById("stars");
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.left = Math.random() * 100 + "%";
+      star.style.top = Math.random() * 100 + "%";
+      star.style.animationDuration = 2 + Math.random() * 4 + "s";
+      starsContainer.appendChild(star);
     }
 
-    function createStars(count) {
-      stars = [];
-      for (let i = 0; i < count; i++) {
-        stars.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 1.2,
-          speed: Math.random() * 0.4 + 0.1
-        });
-      }
+    // Numerolojik sayı efektleri
+    const numbers = ["3", "7", "8", "9"];
+    const numbersContainer = document.getElementById("numbers");
+
+    for (let i = 0; i < 15; i++) {
+      const number = document.createElement("div");
+      number.classList.add("number");
+      number.textContent = numbers[Math.floor(Math.random() * numbers.length)];
+      number.style.left = Math.random() * 100 + "%";
+      number.style.top = Math.random() * 100 + "%";
+      number.style.animationDelay = (Math.random() * 5) + "s";
+      numbersContainer.appendChild(number);
     }
-
-    function animateStars() {
-      ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = "#ffffff";
-      for (let star of stars) {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-        ctx.fill();
-        star.y += star.speed;
-        if (star.y > height) star.y = 0;
-      }
-      requestAnimationFrame(animateStars);
-    }
-
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      createStars(250);
-    });
-
-    resizeCanvas();
-    createStars(250);
-    animateStars();
   </script>
 </body>
 </html>
