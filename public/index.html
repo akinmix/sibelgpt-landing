@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SibelGPT'ye hoşgeldiniz</title>
+  <title>SibelGPT'ye Hoşgeldiniz</title>
 </head>
 <body style="background-color:#1a1a1a; color:#fff; text-align:center; font-family:sans-serif;">
   <h1>SibelGPT'ye Hoş Geldiniz!</h1>
@@ -11,114 +11,93 @@
   <button style="margin-top:20px; padding:10px 20px; background:#a020f0; color:#fff; border:none; border-radius:5px;">
     Sohbete Başla
   </button>
-<div id="chat-box" style="
-  margin: 60px auto;
-  max-width: 800px;
-  padding: 40px;
-  background-color: #1f1f1f;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  font-family: 'Inter', sans-serif;
-">
-  <p style="color:#fff; font-size: 20px; margin-bottom: 20px;">SibelGPT'ye sor:</p>
-  
-  <input 
-    type="text" 
-    id="user-input" 
-    placeholder="Sorunuzu yazın..." 
-    style="
-      width: 90%;
-      padding: 15px 20px;
-      font-size: 18px;
-      border-radius: 12px;
-      border: none;
-      margin-bottom: 20px;
-      font-family: 'Inter', sans-serif;
-    "
-  />
-  
-  <button 
-    onclick="sendMessage()" 
-    style="
-      background-color: #8b5cf6;
-      color: white;
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-    "
-  >
-    Gönder
-  </button>
 
-  <div 
-    id="chat-response" 
-    style="
-      margin-top: 30px;
-      color: #ccc;
-      font-size: 16px;
-      min-height: 30px;
-    "
-  ></div>
-</div>
+  <div id="chat-box" style="
+    margin: 60px auto;
+    max-width: 800px;
+    padding: 40px;
+    background-color: #1f1f1f;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    font-family: 'Inter', sans-serif;">
+    
+    <p style="color:#fff; font-size: 20px; margin-bottom: 20px;">SibelGPT'ye sor:</p>
+    
+    <input 
+      type="text" 
+      id="user-input" 
+      placeholder="Sorunuzu yazın..." 
+      style="
+        width: 90%;
+        padding: 15px 20px;
+        font-size: 18px;
+        border-radius: 12px;
+        border: none;
+        margin-bottom: 20px;
+        font-family: 'Inter', sans-serif;" />
+    
+    <button 
+      onclick="sendMessage()" 
+      style="
+        background-color: #8b5cf6;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;">
+      Gönder
+    </button>
 
-<script>
-  function sendMessage() {
-    const input = document.getElementById("user-input").value;
-    const responseDiv = document.getElementById("chat-response");
+    <div 
+      id="chat-response" 
+      style="
+        margin-top: 30px;
+        color: #ccc;
+        font-size: 16px;
+        min-height: 30px;"></div>
+  </div>
 
-    if (input.trim() === "") {
-      responseDiv.innerHTML = "Lütfen bir soru yazın.";
-      return;
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("user-input").value;
+      const responseDiv = document.getElementById("chat-response");
+
+      if (input.trim() === "") {
+        responseDiv.innerHTML = "Lütfen bir soru yazın.";
+        return;
+      }
+
+      responseDiv.innerHTML = "Yükleniyor... ⏳";
+
+      try {
+        const result = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Aşağıdaki satırda API anahtarı GÜVENLİ ŞEKİLDE sunucu tarafına taşınmalı!
+            // "Authorization": "Bearer sk-XXX" ← ASLA BURAYA YAPIŞTIRMA
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: input }],
+            temperature: 0.7
+          })
+        });
+
+        const data = await result.json();
+        const reply = data.choices?.[0]?.message?.content || "Cevap alınamadı.";
+
+        responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${reply}`;
+        document.getElementById("user-input").value = "";
+
+      } catch (error) {
+        responseDiv.innerHTML = "Bir hata oluştu: " + error.message;
+      }
     }
-
-    // Şimdilik basit yanıt
-    responseDiv.innerHTML = `Sorunuz: "${input}" <br> Yanıt: Bu özellik çok yakında aktif olacak!`;
-
-    document.getElementById("user-input").value = "";
-  }
-<script>
-  async function sendMessage() {
-    const input = document.getElementById("user-input").value;
-    const responseDiv = document.getElementById("chat-response");
-
-    if (input.trim() === "") {
-      responseDiv.innerHTML = "Lütfen bir soru yazın.";
-      return;
-    }
-
-    responseDiv.innerHTML = "Yükleniyor... ⏳";
-
-    try {
-      const result = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "// "Authorization": "Bearer sk-...."  // OpenAI API key buraya gelecekti ama frontend'de tutulmamalı
-
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: input }],
-          temperature: 0.7
-        })
-      });
-
-      const data = await result.json();
-      const reply = data.choices?.[0]?.message?.content || "Cevap alınamadı.";
-
-      responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${reply}`;
-      document.getElementById("user-input").value = "";
-
-    } catch (error) {
-      responseDiv.innerHTML = "Bir hata oluştu: " + error.message;
-    }
-  }
-</script>
-</script>
+  </script>
 </body>
 </html>
