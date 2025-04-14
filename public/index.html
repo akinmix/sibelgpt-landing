@@ -2,23 +2,24 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SibelGPT'ye Hoş Geldiniz</title>
   <style>
     body {
       margin: 0;
+      padding: 0;
       font-family: 'Inter', sans-serif;
-      color: #fff;
       background: linear-gradient(to bottom, #09090A, #161521);
+      color: white;
       overflow-x: hidden;
     }
 
-    .stars, .numbers {
+    .stars {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: -1;
     }
 
     .star {
@@ -27,240 +28,188 @@
       height: 2px;
       background: white;
       border-radius: 50%;
-      opacity: 0.6;
-      animation: twinkle 4s infinite ease-in-out;
+      animation: twinkle 2s infinite ease-in-out alternate;
     }
 
     @keyframes twinkle {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 1; }
-    }
-
-    .number {
-      position: absolute;
-      font-size: 2rem;
-      color: #a855f7;
-      opacity: 0;
-      animation: fadeInOut 6s infinite;
-      font-weight: bold;
-    }
-
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: scale(0.8);}
-      50% { opacity: 0.6; transform: scale(1);}
-      100% { opacity: 0; transform: scale(0.8);}
+      from { opacity: 0.2; }
+      to { opacity: 1; }
     }
 
     header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 20px;
-      position: relative;
-      z-index: 1;
     }
 
-    .badge {
+    .logo {
       background-color: #3B0764;
       color: white;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-weight: bold;
       font-size: 14px;
     }
 
-    .menu {
+    .auth-buttons {
       display: flex;
       gap: 10px;
     }
 
-    .menu button {
+    .auth-buttons button {
       background-color: #3B0764;
       color: white;
+      padding: 8px 16px;
       border: none;
-      padding: 6px 14px;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: bold;
     }
 
-    .hero {
+    h1 {
       text-align: center;
-      padding-top: 50px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero h1 {
       font-size: 36px;
-      margin-bottom: 10px;
+      margin-top: 0;
     }
 
-    .hero p.lead {
-      font-style: italic;
-      font-size: 18px;
+    .tagline {
+      text-align: center;
       color: #c084fc;
+      font-style: italic;
       margin-bottom: 30px;
     }
 
-    .info {
+    .intro {
+      text-align: center;
       max-width: 700px;
       margin: auto;
       font-size: 16px;
       line-height: 1.6;
     }
 
-    .info p {
-      margin-bottom: 10px;
-    }
-
-    .info strong {
-      color: #fff;
-    }
-
-    .info .highlight {
-      font-weight: bold;
-      color: #f9fafb;
-    }
-
-    .chat-box {
-      background-color: #2a2a2a;
-      margin: 60px auto;
+    .chat-container {
       max-width: 700px;
+      margin: 60px auto;
       padding: 40px;
+      background-color: #2b2b2b;
       border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       text-align: center;
-      position: relative;
-      z-index: 1;
     }
 
-    .chat-box input {
+    input[type="text"] {
       width: 90%;
       padding: 15px;
-      border-radius: 12px;
       border: none;
+      border-radius: 12px;
       font-size: 16px;
       margin-bottom: 20px;
-      background: #1f1f1f;
-      color: white;
     }
 
-    .chat-box button {
+    button.send {
       background-color: #3B0764;
       color: white;
       padding: 12px 24px;
       border: none;
-      border-radius: 8px;
-      font-weight: bold;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
       cursor: pointer;
-      font-size: 15px;
     }
 
-    .response {
+    #chat-response {
       margin-top: 30px;
-      color: #d1d5db;
+      color: #eee;
       min-height: 30px;
     }
 
     footer {
       text-align: center;
-      font-size: 13px;
-      color: #888;
       padding: 20px;
-      z-index: 1;
-      position: relative;
+      color: #999;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-
-  <!-- Parlayan yıldızlar -->
-  <div class="stars" id="stars"></div>
-
-  <!-- Fade-in-out sayılar -->
-  <div class="numbers" id="numbers"></div>
+  <div class="stars" id="stars-container"></div>
 
   <header>
-    <div class="badge">SibelGPT 1.0</div>
-    <div class="menu">
+    <div class="logo">SibelGPT 1.0</div>
+    <div class="auth-buttons">
       <button>Üye Ol</button>
       <button>Giriş Yap</button>
     </div>
   </header>
 
-  <section class="hero">
+  <main>
     <h1>Hoş Geldiniz!</h1>
-    <p class="lead">Yapay zekanın içgörüsüyle buluştuğunuz yer...</p>
-    <div class="info">
+    <p class="tagline">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
+
+    <div class="intro">
       <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
       <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
       <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
-      <p class="highlight">SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</p>
+      <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
     </div>
-  </section>
 
-  <div class="chat-box">
-    <h3>SibelGPT'ye sor:</h3>
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın...">
-    <button onclick="sendMessage()">Gönder</button>
-    <div class="response" id="chat-response"></div>
-  </div>
+    <div class="chat-container">
+      <h3>SibelGPT'ye sor:</h3>
+      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+      <br />
+      <button class="send" onclick="sendMessage()">Gönder</button>
+      <div id="chat-response"></div>
+    </div>
+  </main>
 
   <footer>
-    © 2025 SibelGPT. Powered by OpenAI.
+    © 2025 SibelGPT – Powered by OpenAI
   </footer>
 
-  <!-- Script -->
   <script>
-    function sendMessage() {
+    // Twinkling stars generate
+    const starsContainer = document.getElementById('stars-container');
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (1 + Math.random() * 2) + 's';
+      starsContainer.appendChild(star);
+    }
+
+    async function sendMessage() {
       const input = document.getElementById("user-input").value;
       const responseDiv = document.getElementById("chat-response");
 
-      if (!input.trim()) {
+      if (input.trim() === "") {
         responseDiv.innerHTML = "Lütfen bir soru yazın.";
         return;
       }
 
       responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
 
-      fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: input })
-      })
-      .then(res => res.json())
-      .then(data => {
-        responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
+      try {
+        const result = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: input })
+        });
+
+        const data = await result.json();
+        if (result.ok) {
+          responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
+        } else {
+          responseDiv.innerHTML = `Hata: ${data.error}`;
+        }
+
         document.getElementById("user-input").value = "";
-      })
-      .catch(err => {
-        responseDiv.innerHTML = "Bir hata oluştu: " + err.message;
-      });
-    }
 
-    // Dinamik yıldız üretimi
-    const starsContainer = document.getElementById("stars");
-    for (let i = 0; i < 100; i++) {
-      const star = document.createElement("div");
-      star.classList.add("star");
-      star.style.left = Math.random() * 100 + "%";
-      star.style.top = Math.random() * 100 + "%";
-      star.style.animationDuration = 2 + Math.random() * 4 + "s";
-      starsContainer.appendChild(star);
-    }
-
-    // Numerolojik sayı efektleri
-    const numbers = ["3", "7", "8", "9"];
-    const numbersContainer = document.getElementById("numbers");
-
-    for (let i = 0; i < 15; i++) {
-      const number = document.createElement("div");
-      number.classList.add("number");
-      number.textContent = numbers[Math.floor(Math.random() * numbers.length)];
-      number.style.left = Math.random() * 100 + "%";
-      number.style.top = Math.random() * 100 + "%";
-      number.style.animationDelay = (Math.random() * 5) + "s";
-      numbersContainer.appendChild(number);
+      } catch (error) {
+        responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
+      }
     }
   </script>
 </body>
