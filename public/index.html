@@ -4,192 +4,174 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SibelGPT</title>
-  <link rel="icon" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #09090A, #161521);
       color: #fff;
       overflow-x: hidden;
-      text-align: center;
     }
 
-    /* Giriş animasyon logosu */
-    .intro-logo {
+    .badge {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 300px;
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      animation: fadeInOut 6s ease-in-out forwards;
-      z-index: 9999;
-    }
-
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-      30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-      70% { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
-    }
-
-    /* Sabit üst çubuk */
-    .top-bar {
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10000;
-    }
-
-    .version-tag {
+      top: 15px;
+      left: 20px;
       background-color: #3B0764;
-      padding: 6px 12px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: bold;
+      padding: 6px 14px;
       border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
     }
 
-    .auth-buttons {
-      display: flex;
-      gap: 10px;
+    .nav-buttons {
+      position: fixed;
+      top: 15px;
+      right: 20px;
     }
 
-    .auth-buttons button {
+    .nav-buttons button {
       background-color: #3B0764;
       color: white;
-      padding: 8px 16px;
-      font-size: 14px;
       border: none;
+      padding: 6px 14px;
+      margin-left: 10px;
       border-radius: 8px;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: 500;
     }
 
-    /* Parlak ana logo */
-    .main-logo {
-      width: 160px;
-      margin-top: 100px;
-      margin-bottom: 10px;
-      animation: fadeIn 2s ease-in-out 5s both;
-      filter: drop-shadow(0 0 10px #a855f7);
+    .logo {
+      display: block;
+      margin: 80px auto 20px auto;
+      width: 120px;
+      opacity: 0.9;
+      animation: pulse 4s ease-in-out infinite;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    h1, .subtitle, .container {
-      animation: fadeIn 2s ease-in-out 5.2s both;
-    }
-
-    .subtitle {
-      font-size: 16px;
-      font-style: italic;
-      color: #c084fc;
-      margin-bottom: 30px;
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 0.6; transform: scale(1); }
     }
 
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
-      margin-top: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-style: italic;
+      color: #c084fc;
+      margin-bottom: 40px;
+    }
+
+    .description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
     }
 
     .highlight {
       font-weight: bold;
     }
 
-    #chat-box {
-      margin: 60px auto;
-      max-width: 800px;
+    .chat-box {
+      background-color: #2e2e2e;
       padding: 40px;
-      background-color: #2a2a2a;
       border-radius: 20px;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: fadeIn 2s ease-in-out 5.4s both;
     }
 
-    #chat-box h2 {
+    .chat-box label {
+      font-weight: 600;
       font-size: 20px;
       margin-bottom: 20px;
+      display: block;
     }
 
-    input[type="text"] {
-      width: 90%;
-      padding: 15px;
+    #user-input {
+      width: 85%;
+      padding: 14px 18px;
       font-size: 16px;
-      border-radius: 12px;
+      border-radius: 10px;
       border: none;
-      margin-bottom: 20px;
+      outline: none;
+      margin-top: 10px;
     }
 
-    button {
+    button.send-btn {
       background-color: #3B0764;
       color: white;
-      padding: 12px 24px;
-      font-size: 16px;
+      padding: 12px 30px;
       border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      border-radius: 8px;
+      font-size: 16px;
       font-weight: 600;
+      margin-top: 20px;
+      cursor: pointer;
     }
 
     #chat-response {
       margin-top: 30px;
-      color: #ccc;
       font-size: 16px;
+      color: #ddd;
       min-height: 30px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      margin: 60px 0 20px 0;
     }
   </style>
 </head>
 <body>
 
-  <!-- Giriş animasyon logosu -->
-  <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
+  <div class="badge">SibelGPT 1.0</div>
 
-  <!-- Sabit üst çubuk -->
-  <div class="top-bar">
-    <div class="version-tag">SibelGPT 1.0</div>
-    <div class="auth-buttons">
-      <button>Üye Ol</button>
-      <button>Giriş Yap</button>
+  <div class="nav-buttons">
+    <button>Üye Ol</button>
+    <button>Giriş Yap</button>
+  </div>
+
+  <img src="logo.png" alt="SibelGPT Logo" class="logo" />
+
+  <div class="container">
+    <h1>Hoş Geldiniz!</h1>
+    <p class="tagline">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
+
+    <div class="description">
+      <span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.<br>
+      Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.<br><br>
+      💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.<br><br>
+      <span class="highlight">SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</span>
+    </div>
+
+    <div class="chat-box">
+      <label for="user-input">SibelGPT'ye sor:</label>
+      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+      <br>
+      <button class="send-btn" onclick="sendMessage()">Gönder</button>
+      <div id="chat-response"></div>
     </div>
   </div>
 
-  <!-- Sayfa Ortasında Parlak Logo -->
-  <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
+  <footer>© 2025 SibelGPT. Tüm hakları saklıdır.</footer>
 
-  <!-- Başlık ve açıklamalar -->
-  <h1>Hoş Geldiniz!</h1>
-  <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
-
-  <div class="container">
-    <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
-    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
-    <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
-    <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
-  </div>
-
-  <!-- Chat kutusu -->
-  <div id="chat-box">
-    <h2><strong>SibelGPT’ye sor:</strong></h2>
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-    <br />
-    <button onclick="sendMessage()">Gönder</button>
-    <div id="chat-response"></div>
-  </div>
-
-  <!-- Chat script -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
