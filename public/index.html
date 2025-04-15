@@ -23,7 +23,7 @@
       background: url('https://raw.githubusercontent.com/kiliman/space-stars/master/starfield.png') repeat;
       animation: moveStars 100s linear infinite;
       z-index: -1;
-      opacity: 0.2;
+      opacity: 0.1;
     }
 
     @keyframes moveStars {
@@ -31,69 +31,22 @@
       to { background-position: 10000px 10000px; }
     }
 
-    /* Giriş Animasyonu */
-    #intro-logo {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      opacity: 0;
-      z-index: 9999;
-      animation: introZoom 5s ease-out forwards;
-      pointer-events: none;
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
     }
 
-    #intro-logo img {
-      width: 400px;
+    .logo-container img {
+      width: 180px;
       height: auto;
-      filter: drop-shadow(0 0 40px #a020f0);
-    }
-
-    @keyframes introZoom {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.6);
-      }
-      20% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.2);
-      }
-      60% {
-        transform: translate(-50%, -50%) scale(1.1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1);
-      }
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-    }
-
-    .logo-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-top img {
-      height: 32px;
-    }
-
-    .label {
-      background-color: #3B0764;
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 14px;
+      filter: drop-shadow(0 0 20px #a020f0);
     }
 
     .buttons {
       display: flex;
+      justify-content: flex-end;
+      padding: 10px 30px;
       gap: 10px;
     }
 
@@ -110,13 +63,15 @@
     h1 {
       font-size: 36px;
       margin-top: 30px;
+      text-align: center;
     }
 
     .subtitle {
       color: #a855f7;
       font-style: italic;
       font-size: 18px;
-      margin-bottom: 20px;
+      text-align: center;
+      margin-bottom: 30px;
     }
 
     .content {
@@ -164,35 +119,29 @@
 </head>
 <body>
 
-  <!-- Sayfa giriş animasyonu -->
-  <div id="intro-logo">
-    <img src="sibelgpt-intro.jpg" alt="SibelGPT Giriş Damgası" />
+  <!-- Sağ üst köşe butonlar -->
+  <div class="buttons">
+    <button>Üye Ol</button>
+    <button>Giriş Yap</button>
   </div>
 
-  <!-- Üst çubuk ve logo -->
-  <div class="top-bar">
-    <div class="logo-top">
-      <img src="sibelgpt-icon.png" alt="SibelGPT Logo" />
-      <div class="label">SibelGPT 1.0</div>
-    </div>
-    <div class="buttons">
-      <button>Üye Ol</button>
-      <button>Giriş Yap</button>
-    </div>
+  <!-- Sayfanın üst ortasındaki logo -->
+  <div class="logo-container">
+    <img src="sibelgpt-logo.png" alt="SibelGPT Logo" />
   </div>
 
-  <!-- Ana içerik -->
+  <!-- Başlık ve içerik -->
+  <h1>Hoş Geldiniz!</h1>
+  <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
+
   <div class="content">
-    <h1>Hoş Geldiniz!</h1>
-    <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
-
     <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
     <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat kutusu -->
+  <!-- Chat alanı -->
   <div class="chat-box">
     <h2>SibelGPT'ye sor:</h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın...">
@@ -201,7 +150,6 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Chat.js -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -237,14 +185,6 @@
         responseDiv.innerHTML = "Bağlantı hatası: " + error.message;
       }
     }
-
-    // Intro animasyon 5 saniye sonra kaldırılır
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        const intro = document.getElementById("intro-logo");
-        if (intro) intro.remove();
-      }, 5000);
-    });
   </script>
 
 </body>
