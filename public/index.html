@@ -16,6 +16,7 @@
       text-align: center;
     }
 
+    /* Giriş animasyonu */
     .intro-logo {
       position: fixed;
       top: 50%;
@@ -34,6 +35,7 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
     }
 
+    /* Sabit üst çubuk */
     .top-bar {
       position: fixed;
       width: 100%;
@@ -58,10 +60,10 @@
     .auth-buttons {
       display: flex;
       gap: 10px;
+      margin-right: 40px;
     }
 
-    .auth-buttons button,
-    .auth-buttons a {
+    .auth-buttons button, .auth-buttons a {
       background-color: #3B0764;
       color: white;
       padding: 8px 16px;
@@ -73,6 +75,7 @@
       text-decoration: none;
     }
 
+    /* Logo */
     .main-logo {
       width: 160px;
       margin-top: 100px;
@@ -88,6 +91,11 @@
 
     h1, .subtitle, .container {
       animation: fadeIn 2s ease-in-out 5.2s both;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
     }
 
     .subtitle {
@@ -107,11 +115,12 @@
       font-weight: bold;
     }
 
+    /* Chat kutusu */
     #chat-box {
       margin: 60px auto;
-      max-width: 800px;
+      max-width: 700px;
       padding: 40px;
-      background: linear-gradient(to bottom right, #6b21a8, #9333ea, #3b82f6);
+      background: linear-gradient(135deg, #6B21A8, #4F46E5);
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -121,6 +130,7 @@
     #chat-box h2 {
       font-size: 20px;
       margin-bottom: 20px;
+      color: #fff;
     }
 
     input[type="text"] {
@@ -152,14 +162,18 @@
 
     footer {
       margin-top: 80px;
-      padding: 30px 0;
-      color: #999;
-      font-size: 14px;
+      font-size: 13px;
+      color: #aaa;
     }
 
     footer a {
-      color: #a78bfa;
+      color: #8B5CF6;
       text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -168,7 +182,7 @@
   <!-- Giriş animasyon logosu -->
   <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
-  <!-- Sabit üst çubuk -->
+  <!-- Üst Çubuk -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.0</div>
     <div class="auth-buttons">
@@ -178,10 +192,10 @@
     </div>
   </div>
 
-  <!-- Sayfa Ortasında Parlak Logo -->
+  <!-- Ana Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Başlık ve açıklamalar -->
+  <!-- Başlık ve Açıklama -->
   <h1>Hoş Geldiniz!</h1>
   <p class="subtitle">Yapay zekanın Sibelce hali...</p>
 
@@ -192,7 +206,7 @@
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat kutusu -->
+  <!-- Chat Kutusu -->
   <div id="chat-box">
     <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
@@ -204,11 +218,11 @@
   <!-- Footer -->
   <footer>
     © 2025 SibelGPT – Powered by 
-    <a href="https://openai.com" target="_blank">OpenAI</a> & 
+    <a href="https://openai.com" target="_blank">OpenAI</a> &amp; 
     <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
   </footer>
 
-  <!-- Chat script -->
+  <!-- Chat JS -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
