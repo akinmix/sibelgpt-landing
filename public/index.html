@@ -29,30 +29,57 @@
     }
 
     @keyframes fadeInOut {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.7);
-      }
-      30% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.2);
-      }
-      70% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.0);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.4);
-      }
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+      30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+      70% { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
     }
 
-    /* Ana logo */
+    /* Sabit üst çubuk */
+    .top-bar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .version-tag {
+      background-color: #3B0764;
+      padding: 6px 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 12px;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-buttons button {
+      background-color: #3B0764;
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Parlak ana logo */
     .main-logo {
       width: 160px;
       margin-top: 100px;
       margin-bottom: 10px;
       animation: fadeIn 2s ease-in-out 5s both;
+      filter: drop-shadow(0 0 10px #a855f7);
     }
 
     @keyframes fadeIn {
@@ -127,13 +154,22 @@
 </head>
 <body>
 
-  <!-- Giriş animasyonu (damga gibi) -->
+  <!-- Giriş animasyon logosu -->
   <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
-  <!-- Sayfa Ortasında Ana Logo -->
+  <!-- Sabit üst çubuk -->
+  <div class="top-bar">
+    <div class="version-tag">SibelGPT 1.0</div>
+    <div class="auth-buttons">
+      <button>Üye Ol</button>
+      <button>Giriş Yap</button>
+    </div>
+  </div>
+
+  <!-- Sayfa Ortasında Parlak Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Giriş metni -->
+  <!-- Başlık ve açıklamalar -->
   <h1>Hoş Geldiniz!</h1>
   <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
 
