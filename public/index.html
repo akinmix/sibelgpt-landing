@@ -16,7 +16,7 @@
       text-align: center;
     }
 
-    /* Giriş animasyon logosu */
+    /* Giriş animasyonu */
     .intro-logo {
       position: fixed;
       top: 50%;
@@ -35,7 +35,7 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
     }
 
-    /* Sabit üst çubuk */
+    /* Üst çubuk */
     .top-bar {
       position: fixed;
       width: 100%;
@@ -73,7 +73,7 @@
       font-weight: 500;
     }
 
-    /* Parlak ana logo */
+    /* Ana logo */
     .main-logo {
       width: 160px;
       margin-top: 100px;
@@ -108,12 +108,12 @@
       font-weight: bold;
     }
 
-    /* Güncellenmiş chat kutusu arka planı */
+    /* Chat kutusu */
     #chat-box {
       margin: 60px auto;
       max-width: 800px;
       padding: 40px;
-      background: linear-gradient(135deg, #5B0E9D, #4B2ABF, #3B82F6); /* Mor - eflatun - mavi */
+      background: linear-gradient(135deg, #5B0E9D, #6C28A9, #7C3AED); /* Mor baskın degrade */
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
@@ -155,7 +155,7 @@
 </head>
 <body>
 
-  <!-- Giriş animasyon logosu -->
+  <!-- Giriş animasyonu -->
   <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
   <!-- Sabit üst çubuk -->
@@ -167,13 +167,14 @@
     </div>
   </div>
 
-  <!-- Sayfa Ortasında Parlak Logo -->
+  <!-- Merkezdeki parlak logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Başlık ve açıklamalar -->
+  <!-- Başlık -->
   <h1>Hoş Geldiniz!</h1>
   <p class="subtitle">Yapay zekanın Sibelce hali...</p>
 
+  <!-- Tanıtım -->
   <div class="container">
     <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
@@ -190,7 +191,7 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Chat script -->
+  <!-- Chat işlemi -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
