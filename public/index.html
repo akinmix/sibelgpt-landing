@@ -11,8 +11,10 @@
       color: white;
       background: linear-gradient(to bottom, #09090A, #161521);
       overflow-x: hidden;
+      position: relative;
     }
 
+    /* Parlayan yıldız efekti */
     body::before {
       content: "";
       position: fixed;
@@ -21,9 +23,9 @@
       width: 100%;
       height: 100%;
       background: url('https://raw.githubusercontent.com/kiliman/space-stars/master/starfield.png') repeat;
-      animation: moveStars 100s linear infinite;
+      animation: moveStars 120s linear infinite;
       z-index: -1;
-      opacity: 0.1;
+      opacity: 0.08;
     }
 
     @keyframes moveStars {
@@ -31,23 +33,41 @@
       to { background-position: 10000px 10000px; }
     }
 
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 40px;
+    /* Açılış animasyonu */
+    #intro-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 1;
+      transition: all 2.5s ease-in-out;
+      z-index: 9999;
     }
 
-    .logo-container img {
-      width: 180px;
-      height: auto;
-      filter: drop-shadow(0 0 20px #a020f0);
+    #intro-logo.hide {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(3);
+      pointer-events: none;
+    }
+
+    .fixed-badge {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      background-color: #3B0764;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      z-index: 99;
     }
 
     .buttons {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 30px;
-      gap: 10px;
+      position: fixed;
+      top: 16px;
+      right: 30px;
+      z-index: 99;
     }
 
     .buttons button {
@@ -56,13 +76,26 @@
       border: none;
       padding: 8px 16px;
       border-radius: 10px;
+      margin-left: 10px;
       cursor: pointer;
       font-weight: bold;
     }
 
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 80px;
+    }
+
+    .logo-container img {
+      width: 140px;
+      height: auto;
+      filter: drop-shadow(0 0 20px #a020f0);
+    }
+
     h1 {
       font-size: 36px;
-      margin-top: 30px;
+      margin-top: 20px;
       text-align: center;
     }
 
@@ -119,18 +152,24 @@
 </head>
 <body>
 
-  <!-- Sağ üst köşe butonlar -->
+  <!-- Açılış animasyonlu logo -->
+  <img id="intro-logo" src="sibelgpt-intro.png" alt="SibelGPT Intro Logo"/>
+
+  <!-- Sabit üstteki SibelGPT 1.0 rozeti -->
+  <div class="fixed-badge">SibelGPT 1.0</div>
+
+  <!-- Sağ üst giriş butonları -->
   <div class="buttons">
     <button>Üye Ol</button>
     <button>Giriş Yap</button>
   </div>
 
-  <!-- Sayfanın üst ortasındaki logo -->
+  <!-- Üstteki sabit logo -->
   <div class="logo-container">
     <img src="sibelgpt-logo.png" alt="SibelGPT Logo" />
   </div>
 
-  <!-- Başlık ve içerik -->
+  <!-- Hoş geldiniz bölümü -->
   <h1>Hoş Geldiniz!</h1>
   <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
 
@@ -141,7 +180,7 @@
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat alanı -->
+  <!-- Chat kutusu -->
   <div class="chat-box">
     <h2>SibelGPT'ye sor:</h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın...">
@@ -151,6 +190,14 @@
   </div>
 
   <script>
+    // Intro logo animasyonu
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("intro-logo").classList.add("hide");
+      }, 2200); // 2.2 saniyede kaybol
+    });
+
+    // Chat API
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
       const responseDiv = document.getElementById("chat-response");
@@ -165,9 +212,7 @@
       try {
         const result = await fetch("/api/chat", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: input })
         });
 
