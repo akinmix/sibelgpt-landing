@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SibelGPT</title>
   <link rel="icon" href="logo.png" />
   <style>
@@ -10,11 +10,11 @@
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
-      background: url('arka_plan.jpg') no-repeat center center fixed;
+      background: url('earth-bg.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
-      text-align: center;
       overflow-x: hidden;
+      text-align: center;
     }
 
     .top-bar {
@@ -24,27 +24,12 @@
       left: 0;
       padding: 15px 30px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       z-index: 10000;
     }
 
-    .top-bar button {
-      background-color: #3B0764;
-      color: white;
-      padding: 8px 16px;
-      font-size: 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
-      margin-left: 10px;
-    }
-
     .version-tag {
-      position: absolute;
-      left: 30px;
-      top: 15px;
       background-color: #3B0764;
       padding: 6px 12px;
       color: #fff;
@@ -53,36 +38,53 @@
       border-radius: 12px;
     }
 
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-buttons button {
+      background-color: #3B0764;
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
     .main-logo {
       width: 160px;
       margin-top: 100px;
       margin-bottom: 10px;
-      animation: fadeIn 2s ease-in-out 3s both;
-      filter: drop-shadow(0 0 15px #a855f7);
+      filter: drop-shadow(0 0 10px #a855f7);
+      animation: fadeIn 2s ease-in-out both;
     }
 
     h1, .subtitle, .container {
-      animation: fadeIn 2s ease-in-out 3.2s both;
-      text-shadow: 2px 2px 5px #000;
+      animation: fadeIn 2s ease-in-out 0.5s both;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+    h1 {
+      font-size: 32px;
+      margin-top: 10px;
     }
 
     .subtitle {
       font-size: 16px;
       font-style: italic;
-      color: #e0aaff;
+      color: #e0b3ff;
       margin-bottom: 30px;
     }
 
     .container {
       max-width: 900px;
       margin: 0 auto;
-      margin-top: 20px;
-      text-shadow: 2px 2px 4px #000;
+      margin-top: 10px;
+      font-size: 16px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9);
     }
 
     .highlight {
@@ -93,16 +95,18 @@
       margin: 60px auto;
       max-width: 800px;
       padding: 40px;
+      background: linear-gradient(135deg, #6b21a8, #3b82f6);
       border-radius: 20px;
       text-align: center;
-      animation: fadeIn 2s ease-in-out 3.4s both;
-      background: linear-gradient(135deg, #6b21a8, #3b82f6);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 2s ease-in-out 0.7s both;
     }
 
     #chat-box h2 {
       font-size: 20px;
       margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 1px 1px 2px black;
     }
 
     input[type="text"] {
@@ -127,44 +131,56 @@
 
     #chat-response {
       margin-top: 30px;
-      color: #ccc;
+      color: #eee;
       font-size: 16px;
       min-height: 30px;
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 60px;
       font-size: 13px;
       color: #ccc;
+      text-align: center;
+      padding-bottom: 20px;
     }
 
     footer a {
-      color: #8ab4f8;
+      color: #a855f7;
       text-decoration: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body>
 
+<body>
+  <!-- Üst Bar -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.0</div>
-    <button onclick="location.href='https://www.sibelizim.com/my-blog'">Bloğa Git</button>
-    <button>Üye Ol</button>
-    <button>Giriş Yap</button>
+    <div class="auth-buttons">
+      <button onclick="window.location.href='https://www.sibelizim.com/blog'">Bloğa Git</button>
+      <button onclick="window.location.href='https://www.sibelizim.com/uye-ol'">Üye Ol</button>
+      <button onclick="window.location.href='https://www.sibelizim.com/giris'">Giriş Yap</button>
+    </div>
   </div>
 
+  <!-- Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
+  <!-- Başlık ve Açıklama -->
   <h1>Hoş Geldiniz!</h1>
-  <p class="subtitle">Yapay zekanın Sibelce hali...</p>
+  <p class="subtitle">Yapay zekanın Sibelce hali…</p>
 
   <div class="container">
-    <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
-    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
-    <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+    <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
+    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda destek sunar.</p>
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
+  <!-- Chat Kutusu -->
   <div id="chat-box">
     <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
@@ -173,10 +189,12 @@
     <div id="chat-response"></div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    © 2025 SibelGPT – Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
+    © 2025 SibelGPT — Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
   </footer>
 
+  <!-- JS -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -207,10 +225,9 @@
         document.getElementById("user-input").value = "";
 
       } catch (error) {
-        responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
+        responseDiv.innerHTML = "Bağlantı hatası: " + error.message;
       }
     }
   </script>
-
 </body>
 </html>
