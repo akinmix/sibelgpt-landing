@@ -2,177 +2,199 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SibelGPT'ye Hoş Geldiniz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SibelGPT</title>
   <style>
+    /* Genel ayarlar */
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #09090A, #161521);
       color: white;
+      background: linear-gradient(to bottom, #09090A, #161521);
       overflow-x: hidden;
     }
 
-    .stars {
+    /* Parallax yıldızlar */
+    body::before {
+      content: "";
       position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: url("https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png");
-      background-size: cover;
+      background: url('https://raw.githubusercontent.com/kiliman/space-stars/master/starfield.png') repeat;
+      animation: moveStars 100s linear infinite;
       z-index: -1;
-      animation: moveStars 200s linear infinite;
-      opacity: 0.3;
+      opacity: 0.2;
     }
 
     @keyframes moveStars {
       from { background-position: 0 0; }
-      to { background-position: -10000px 5000px; }
+      to { background-position: 10000px 10000px; }
     }
 
-    header {
-      padding: 30px 20px 10px;
-      text-align: center;
+    /* Intro logo animasyonu */
+    #intro-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+      z-index: 9999;
+      animation: introZoom 3.5s ease-out forwards;
+      pointer-events: none;
     }
 
-    header img {
-      width: 100px;
-      margin-bottom: 10px;
+    #intro-logo img {
+      width: 300px;
+      height: auto;
+      filter: drop-shadow(0 0 30px #a020f0);
     }
 
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
+    @keyframes introZoom {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        filter: brightness(50%);
+      }
+      25% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+        filter: brightness(120%);
+      }
+      70% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(140%);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(50%);
+      }
     }
 
-    header p {
-      font-style: italic;
-      font-size: 1.2em;
-      color: #a855f7;
-      margin-top: 10px;
+    /* Üst etiket ve butonlar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
     }
 
-    .description {
-      max-width: 700px;
-      margin: 20px auto 40px;
-      text-align: center;
-      line-height: 1.7;
-      font-size: 1.1em;
-    }
-
-    .highlight {
+    .label {
+      background-color: #3B0764;
+      padding: 8px 16px;
+      border-radius: 12px;
       font-weight: bold;
-      color: #fff;
+      font-size: 14px;
     }
 
-    .icon {
-      font-size: 1.2em;
-      margin-right: 5px;
+    .buttons {
+      display: flex;
+      gap: 10px;
     }
 
-    #chat-box {
-      background-color: #2e2e32;
-      max-width: 600px;
-      margin: 0 auto 60px;
-      padding: 40px;
-      border-radius: 16px;
+    .buttons button {
+      background-color: #3B0764;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-top: 30px;
+    }
+
+    .subtitle {
+      color: #a855f7;
+      font-style: italic;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .chat-box {
+      background-color: #2a2a2e;
+      padding: 40px;
+      margin: 40px auto;
+      max-width: 700px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
 
     input[type="text"] {
       width: 90%;
       padding: 15px;
       font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #555;
-      margin-bottom: 20px;
-      background-color: #1a1a1a;
-      color: white;
-    }
-
-    button {
-      background-color: #3B0764;
-      color: white;
-      padding: 12px 28px;
-      font-size: 16px;
-      border: none;
       border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
+      border: none;
+      margin-bottom: 20px;
     }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #999;
-      border-top: 1px solid #333;
-    }
-
-    .top-bar {
-      position: fixed;
-      top: 20px;
-      left: 20px;
+    .send-btn {
       background-color: #3B0764;
       color: white;
-      padding: 6px 12px;
+      padding: 12px 24px;
+      border: none;
       border-radius: 8px;
+      cursor: pointer;
       font-weight: bold;
-      z-index: 999;
-      font-size: 0.85em;
     }
 
-    .auth-buttons {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-    }
-
-    .auth-buttons button {
-      margin-left: 10px;
-      background-color: #3B0764;
-      padding: 6px 14px;
-      font-size: 0.9em;
-      border-radius: 6px;
+    #chat-response {
+      margin-top: 20px;
+      color: #ddd;
+      font-size: 16px;
+      min-height: 30px;
     }
   </style>
 </head>
 <body>
 
-  <div class="stars"></div>
-
-  <div class="top-bar">SibelGPT 1.0</div>
-  <div class="auth-buttons">
-    <button>Üye Ol</button>
-    <button>Giriş Yap</button>
+  <!-- Giriş animasyonu -->
+  <div id="intro-logo">
+    <img src="sibelgpt-intro.jpg" alt="SibelGPT Intro Logo" />
   </div>
 
-  <header>
-    <img src="sibelgpt-logo.png" alt="SibelGPT Logo">
+  <!-- Üst bar -->
+  <div class="top-bar">
+    <div class="label">SibelGPT 1.0</div>
+    <div class="buttons">
+      <button>Üye Ol</button>
+      <button>Giriş Yap</button>
+    </div>
+  </div>
+
+  <!-- Ana içerik -->
+  <div class="content">
     <h1>Hoş Geldiniz!</h1>
-    <p>Yapay zekanın danışmanlıkla buluştuğu yer...</p>
-  </header>
+    <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
 
-  <section class="description">
-    <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
+    <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
-    <p><span class="icon">💬</span>Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+    <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
-  </section>
-
-  <div id="chat-box">
-    <p><strong>SibelGPT'ye sor:</strong></p>
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-    <br>
-    <button onclick="sendMessage()">Gönder</button>
-    <div id="chat-response" style="margin-top: 20px; color: #ccc;"></div>
   </div>
 
-  <footer>
-    © 2025 SibelGPT — All rights reserved. Powered by ChatGPT
-  </footer>
+  <!-- Chat bölümü -->
+  <div class="chat-box">
+    <h2>SibelGPT'ye sor:</h2>
+    <input type="text" id="user-input" placeholder="Sorunuzu yazın...">
+    <br>
+    <button class="send-btn" onclick="sendMessage()">Gönder</button>
+    <div id="chat-response"></div>
+  </div>
 
+  <!-- Chat.js dosyasını çağır -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -205,9 +227,18 @@
         document.getElementById("user-input").value = "";
 
       } catch (error) {
-        responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
+        responseDiv.innerHTML = "Bağlantı hatası: " + error.message;
       }
     }
+
+    // Giriş animasyonu DOM'dan kaldır
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const intro = document.getElementById("intro-logo");
+        if (intro) intro.remove();
+      }, 3500);
+    });
   </script>
+
 </body>
 </html>
