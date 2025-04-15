@@ -7,7 +7,6 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #09090A, #161521);
       color: white;
@@ -18,166 +17,163 @@
       position: fixed;
       width: 100%;
       height: 100%;
-      background: transparent;
+      background: url("https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png");
+      background-size: cover;
       z-index: -1;
+      animation: moveStars 200s linear infinite;
+      opacity: 0.3;
     }
 
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 2s infinite ease-in-out alternate;
-    }
-
-    @keyframes twinkle {
-      from { opacity: 0.2; }
-      to { opacity: 1; }
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 5000px; }
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .logo {
-      background-color: #3B0764;
-      color: white;
-      padding: 6px 14px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .auth-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .auth-buttons button {
-      background-color: #3B0764;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    h1 {
+      padding: 30px 20px 10px;
       text-align: center;
-      font-size: 36px;
-      margin-top: 0;
     }
 
-    .tagline {
-      text-align: center;
-      color: #c084fc;
+    header img {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+
+    header p {
       font-style: italic;
-      margin-bottom: 30px;
+      font-size: 1.2em;
+      color: #a855f7;
+      margin-top: 10px;
     }
 
-    .intro {
+    .description {
+      max-width: 700px;
+      margin: 20px auto 40px;
       text-align: center;
-      max-width: 700px;
-      margin: auto;
-      font-size: 16px;
-      line-height: 1.6;
+      line-height: 1.7;
+      font-size: 1.1em;
     }
 
-    .chat-container {
-      max-width: 700px;
-      margin: 60px auto;
+    .highlight {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .icon {
+      font-size: 1.2em;
+      margin-right: 5px;
+    }
+
+    #chat-box {
+      background-color: #2e2e32;
+      max-width: 600px;
+      margin: 0 auto 60px;
       padding: 40px;
-      background-color: #2b2b2b;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-radius: 16px;
       text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     input[type="text"] {
       width: 90%;
       padding: 15px;
-      border: none;
-      border-radius: 12px;
       font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #555;
       margin-bottom: 20px;
+      background-color: #1a1a1a;
+      color: white;
     }
 
-    button.send {
+    button {
       background-color: #3B0764;
       color: white;
-      padding: 12px 24px;
+      padding: 12px 28px;
+      font-size: 16px;
       border: none;
       border-radius: 10px;
-      font-weight: 600;
-      font-size: 16px;
       cursor: pointer;
-    }
-
-    #chat-response {
-      margin-top: 30px;
-      color: #eee;
-      min-height: 30px;
+      font-weight: 600;
     }
 
     footer {
       text-align: center;
       padding: 20px;
+      font-size: 0.9em;
       color: #999;
-      font-size: 14px;
+      border-top: 1px solid #333;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #3B0764;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      z-index: 999;
+      font-size: 0.85em;
+    }
+
+    .auth-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    .auth-buttons button {
+      margin-left: 10px;
+      background-color: #3B0764;
+      padding: 6px 14px;
+      font-size: 0.9em;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <div class="stars" id="stars-container"></div>
+
+  <div class="stars"></div>
+
+  <div class="top-bar">SibelGPT 1.0</div>
+  <div class="auth-buttons">
+    <button>Üye Ol</button>
+    <button>Giriş Yap</button>
+  </div>
 
   <header>
-    <div class="logo">SibelGPT 1.0</div>
-    <div class="auth-buttons">
-      <button>Üye Ol</button>
-      <button>Giriş Yap</button>
-    </div>
+    <img src="sibelgpt-logo.png" alt="SibelGPT Logo">
+    <h1>Hoş Geldiniz!</h1>
+    <p>Yapay zekanın içgörüsüyle buluştuğun yer...</p>
   </header>
 
-  <main>
-    <h1>Hoş Geldiniz!</h1>
-    <p class="tagline">Yapay zekanın danışmanlıkla buluştuğu yer...</p>
+  <section class="description">
+    <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
+    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
+    <p><span class="icon">💬</span>Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+    <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
+  </section>
 
-    <div class="intro">
-      <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
-      <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
-      <p>💬 Gayrimenkul ,numeroloji, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
-      <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
-    </div>
-
-    <div class="chat-container">
-      <h3>SibelGPT'ye sor:</h3>
-      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-      <br />
-      <button class="send" onclick="sendMessage()">Gönder</button>
-      <div id="chat-response"></div>
-    </div>
-  </main>
+  <div id="chat-box">
+    <p><strong>SibelGPT'ye sor:</strong></p>
+    <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+    <br>
+    <button onclick="sendMessage()">Gönder</button>
+    <div id="chat-response" style="margin-top: 20px; color: #ccc;"></div>
+  </div>
 
   <footer>
-    © 2025 SibelGPT – Powered by OpenAI
+    © 2025 SibelGPT — All rights reserved. Powered by ChatGPT
   </footer>
 
   <script>
-    // Twinkling stars generate
-    const starsContainer = document.getElementById('stars-container');
-    for (let i = 0; i < 100; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.top = Math.random() * 100 + 'vh';
-      star.style.left = Math.random() * 100 + 'vw';
-      star.style.animationDuration = (1 + Math.random() * 2) + 's';
-      starsContainer.appendChild(star);
-    }
-
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
       const responseDiv = document.getElementById("chat-response");
@@ -199,6 +195,7 @@
         });
 
         const data = await result.json();
+
         if (result.ok) {
           responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
         } else {
