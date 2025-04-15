@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SibelGPT</title>
-  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="icon" href="logo.png" />
   <style>
-    /* Genel Stil */
     body {
       margin: 0;
       padding: 0;
@@ -17,88 +16,52 @@
       text-align: center;
     }
 
-    /* Sabit üst logo */
-    .top-logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      height: 40px;
-    }
-
-    /* SibelGPT 1.0 */
-    .top-badge {
-      position: absolute;
-      top: 20px;
-      left: 80px;
-      background-color: #3B0764;
-      color: white;
-      padding: 6px 12px;
-      font-size: 13px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    /* Üye Ol – Giriş Yap */
-    .top-buttons {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-    }
-
-    .top-buttons button {
-      background-color: #3B0764;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      margin-left: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    /* Giriş Animasyonu */
+    /* Giriş animasyon logosu */
     .intro-logo {
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 200px;
-      height: auto;
-      transform: translate(-50%, -50%) scale(0.6);
-      opacity: 0;
-      animation: fadeInOut 3.5s ease-in-out forwards;
+      width: 300px;
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      animation: fadeInOut 6s ease-in-out forwards;
       z-index: 9999;
     }
 
     @keyframes fadeInOut {
       0% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(0.6);
+        transform: translate(-50%, -50%) scale(0.7);
       }
       30% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1.2);
       }
-      60% {
+      70% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1.0);
       }
       100% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(1.6);
-        display: none;
+        transform: translate(-50%, -50%) scale(1.4);
       }
     }
 
-    /* Giriş bölümü */
-    .container {
-      padding-top: 160px;
-      max-width: 900px;
-      margin: 0 auto;
+    /* Ana logo */
+    .main-logo {
+      width: 160px;
+      margin-top: 100px;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease-in-out 5s both;
     }
 
-    .title {
-      font-size: 32px;
-      font-weight: 700;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1, .subtitle, .container {
+      animation: fadeIn 2s ease-in-out 5.2s both;
     }
 
     .subtitle {
@@ -108,11 +71,16 @@
       margin-bottom: 30px;
     }
 
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      margin-top: 20px;
+    }
+
     .highlight {
       font-weight: bold;
     }
 
-    /* Chat kutusu */
     #chat-box {
       margin: 60px auto;
       max-width: 800px;
@@ -121,6 +89,7 @@
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 2s ease-in-out 5.4s both;
     }
 
     #chat-box h2 {
@@ -158,28 +127,24 @@
 </head>
 <body>
 
-  <!-- Giriş Animasyon Logosu -->
-  <img src="intro-logo.png" alt="SibelGPT Intro Logo" class="intro-logo" />
+  <!-- Giriş animasyonu (damga gibi) -->
+  <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
-  <!-- Sabit Logo ve Üst Bilgiler -->
-  <img src="logo.png" alt="SibelGPT Logo" class="top-logo" />
-  <div class="top-badge">SibelGPT 1.0</div>
-  <div class="top-buttons">
-    <button>Üye Ol</button>
-    <button>Giriş Yap</button>
-  </div>
+  <!-- Sayfa Ortasında Ana Logo -->
+  <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Giriş Metni -->
+  <!-- Giriş metni -->
+  <h1>Hoş Geldiniz!</h1>
+  <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
+
   <div class="container">
-    <h1 class="title">Hoş Geldiniz!</h1>
-    <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
     <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
     <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat Alanı -->
+  <!-- Chat kutusu -->
   <div id="chat-box">
     <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
@@ -188,6 +153,7 @@
     <div id="chat-response"></div>
   </div>
 
+  <!-- Chat script -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -203,9 +169,7 @@
       try {
         const result = await fetch("/api/chat", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: input })
         });
 
