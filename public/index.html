@@ -2,21 +2,77 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SibelGPT</title>
   <link rel="icon" href="logo.png" />
   <style>
+    /* Arka plan degrade ve bokeh noktaları */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #09090A, #161521);
       color: #fff;
-      overflow-x: hidden;
-      text-align: center;
+      overflow: hidden;
+      position: relative;
     }
 
-    /* Giriş animasyonu */
+    .bokeh {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bokeh span {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(168, 85, 247, 0.15);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .bokeh span:nth-child(2) {
+      width: 100px;
+      height: 100px;
+      left: 40%;
+      animation-delay: 5s;
+    }
+
+    .bokeh span:nth-child(3) {
+      width: 80px;
+      height: 80px;
+      left: 75%;
+      animation-delay: 10s;
+    }
+
+    .bokeh span:nth-child(4) {
+      width: 120px;
+      height: 120px;
+      left: 20%;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0% {
+        top: 100%;
+        transform: translateY(0) scale(1);
+        opacity: 0.4;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        top: -200px;
+        transform: translateY(-100%) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Intro animasyon logosu */
     .intro-logo {
       position: fixed;
       top: 50%;
@@ -25,7 +81,7 @@
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
       animation: fadeInOut 6s ease-in-out forwards;
-      z-index: 9999;
+      z-index: 10000;
     }
 
     @keyframes fadeInOut {
@@ -35,7 +91,6 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
     }
 
-    /* Sabit üst çubuk */
     .top-bar {
       position: fixed;
       width: 100%;
@@ -45,7 +100,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 10000;
+      z-index: 1000;
     }
 
     .version-tag {
@@ -60,10 +115,9 @@
     .auth-buttons {
       display: flex;
       gap: 10px;
-      margin-right: 40px;
     }
 
-    .auth-buttons button, .auth-buttons a {
+    .auth-buttons button {
       background-color: #3B0764;
       color: white;
       padding: 8px 16px;
@@ -72,16 +126,16 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
-      text-decoration: none;
     }
 
-    /* Logo */
     .main-logo {
       width: 160px;
       margin-top: 100px;
       margin-bottom: 10px;
       animation: fadeIn 2s ease-in-out 5s both;
       filter: drop-shadow(0 0 10px #a855f7);
+      z-index: 2;
+      position: relative;
     }
 
     @keyframes fadeIn {
@@ -91,11 +145,9 @@
 
     h1, .subtitle, .container {
       animation: fadeIn 2s ease-in-out 5.2s both;
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
+      z-index: 2;
+      position: relative;
+      text-align: center;
     }
 
     .subtitle {
@@ -115,22 +167,22 @@
       font-weight: bold;
     }
 
-    /* Chat kutusu */
     #chat-box {
       margin: 60px auto;
-      max-width: 700px;
+      max-width: 800px;
       padding: 40px;
-      background: linear-gradient(135deg, #6B21A8, #4F46E5);
+      background: linear-gradient(135deg, #5f259f, #2e1746);
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       animation: fadeIn 2s ease-in-out 5.4s both;
+      z-index: 2;
+      position: relative;
     }
 
     #chat-box h2 {
       font-size: 20px;
       margin-bottom: 20px;
-      color: #fff;
     }
 
     input[type="text"] {
@@ -161,43 +213,48 @@
     }
 
     footer {
+      text-align: center;
       margin-top: 80px;
-      font-size: 13px;
+      font-size: 14px;
       color: #aaa;
+      z-index: 2;
+      position: relative;
     }
 
     footer a {
-      color: #8B5CF6;
+      color: #c084fc;
       text-decoration: none;
-      font-weight: 500;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <!-- Giriş animasyon logosu -->
+  <!-- Intro animasyon logosu -->
   <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
-  <!-- Üst Çubuk -->
+  <!-- Parlayan bokeh ışıklar -->
+  <div class="bokeh">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Üst çubuk -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.0</div>
     <div class="auth-buttons">
-      <button>Üye Ol</button>
-      <button>Giriş Yap</button>
-      <a href="https://www.sibelizim.com" target="_blank">Bloga Git</a>
+      <button onclick="window.location.href='https://www.sibelizim.com/blog'">Bloga Git</button>
+      <button onclick="window.location.href='https://www.sibelizim.com/uye-girisi'">Giriş Yap</button>
     </div>
   </div>
 
-  <!-- Ana Logo -->
+  <!-- Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Başlık ve Açıklama -->
+  <!-- Başlık ve açıklama -->
   <h1>Hoş Geldiniz!</h1>
-  <p class="subtitle">Yapay zekanın Sibelce hali...</p>
+  <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
 
   <div class="container">
     <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
@@ -206,7 +263,7 @@
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat Kutusu -->
+  <!-- Chat kutusu -->
   <div id="chat-box">
     <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
@@ -215,14 +272,12 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Footer -->
+  <!-- Copyright -->
   <footer>
-    © 2025 SibelGPT – Powered by 
-    <a href="https://openai.com" target="_blank">OpenAI</a> &amp; 
-    <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
+    © 2025 SibelGPT – Powered by OpenAI & Sibel Intelligence | <a href="https://www.sibelizim.com" target="_blank">www.sibelizim.com</a>
   </footer>
 
-  <!-- Chat JS -->
+  <!-- Chat Script -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -257,6 +312,5 @@
       }
     }
   </script>
-
 </body>
 </html>
