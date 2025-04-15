@@ -4,170 +4,200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SibelGPT</title>
+  <link rel="icon" href="logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: linear-gradient(180deg, #09090A 0%, #161521 100%);
       font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom, #09090A, #161521);
       color: #fff;
       overflow-x: hidden;
+      text-align: center;
     }
 
-    /* Giriş Animasyonu */
-    #intro-logo {
+    /* Giriş animasyon logosu */
+    .intro-logo {
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
+      width: 300px;
+      transform: translate(-50%, -50%) scale(1);
       opacity: 1;
+      animation: fadeInOut 6s ease-in-out forwards;
       z-index: 9999;
-      animation: fadeZoom 4s ease forwards;
     }
 
-    @keyframes fadeZoom {
-      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+      30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+      70% { opacity: 1; transform: translate(-50%, -50%) scale(1.0); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
     }
 
-    /* Üstteki sabit logo */
+    /* Sabit üst çubuk */
+    .top-bar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .version-tag {
+      background-color: #3B0764;
+      padding: 6px 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 12px;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-buttons button {
+      background-color: #3B0764;
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Parlak ana logo */
     .main-logo {
       width: 160px;
-      margin: 30px auto 10px;
-      display: block;
+      margin-top: 100px;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease-in-out 5s both;
+      filter: drop-shadow(0 0 10px #a855f7);
     }
 
-    /* Sağ üst köşedeki SibelGPT 1.0 */
-    .version-tag {
-      position: fixed;
-      top: 25px;
-      right: 30px;
-      background-color: rgba(59, 7, 100, 0.8);
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #fff;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1, .subtitle, .container {
+      animation: fadeIn 2s ease-in-out 5.2s both;
     }
 
     h1 {
       font-size: 36px;
-      text-align: center;
-      margin-top: 20px;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     .subtitle {
-      text-align: center;
-      font-size: 18px;
-      color: #ccc;
-      margin-bottom: 50px;
-      padding: 0 20px;
+      font-size: 16px;
+      font-style: italic;
+      color: #c084fc;
+      margin-bottom: 30px;
     }
 
-    /* Sohbet Kutusu */
-    .chat-container {
-      margin: 40px auto 100px;
-      max-width: 720px;
-      background: #2a2a2a;
-      border-radius: 20px;
-      padding: 40px 30px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      margin-top: 20px;
     }
 
-    .chat-container h2 {
-      font-size: 22px;
-      color: #e0e0e0;
-      margin-bottom: 25px;
-    }
-
-    .chat-container input {
-      width: 100%;
-      padding: 18px 20px;
-      font-size: 18px;
-      border-radius: 12px;
-      border: none;
-      margin-bottom: 20px;
-      background-color: #1e1e1e;
-      color: #fff;
-    }
-
-    .chat-container button {
-      background-color: #3B0764;
-      color: white;
-      padding: 14px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.3s ease;
+    .highlight {
       font-weight: bold;
     }
 
-    .chat-container button:hover {
-      background-color: #5b0a91;
+    #chat-box {
+      margin: 60px auto;
+      max-width: 800px;
+      padding: 40px;
+      background-color: #2a2a2a;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 2s ease-in-out 5.4s both;
+    }
+
+    #chat-box h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      background-color: #1a1a1a;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #3B0764;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
     }
 
     #chat-response {
       margin-top: 30px;
-      color: #ddd;
-      font-size: 17px;
-      text-align: left;
-      width: 100%;
+      color: #ccc;
+      font-size: 16px;
       min-height: 30px;
-    }
-
-    footer {
-      text-align: center;
-      color: #888;
-      font-size: 14px;
-      margin: 60px 0 30px;
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 28px; }
-      .subtitle { font-size: 16px; }
-      .chat-container { padding: 30px 20px; }
     }
   </style>
 </head>
 <body>
-  <!-- Giriş Animasyonu -->
-  <img src="logo.png" alt="Intro Logo" id="intro-logo">
 
-  <!-- Sabit Logo -->
-  <img src="logo.png" alt="SibelGPT Logo" class="main-logo">
+  <!-- Giriş animasyon logosu -->
+  <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
-  <!-- Versiyon Etiketi -->
-  <div class="version-tag">SibelGPT 1.0</div>
+  <!-- Sabit üst çubuk -->
+  <div class="top-bar">
+    <div class="version-tag">SibelGPT 1.0</div>
+    <div class="auth-buttons">
+      <button>Üye Ol</button>
+      <button>Giriş Yap</button>
+    </div>
+  </div>
 
-  <h1>SibelGPT'ye Hoş Geldiniz!</h1>
-  <p class="subtitle">
-    SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli dijital bir danışmandır.<br />
-    Gayrimenkul yatırımları, numerolojik analizler ve finansal kararlar için rehberlik eder.<br />
-    💬 Yapay zekaya sorunuzu sorun, anında yanıt alın!
-  </p>
+  <!-- Sayfa Ortasında Parlak Logo -->
+  <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <div class="chat-container">
-    <h2>SibelGPT'ye sor:</h2>
+  <!-- Başlık ve açıklamalar -->
+  <h1>Hoş Geldiniz!</h1>
+  <p class="subtitle">Yapay zekanın içgörüsüyle buluştuğun yer...</p>
+
+  <div class="container">
+    <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
+    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
+    <p>💬 Numeroloji yorumları, emlak yatırımları, borsa ve para piyasaları hakkında bilgi burada sizi bekliyor.</p>
+    <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
+  </div>
+
+  <!-- Chat kutusu -->
+  <div id="chat-box">
+    <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+    <br />
     <button onclick="sendMessage()">Gönder</button>
     <div id="chat-response"></div>
   </div>
 
-  <footer>
-    © 2025 SibelGPT — Powered by OpenAI
-  </footer>
-
+  <!-- Chat script -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -183,9 +213,7 @@
       try {
         const result = await fetch("/api/chat", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: input })
         });
 
@@ -204,5 +232,6 @@
       }
     }
   </script>
+
 </body>
 </html>
