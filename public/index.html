@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SibelGPT</title>
   <style>
-    /* Genel ayarlar */
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -14,7 +13,6 @@
       overflow-x: hidden;
     }
 
-    /* Parallax yıldızlar */
     body::before {
       content: "";
       position: fixed;
@@ -33,51 +31,57 @@
       to { background-position: 10000px 10000px; }
     }
 
-    /* Intro logo animasyonu */
+    /* Giriş Animasyonu */
     #intro-logo {
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0.5);
+      transform: translate(-50%, -50%) scale(0.8);
       opacity: 0;
       z-index: 9999;
-      animation: introZoom 3.5s ease-out forwards;
+      animation: introZoom 5s ease-out forwards;
       pointer-events: none;
     }
 
     #intro-logo img {
-      width: 300px;
+      width: 400px;
       height: auto;
-      filter: drop-shadow(0 0 30px #a020f0);
+      filter: drop-shadow(0 0 40px #a020f0);
     }
 
     @keyframes introZoom {
       0% {
-        transform: translate(-50%, -50%) scale(0.5);
         opacity: 0;
-        filter: brightness(50%);
+        transform: translate(-50%, -50%) scale(0.6);
       }
-      25% {
+      20% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1.2);
-        filter: brightness(120%);
       }
-      70% {
-        transform: translate(-50%, -50%) scale(1);
-        filter: brightness(140%);
+      60% {
+        transform: translate(-50%, -50%) scale(1.1);
       }
       100% {
         opacity: 0;
         transform: translate(-50%, -50%) scale(1);
-        filter: brightness(50%);
       }
     }
 
-    /* Üst etiket ve butonlar */
     .top-bar {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 15px 30px;
+    }
+
+    .logo-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-top img {
+      height: 32px;
     }
 
     .label {
@@ -160,14 +164,17 @@
 </head>
 <body>
 
-  <!-- Giriş animasyonu -->
+  <!-- Sayfa giriş animasyonu -->
   <div id="intro-logo">
-    <img src="sibelgpt-intro.jpg" alt="SibelGPT Intro Logo" />
+    <img src="sibelgpt-intro.jpg" alt="SibelGPT Giriş Damgası" />
   </div>
 
-  <!-- Üst bar -->
+  <!-- Üst çubuk ve logo -->
   <div class="top-bar">
-    <div class="label">SibelGPT 1.0</div>
+    <div class="logo-top">
+      <img src="sibelgpt-icon.png" alt="SibelGPT Logo" />
+      <div class="label">SibelGPT 1.0</div>
+    </div>
     <div class="buttons">
       <button>Üye Ol</button>
       <button>Giriş Yap</button>
@@ -185,7 +192,7 @@
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat bölümü -->
+  <!-- Chat kutusu -->
   <div class="chat-box">
     <h2>SibelGPT'ye sor:</h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın...">
@@ -194,7 +201,7 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Chat.js dosyasını çağır -->
+  <!-- Chat.js -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -231,12 +238,12 @@
       }
     }
 
-    // Giriş animasyonu DOM'dan kaldır
+    // Intro animasyon 5 saniye sonra kaldırılır
     window.addEventListener("load", () => {
       setTimeout(() => {
         const intro = document.getElementById("intro-logo");
         if (intro) intro.remove();
-      }, 3500);
+      }, 5000);
     });
   </script>
 
