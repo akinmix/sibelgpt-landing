@@ -16,7 +16,6 @@
       text-align: center;
     }
 
-    /* Giriş animasyonu */
     .intro-logo {
       position: fixed;
       top: 50%;
@@ -35,7 +34,6 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
     }
 
-    /* Üst çubuk */
     .top-bar {
       position: fixed;
       width: 100%;
@@ -62,7 +60,8 @@
       gap: 10px;
     }
 
-    .auth-buttons button {
+    .auth-buttons button,
+    .auth-buttons a {
       background-color: #3B0764;
       color: white;
       padding: 8px 16px;
@@ -71,9 +70,9 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
+      text-decoration: none;
     }
 
-    /* Ana logo */
     .main-logo {
       width: 160px;
       margin-top: 100px;
@@ -108,15 +107,14 @@
       font-weight: bold;
     }
 
-    /* Chat kutusu */
     #chat-box {
       margin: 60px auto;
       max-width: 800px;
       padding: 40px;
-      background: linear-gradient(135deg, #5B0E9D, #6C28A9, #7C3AED); /* Mor baskın degrade */
+      background: linear-gradient(to bottom right, #6b21a8, #9333ea, #3b82f6);
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       animation: fadeIn 2s ease-in-out 5.4s both;
     }
 
@@ -151,11 +149,23 @@
       font-size: 16px;
       min-height: 30px;
     }
+
+    footer {
+      margin-top: 80px;
+      padding: 30px 0;
+      color: #999;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #a78bfa;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Giriş animasyonu -->
+  <!-- Giriş animasyon logosu -->
   <img src="intro-logo.png" alt="Intro Logo" class="intro-logo" />
 
   <!-- Sabit üst çubuk -->
@@ -164,17 +174,17 @@
     <div class="auth-buttons">
       <button>Üye Ol</button>
       <button>Giriş Yap</button>
+      <a href="https://www.sibelizim.com" target="_blank">Bloga Git</a>
     </div>
   </div>
 
-  <!-- Merkezdeki parlak logo -->
+  <!-- Sayfa Ortasında Parlak Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Başlık -->
+  <!-- Başlık ve açıklamalar -->
   <h1>Hoş Geldiniz!</h1>
   <p class="subtitle">Yapay zekanın Sibelce hali...</p>
 
-  <!-- Tanıtım -->
   <div class="container">
     <p><span class="highlight">SibelGPT</span>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.</p>
@@ -191,7 +201,14 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Chat işlemi -->
+  <!-- Footer -->
+  <footer>
+    © 2025 SibelGPT – Powered by 
+    <a href="https://openai.com" target="_blank">OpenAI</a> & 
+    <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
+  </footer>
+
+  <!-- Chat script -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
