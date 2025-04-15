@@ -6,53 +6,30 @@
   <title>SibelGPT</title>
   <link rel="icon" href="logo.png" />
   <style>
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
       font-family: 'Inter', sans-serif;
-      color: #fff;
-      overflow-x: hidden;
-      background: linear-gradient(to bottom, #09090A, #161521);
-      min-height: 100vh;
-      background-attachment: fixed;
-      background-image: url("world-bg.jpg");
-      background-position: center;
+      background: url('arka_plan.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-repeat: no-repeat;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
     }
 
     .top-bar {
       position: fixed;
+      width: 100%;
       top: 0;
       left: 0;
-      width: 100%;
-      padding: 15px 20px;
+      padding: 15px 30px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
-      z-index: 1000;
+      z-index: 10000;
     }
 
-    .version-tag {
-      background-color: #3B0764;
-      padding: 6px 12px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 12px;
-    }
-
-    .auth-buttons {
-      display: flex;
-      gap: 10px;
-      margin-right: 20px;
-    }
-
-    .auth-buttons button {
+    .top-bar button {
       background-color: #3B0764;
       color: white;
       padding: 8px 16px;
@@ -61,14 +38,32 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
+      margin-left: 10px;
+    }
+
+    .version-tag {
+      position: absolute;
+      left: 30px;
+      top: 15px;
+      background-color: #3B0764;
+      padding: 6px 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 12px;
     }
 
     .main-logo {
       width: 160px;
-      margin: 130px auto 20px auto;
-      display: block;
-      animation: fadeIn 2s ease-in-out both;
-      filter: drop-shadow(0 0 10px #a855f7);
+      margin-top: 100px;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease-in-out 3s both;
+      filter: drop-shadow(0 0 15px #a855f7);
+    }
+
+    h1, .subtitle, .container {
+      animation: fadeIn 2s ease-in-out 3.2s both;
+      text-shadow: 2px 2px 5px #000;
     }
 
     @keyframes fadeIn {
@@ -76,25 +71,18 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    h1 {
-      text-align: center;
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
     .subtitle {
-      text-align: center;
       font-size: 16px;
       font-style: italic;
-      color: #c084fc;
+      color: #e0aaff;
       margin-bottom: 30px;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 0 20px;
-      text-align: center;
+      margin-top: 20px;
+      text-shadow: 2px 2px 4px #000;
     }
 
     .highlight {
@@ -105,16 +93,16 @@
       margin: 60px auto;
       max-width: 800px;
       padding: 40px;
-      background: linear-gradient(to right, #6B21A8, #3B82F6);
       border-radius: 20px;
       text-align: center;
+      animation: fadeIn 2s ease-in-out 3.4s both;
+      background: linear-gradient(135deg, #6b21a8, #3b82f6);
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     #chat-box h2 {
       font-size: 20px;
       margin-bottom: 20px;
-      color: #fff;
     }
 
     input[type="text"] {
@@ -145,39 +133,28 @@
     }
 
     footer {
-      text-align: center;
-      font-size: 14px;
-      margin-top: 80px;
-      padding: 20px;
+      margin-top: 40px;
+      font-size: 13px;
       color: #ccc;
     }
 
     footer a {
-      color: #8b5cf6;
+      color: #8ab4f8;
       text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <!-- Üst Menü -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.0</div>
-    <div class="auth-buttons">
-      <button onclick="window.location.href='https://www.sibelizim.com'">Bloğa Git</button>
-      <button>Üye Ol</button>
-      <button>Giriş Yap</button>
-    </div>
+    <button onclick="location.href='https://www.sibelizim.com/my-blog'">Bloğa Git</button>
+    <button>Üye Ol</button>
+    <button>Giriş Yap</button>
   </div>
 
-  <!-- Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
 
-  <!-- Hoşgeldiniz Bölümü -->
   <h1>Hoş Geldiniz!</h1>
   <p class="subtitle">Yapay zekanın Sibelce hali...</p>
 
@@ -188,7 +165,6 @@
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Sohbet Kutusu -->
   <div id="chat-box">
     <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
@@ -197,12 +173,10 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Footer -->
   <footer>
     © 2025 SibelGPT – Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
   </footer>
 
-  <!-- Chat Script -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -233,7 +207,7 @@
         document.getElementById("user-input").value = "";
 
       } catch (error) {
-        responseDiv.innerHTML = "Bağlantı hatası oluştu: " + error.message;
+        responseDiv.innerHTML = "Bir bağlantı hatası oluştu: " + error.message;
       }
     }
   </script>
