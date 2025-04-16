@@ -112,17 +112,32 @@
       font-size: 16px;
     }
 
-    #chat-box {
+    .chat-wrapper {
       margin: 60px auto;
       max-width: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      animation: fadeIn 2s ease-in-out 1s both;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #ffffff10;
+      padding: 6px;
+      box-shadow: 0 0 10px #9333ea;
+    }
+
+    #chat-box {
+      flex: 1;
       padding: 40px 20px;
       background: linear-gradient(135deg, #6b21a8, #3b82f6);
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 0 30px rgba(104, 50, 200, 0.6);
-      animation: fadeIn 2s ease-in-out 1s both;
-      z-index: 1;
-      position: relative;
     }
 
     #chat-box h2 {
@@ -185,11 +200,14 @@
     }
 
     @media screen and (max-width: 768px) {
-      .main-logo { width: 120px; margin-top: 60px; }
-      #chat-box { padding: 20px; }
-      input[type="text"] { width: 100%; }
-      .top-bar { align-items: flex-start; }
-      .slogan { font-size: 16px; top: 70px; }
+      .chat-wrapper {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .avatar {
+        width: 80px;
+        height: 80px;
+      }
     }
   </style>
 </head>
@@ -216,13 +234,16 @@
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Chat Kutusu -->
-  <div id="chat-box">
-    <h2><strong>SibelGPT’ye sor:</strong></h2>
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-    <br />
-    <button onclick="sendMessage()">Gönder</button>
-    <div id="chat-response"></div>
+  <!-- Chat Kutusu + Avatar -->
+  <div class="chat-wrapper">
+    <img src="avatar-sibelgpt.png" alt="SibelGPT Avatarı" class="avatar" />
+    <div id="chat-box">
+      <h2><strong>SibelGPT’ye sor:</strong></h2>
+      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+      <br />
+      <button onclick="sendMessage()">Gönder</button>
+      <div id="chat-response"></div>
+    </div>
   </div>
 
   <!-- Footer -->
