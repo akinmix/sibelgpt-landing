@@ -18,6 +18,7 @@
       position: relative;
     }
 
+    /* Arka plan yıldız efekti */
     body::before {
       content: "";
       position: fixed;
@@ -35,16 +36,18 @@
       100% { background-position: 1000px 1000px; }
     }
 
+    /* Üst bar */
     .top-bar {
       position: fixed;
       top: 0;
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       padding: 15px 20px;
       z-index: 10;
       flex-wrap: wrap;
+      gap: 10px;
     }
 
     .version-tag {
@@ -53,18 +56,10 @@
       font-size: 14px;
       font-weight: bold;
       border-radius: 12px;
-      margin-bottom: 10px;
     }
 
-    .auth-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-start;
-    }
-
-    .auth-buttons button {
-      background-color: #3B0764;
+    .blog-button {
+      background-color: #9333ea;
       color: white;
       padding: 8px 16px;
       font-size: 14px;
@@ -72,12 +67,14 @@
       border-radius: 8px;
       cursor: pointer;
       transition: 0.3s;
+      font-weight: 500;
     }
 
-    .auth-buttons button:hover {
-      background-color: #9333ea;
+    .blog-button:hover {
+      background-color: #a855f7;
     }
 
+    /* Logo */
     .main-logo {
       width: 160px;
       margin-top: 120px;
@@ -115,6 +112,7 @@
       font-size: 16px;
     }
 
+    /* Chat Kutusu */
     #chat-box {
       margin: 60px auto;
       max-width: 800px;
@@ -200,9 +198,7 @@
   <!-- Üst Bar -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.1</div>
-    <div class="auth-buttons">
-      <button onclick="window.location.href='https://www.sibelizim.com'">Bloğa Git</button>
-    </div>
+    <button onclick="window.location.href='https://www.sibelizim.com'" class="blog-button">Bloğa Git</button>
   </div>
 
   <!-- Logo -->
@@ -232,7 +228,7 @@
     © 2025 SibelGPT — Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
   </footer>
 
-  <!-- JS -->
+  <!-- JavaScript -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
