@@ -5,7 +5,6 @@ export default async function handler(req, res) {
 
   let body = "";
 
-  // Gövdeyi oku
   try {
     const buffers = [];
     for await (const chunk of req) {
@@ -13,6 +12,7 @@ export default async function handler(req, res) {
     }
     body = Buffer.concat(buffers).toString();
   } catch (error) {
+    console.error("Gövde okuma hatası:", error);
     return res.status(400).json({ error: "Gövde okunamadı." });
   }
 
@@ -20,12 +20,13 @@ export default async function handler(req, res) {
   try {
     parsed = JSON.parse(body);
   } catch (error) {
+    console.error("JSON parse hatası:", error);
     return res.status(400).json({ error: "Geçersiz JSON" });
   }
 
+  const text = parsed.text;
   const apiKey = process.env.ELEVEN_API_KEY;
   const voiceId = "ThT5KcBeYPX3keUQqHPh";
-  const text = parsed.text;
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
@@ -37,13 +38,16 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         text: text,
         model_id: "eleven_monolingual_v1",
-        voice_settings: { stability: 0.5, similarity_boost: 0.8 }
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.8
+        }
       })
     });
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("ElevenLabs API hatası:", error);
+      console.error("ElevenLabs yanıt hatası:", error);
       return res.status(500).json({ error: "Ses üretilemedi", detail: error });
     }
 
@@ -53,7 +57,7 @@ export default async function handler(req, res) {
     res.status(200).send(Buffer.from(audioBuffer));
 
   } catch (error) {
-    console.error("Genel Hata:", error);
+    console.error("Sunucu hatası:", error);
     res.status(500).json({ error: "Sunucu hatası", detail: error.message });
   }
 }
