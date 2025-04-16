@@ -15,7 +15,6 @@
       color: #fff;
       text-align: center;
       overflow-x: hidden;
-      position: relative;
     }
 
     .top-bar {
@@ -46,22 +45,15 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s;
       font-weight: 500;
     }
 
-    .blog-button:hover {
-      background-color: #a855f7;
-    }
-
     .slogan {
-      position: relative;
-      top: 90px;
+      margin-top: 90px;
       font-style: italic;
       font-size: 18px;
       color: #e0b3ff;
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
-      z-index: 2;
     }
 
     .main-logo {
@@ -69,19 +61,16 @@
       margin-top: 20px;
       margin-bottom: 10px;
       filter: drop-shadow(0 0 12px #a855f7);
-      animation: zoomIn 2s ease-out;
-      z-index: 1;
-      position: relative;
     }
 
     h1, .container {
-      animation: fadeIn 2s ease-in-out 0.5s both;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
-      z-index: 1;
-      position: relative;
     }
 
-    h1 { font-size: 34px; margin-top: 10px; }
+    h1 {
+      font-size: 34px;
+      margin-top: 10px;
+    }
 
     .container {
       max-width: 900px;
@@ -97,7 +86,6 @@
       align-items: center;
       justify-content: center;
       gap: 20px;
-      animation: fadeIn 2s ease-in-out 1s both;
     }
 
     .avatar {
@@ -143,12 +131,6 @@
       cursor: pointer;
       margin-top: 12px;
       font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #9333ea;
-      box-shadow: 0 0 10px #a855f7;
     }
 
     #chat-response {
@@ -164,18 +146,11 @@
       color: #ccc;
       text-align: center;
       padding-bottom: 20px;
-      z-index: 1;
-      position: relative;
     }
 
     footer a {
       color: #a855f7;
       text-decoration: none;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes glowPulse {
@@ -187,17 +162,6 @@
     @keyframes floatSibel {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
-    }
-
-    @media screen and (max-width: 768px) {
-      .chat-wrapper {
-        flex-direction: column;
-        gap: 20px;
-      }
-      .avatar {
-        width: 80px;
-        height: 80px;
-      }
     }
   </style>
 </head>
@@ -268,7 +232,7 @@
 
         if (result.ok) {
           responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
-          playVoice(data.reply);  // ← Sesli yanıt fonksiyonu
+          playVoice(data.reply); // ← Sesli yanıt burada çalışır
         } else {
           responseDiv.innerHTML = `Hata: ${data.error}`;
         }
@@ -282,17 +246,22 @@
 
     async function playVoice(text) {
       const voicePlayer = document.getElementById("voice-player");
-      const response = await fetch("/api/speak", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text })
-      });
 
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      voicePlayer.src = audioUrl;
-      voicePlayer.style.display = "block";
-      voicePlayer.play();
+      try {
+        const response = await fetch("/api/speak", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: text })
+        });
+
+        const blob = await response.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        voicePlayer.src = audioUrl;
+        voicePlayer.play();
+
+      } catch (error) {
+        console.error("Ses oynatma hatası:", error);
+      }
     }
   </script>
 </body>
