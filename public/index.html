@@ -42,12 +42,11 @@
       top: 0;
       width: 100%;
       display: flex;
-      justify-content: flex-start;
+      flex-direction: column;
       align-items: center;
       padding: 15px 20px;
       z-index: 10;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .version-tag {
@@ -74,7 +73,6 @@
       background-color: #a855f7;
     }
 
-    /* Logo */
     .main-logo {
       width: 160px;
       margin-top: 120px;
@@ -112,7 +110,6 @@
       font-size: 16px;
     }
 
-    /* Chat Kutusu */
     #chat-box {
       margin: 60px auto;
       max-width: 800px;
@@ -189,7 +186,7 @@
       .main-logo { width: 120px; margin-top: 90px; }
       #chat-box { padding: 20px; }
       input[type="text"] { width: 100%; }
-      .top-bar { flex-direction: column; align-items: flex-start; }
+      .top-bar { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
