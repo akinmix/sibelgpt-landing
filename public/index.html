@@ -129,6 +129,7 @@
       background-color: #ffffff10;
       padding: 6px;
       box-shadow: 0 0 10px #9333ea;
+      animation: glowPulse 2.5s ease-in-out infinite, floatSibel 3s ease-in-out infinite;
     }
 
     #chat-box {
@@ -197,6 +198,17 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 8px #9333ea; }
+      50% { box-shadow: 0 0 25px #a855f7; }
+      100% { box-shadow: 0 0 8px #9333ea; }
+    }
+
+    @keyframes floatSibel {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
     }
 
     @media screen and (max-width: 768px) {
