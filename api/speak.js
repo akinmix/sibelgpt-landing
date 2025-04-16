@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
   const text = parsed.text;
   const apiKey = process.env.ELEVEN_API_KEY;
-  const voiceId = "ThT5KcBeYPX3keUQqHPh";
+  const voiceId = "ThT5KcBeYPX3keUQqHPh"; // Dorothy
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
@@ -37,17 +37,17 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         text: text,
-        model_id: "eleven_monolingual_v1",
+        model_id: "eleven_multilingual_v2",
         voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.8
+          stability: 0.3,
+          similarity_boost: 0.85
         }
       })
     });
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("ElevenLabs yanıt hatası:", error);
+      console.error("ElevenLabs API hatası:", error);
       return res.status(500).json({ error: "Ses üretilemedi", detail: error });
     }
 
