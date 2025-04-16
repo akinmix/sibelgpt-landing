@@ -19,72 +19,58 @@
 
     .top-bar {
       position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      padding: 15px 30px;
+      top: 20px;
+      left: 20px;
       display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 10px;
-      z-index: 10000;
       flex-direction: column;
-      align-items: flex-start;
+      gap: 8px;
+      z-index: 10000;
     }
 
     .version-tag, .blog-button {
-      background-color: #6b21a8;
+      background-color: #7e22ce;
+      color: white;
       padding: 6px 12px;
-      color: #fff;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: bold;
-      border-radius: 12px;
       text-decoration: none;
-      display: inline-block;
+    }
+
+    .slogan {
+      margin-top: 60px;
+      font-size: 14px;
+      font-style: italic;
+      color: #d8b4fe;
+      text-shadow: 1px 1px 3px #000;
     }
 
     .main-logo {
-      width: 160px;
-      margin-top: 100px;
-      margin-bottom: 10px;
+      width: 150px;
+      margin-top: 20px;
       filter: drop-shadow(0 0 10px #a855f7);
       animation: fadeIn 2s ease-in-out both;
     }
 
-    h1, .subtitle, .container {
-      animation: fadeIn 2s ease-in-out 0.5s both;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    }
-
     h1 {
       font-size: 32px;
-      margin-top: 10px;
+      margin: 10px 0;
+      animation: fadeIn 2s ease-in-out 0.3s both;
+      text-shadow: 1px 1px 4px #000;
     }
 
-    .subtitle {
+    .description {
       font-size: 16px;
-      font-style: italic;
-      color: #e0b3ff;
-      margin-bottom: 30px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      margin-top: 10px;
-      font-size: 16px;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9);
-    }
-
-    .highlight {
-      font-weight: bold;
+      margin: 0 auto 30px;
+      max-width: 700px;
+      text-shadow: 1px 1px 3px #000;
+      animation: fadeIn 2s ease-in-out 0.5s both;
     }
 
     #chat-box {
-      width: 70%;
-      max-width: 950px;
-      margin: 60px auto;
-      padding: 40px;
+      margin: 40px auto;
+      max-width: 900px;
+      padding: 40px 30px;
       background: linear-gradient(135deg, #6b21a8, #3b82f6);
       border-radius: 20px;
       text-align: center;
@@ -93,23 +79,10 @@
       position: relative;
     }
 
-    .chat-avatar {
-      position: absolute;
-      left: -90px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #a855f7;
-      box-shadow: 0 0 10px #a855f7;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(-50%) translateY(0); }
-      50% { transform: translateY(-50%) translateY(-10px); }
-      100% { transform: translateY(-50%) translateY(0); }
+    #chat-box h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #fff;
     }
 
     input[type="text"] {
@@ -139,6 +112,29 @@
       min-height: 30px;
     }
 
+    .avatar {
+      position: absolute;
+      left: -110px;
+      bottom: 30px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #a855f7;
+      animation: floatAvatar 3s ease-in-out infinite;
+      box-shadow: 0 0 20px #a855f7;
+      background-color: white;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatAvatar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
     footer {
       margin-top: 60px;
       font-size: 13px;
@@ -151,42 +147,36 @@
       color: #a855f7;
       text-decoration: none;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      .chat-avatar {
-        display: none;
-      }
-
-      #chat-box {
-        width: 90%;
-        padding: 30px;
-      }
-    }
   </style>
 </head>
+
 <body>
+
+  <!-- Üst Butonlar -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.1</div>
     <a class="blog-button" href="https://www.sibelizim.com" target="_blank">Bloğa Git</a>
   </div>
 
-  <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
-  <p class="subtitle">Yapay zekanın Sibelce hali…</p>
+  <!-- Slogan -->
+  <div class="slogan">Yapay zekanın Sibelce hali…</div>
 
+  <!-- Logo -->
+  <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
+
+  <!-- Başlık -->
   <h1>Hoş Geldiniz!</h1>
-  <div class="container">
+
+  <!-- Açıklama -->
+  <div class="description">
     <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda destek sunar.</p>
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
+  <!-- Sohbet Kutusu -->
   <div id="chat-box">
-    <img src="avatar-sibelgpt.png" alt="Avatar" class="chat-avatar" />
+    <img src="avatar-sibelgpt.png" class="avatar" alt="Sibel Avatar" />
     <h2><strong>SibelGPT’ye sor:</strong></h2>
     <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
     <br />
@@ -194,10 +184,12 @@
     <div id="chat-response"></div>
   </div>
 
+  <!-- Footer -->
   <footer>
     © 2025 SibelGPT — Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
   </footer>
 
+  <!-- JS -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -222,12 +214,17 @@
         if (result.ok) {
           responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
 
-          // Sesli yanıt tetikle
-          await fetch("/api/speak", {
+          // Sesli yanıt tetikle ve oynat
+          const audioResponse = await fetch("/api/speak", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: data.reply })
           });
+
+          const audioData = await audioResponse.blob();
+          const audioURL = URL.createObjectURL(audioData);
+          const audio = new Audio(audioURL);
+          audio.play();
 
         } else {
           responseDiv.innerHTML = `Hata: ${data.error}`;
