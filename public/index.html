@@ -151,30 +151,21 @@
 </head>
 
 <body>
-
-  <!-- Üst Butonlar -->
   <div class="top-bar">
     <div class="version-tag">SibelGPT 1.1</div>
     <a class="blog-button" href="https://www.sibelizim.com" target="_blank">Bloğa Git</a>
   </div>
 
-  <!-- Slogan -->
   <div class="slogan">Yapay zekanın Sibelce hali…</div>
-
-  <!-- Logo -->
   <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
-
-  <!-- Başlık -->
   <h1>Hoş Geldiniz!</h1>
 
-  <!-- Açıklama -->
   <div class="description">
     <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
     <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda destek sunar.</p>
     <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
   </div>
 
-  <!-- Sohbet Kutusu -->
   <div id="chat-box">
     <img src="avatar-sibelgpt.png" class="avatar" alt="Sibel Avatar" />
     <h2><strong>SibelGPT’ye sor:</strong></h2>
@@ -184,12 +175,10 @@
     <div id="chat-response"></div>
   </div>
 
-  <!-- Footer -->
   <footer>
     © 2025 SibelGPT — Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
   </footer>
 
-  <!-- JS -->
   <script>
     async function sendMessage() {
       const input = document.getElementById("user-input").value;
@@ -203,29 +192,16 @@
       responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
 
       try {
-        const result = await fetch("/api/chat", {
+        const result = await fetch("https://sibelgpt-backend.onrender.com/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input })
+          body: JSON.stringify({ question: input })
         });
 
         const data = await result.json();
 
         if (result.ok) {
           responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
-
-          // Sesli yanıt tetikle ve oynat
-          const audioResponse = await fetch("/api/speak", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: data.reply })
-          });
-
-          const audioData = await audioResponse.blob();
-          const audioURL = URL.createObjectURL(audioData);
-          const audio = new Audio(audioURL);
-          audio.play();
-
         } else {
           responseDiv.innerHTML = `Hata: ${data.error}`;
         }
