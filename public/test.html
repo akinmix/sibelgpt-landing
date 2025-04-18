@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>SibelGPT – İlan Detay Testi</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+    }
+    pre {
+      background: #eee;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔍 SibelGPT – İlan Detay Testi</h2>
+  <label for="ilanNo">İlan Numarası:</label>
+  <input type="text" id="ilanNo" placeholder="Örnek: P73663481" />
+  <button onclick="sorgula()">Sorgula</button>
+  <pre id="sonuc">Henüz sorgu yapılmadı.</pre>
+
+  <script>
+    async function sorgula() {
+      const ilanNo = document.getElementById("ilanNo").value.trim();
+      const sonuc = document.getElementById("sonuc");
+
+      if (!ilanNo) {
+        sonuc.textContent = "Lütfen bir ilan numarası girin.";
+        return;
+      }
+
+      sonuc.textContent = "🔄 Sorgulanıyor...";
+
+      try {
+        const res = await fetch("https://sibelgpt-backend.onrender.com/api/ilan-detay", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ ilan_no: ilanNo })
+        });
+
+        if (!res.ok) {
+          throw new Error("Sunucu hatası: " + res.status);
+        }
+
+        const data = await res.json();
+        sonuc.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        sonuc.textContent = "🚫 Hata: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
