@@ -1,29 +1,33 @@
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Sadece POST istekleri destekleniyor." });
-  }
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const chatBox = document.getElementById("chat-box");
 
-  try {
-    const { question } = req.body;
+  const userMessage = input.value.trim();
+  if (!userMessage) return;
 
-    const response = await fetch("https://sibelgpt-backend.onrender.com/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ question })
-    });
+  // Kullanıcı mesajını göster
+  const userDiv = document.createElement("div");
+  userDiv.className = "message user-message";
+  userDiv.innerHTML = `<strong>Sen:</strong> ${userMessage}`;
+  chatBox.appendChild(userDiv);
 
-    const data = await response.json();
+  input.value = "";
 
-    if (!data || !data.reply) {
-      return res.status(500).json({ reply: "⚠️ Bot şu anda yanıt veremiyor." });
-    }
+  // Sunucuya mesajı gönder
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: userMessage })
+  });
 
-    return res.status(200).json({ reply: data.reply });
+  const data = await response.json();
 
-  } catch (error) {
-    console.error("❌ Hata:", error);
-    return res.status(500).json({ reply: "❌ Bir hata oluştu. Sunucuya ulaşılamıyor." });
-  }
+  // Cevabı göster
+  const botDiv = document.createElement("div");
+  botDiv.className = "message bot-message";
+  botDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
+  chatBox.appendChild(botDiv);
+
+  // En sona kaydır
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
