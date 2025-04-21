@@ -1,24 +1,14 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background: url('arka_plan.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #fff;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-}
-
-header {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
 }
 
 .chat-container {
@@ -26,65 +16,72 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  max-width: 800px;
-  margin: 100px auto 120px auto;
   padding: 20px;
   overflow-y: auto;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .message {
-  margin-bottom: 18px;
+  background: rgba(0, 0, 0, 0.5);
   padding: 14px 20px;
   border-radius: 12px;
+  margin-bottom: 12px;
   max-width: 80%;
-  word-wrap: break-word;
-  line-height: 1.5;
   font-size: 16px;
 }
 
 .user-message {
-  background-color: rgba(255, 255, 255, 0.2);
   align-self: flex-end;
+  background-color: rgba(255, 255, 255, 0.2);
   text-align: right;
 }
 
 .bot-message {
-  background-color: rgba(0, 0, 0, 0.5);
   align-self: flex-start;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .chat-input {
   width: 100%;
-  max-width: 700px;
+  max-width: 900px;
+  margin: 0 auto;
   display: flex;
+  align-items: center;
   gap: 10px;
-  padding: 12px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
+  padding: 14px;
+  background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
-  border: 1px solid #ccc;
+  border-top: 1px solid #888;
   position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .chat-input input {
   flex: 1;
-  padding: 12px 18px;
+  padding: 14px;
   font-size: 16px;
   border-radius: 8px;
-  border: 1px solid #aaa;
+  border: none;
+  outline: none;
   background: white;
   color: black;
 }
 
 .chat-input button {
-  padding: 12px 20px;
+  padding: 14px 20px;
   font-size: 16px;
   border-radius: 8px;
-  cursor: pointer;
-  background-color: #6a1b9a;
+  background-color: #8e24aa;
   color: white;
   border: none;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
