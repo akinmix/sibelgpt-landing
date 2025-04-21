@@ -4,214 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SibelGPT</title>
-  <link rel="icon" href="logo.png" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      background: url('earth-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      overflow-x: hidden;
-      text-align: center;
-    }
-
-    .top-bar {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 10000;
-    }
-
-    .version-tag, .blog-button {
-      background-color: #7e22ce;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .slogan {
-      margin-top: 60px;
-      font-size: 14px;
-      font-style: italic;
-      color: #d8b4fe;
-      text-shadow: 1px 1px 3px #000;
-    }
-
-    .main-logo {
-      width: 150px;
-      margin-top: 20px;
-      filter: drop-shadow(0 0 10px #a855f7);
-      animation: fadeIn 2s ease-in-out both;
-    }
-
-    h1 {
-      font-size: 32px;
-      margin: 10px 0;
-      animation: fadeIn 2s ease-in-out 0.3s both;
-      text-shadow: 1px 1px 4px #000;
-    }
-
-    .description {
-      font-size: 16px;
-      margin: 0 auto 30px;
-      max-width: 700px;
-      text-shadow: 1px 1px 3px #000;
-      animation: fadeIn 2s ease-in-out 0.5s both;
-    }
-
-    #chat-box {
-      margin: 40px auto;
-      max-width: 900px;
-      padding: 40px 30px;
-      background: linear-gradient(135deg, #6b21a8, #3b82f6);
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 2s ease-in-out 0.7s both;
-      position: relative;
-    }
-
-    #chat-box h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #fff;
-    }
-
-    input[type="text"] {
-      width: 90%;
-      padding: 15px;
-      font-size: 16px;
-      border-radius: 12px;
-      border: none;
-      margin-bottom: 20px;
-    }
-
-    button {
-      background-color: #3B0764;
-      color: white;
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    #chat-response {
-      margin-top: 30px;
-      color: #eee;
-      font-size: 16px;
-      min-height: 30px;
-    }
-
-    .avatar {
-      position: absolute;
-      left: -110px;
-      bottom: 30px;
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      border: 3px solid #a855f7;
-      animation: floatAvatar 3s ease-in-out infinite;
-      box-shadow: 0 0 20px #a855f7;
-      background-color: white;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes floatAvatar {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    footer {
-      margin-top: 60px;
-      font-size: 13px;
-      color: #ccc;
-      text-align: center;
-      padding-bottom: 20px;
-    }
-
-    footer a {
-      color: #a855f7;
-      text-decoration: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="top-bar">
-    <div class="version-tag">SibelGPT 1.1</div>
-    <a class="blog-button" href="https://www.sibelizim.com" target="_blank">Bloğa Git</a>
+  <!-- Arka plan dünya görseli -->
+  <div class="background"></div>
+
+  <div class="chat-container">
+    <!-- Avatar -->
+    <div class="avatar">
+      <img src="/avatar-sibelgpt.png" alt="SibelGPT Avatar">
+    </div>
+
+    <!-- Mesajlar burada gösterilecek -->
+    <div class="chat-output" id="chat-output">
+      <!-- JS ile buraya mesajlar eklenecek -->
+    </div>
+
+    <!-- Kullanıcı giriş alanı -->
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+      <button onclick="sendMessage()">Gönder</button>
+    </div>
   </div>
 
-  <div class="slogan">Yapay zekanın Sibelce hali…</div>
-  <img src="logo.png" alt="SibelGPT Logo" class="main-logo" />
-  <h1>Hoş Geldiniz!</h1>
-
-  <div class="description">
-    <p><strong>SibelGPT</strong>, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır.</p>
-    <p>Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda destek sunar.</p>
-    <p><strong>SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın.</strong></p>
-  </div>
-
-  <div id="chat-box">
-    <img src="avatar-sibelgpt.png" class="avatar" alt="Sibel Avatar" />
-    <h2><strong>SibelGPT’ye sor:</strong></h2>
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-    <br />
-    <button onclick="sendMessage()">Gönder</button>
-    <div id="chat-response"></div>
-  </div>
-
-  <footer>
-    © 2025 SibelGPT — Powered by <a href="https://openai.com" target="_blank">OpenAI</a> & <a href="https://www.sibelizim.com" target="_blank">Sibel Intelligence</a>
-  </footer>
-
-  <script>
-    async function sendMessage() {
-      const input = document.getElementById("user-input").value;
-      const responseDiv = document.getElementById("chat-response");
-
-      if (input.trim() === "") {
-        responseDiv.innerHTML = "Lütfen bir soru yazın.";
-        return;
-      }
-
-      responseDiv.innerHTML = "SibelGPT yanıtlıyor... ⏳";
-
-      try {
-        const result = await fetch("https://sibelgpt-backend.onrender.com/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question: input })
-        });
-
-        const data = await result.json();
-
-        if (result.ok) {
-          responseDiv.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
-        } else {
-          responseDiv.innerHTML = `Hata: ${data.error}`;
-        }
-
-        document.getElementById("user-input").value = "";
-
-      } catch (error) {
-        responseDiv.innerHTML = "Bağlantı hatası: " + error.message;
-      }
-    }
-  </script>
+  <!-- JavaScript -->
+  <script src="chat.js"></script>
 </body>
 </html>
