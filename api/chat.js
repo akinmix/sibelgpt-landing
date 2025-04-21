@@ -1,44 +1,34 @@
 async function sendMessage() {
   const input = document.getElementById("user-input");
+  const chatBox = document.getElementById("chat-box");
   const message = input.value.trim();
+
   if (!message) return;
 
-  // Kullanıcı mesajını ekle
-  const output = document.getElementById("chat-output");
-  const userMsg = document.createElement("div");
-  userMsg.className = "user";
-  userMsg.innerText = message;
-  output.appendChild(userMsg);
+  // Kullanıcının mesajını göster
+  const userMessage = document.createElement("div");
+  userMessage.innerHTML = `<strong>Sen:</strong> ${message}`;
+  chatBox.appendChild(userMessage);
 
-  // Giriş kutusunu temizle
   input.value = "";
+  chatBox.scrollTop = chatBox.scrollHeight;
 
-  // Scroll'u en aşağıya kaydır
-  output.scrollTop = output.scrollHeight;
-
-  // Bot cevabı için bekleme mesajı
-  const botMsg = document.createElement("div");
-  botMsg.className = "bot";
-  botMsg.innerText = "SibelGPT düşünüyor...";
-  output.appendChild(botMsg);
-
-  // API'ye mesaj gönder
   try {
-    const response = await fetch("https://sibelgpt-backend.onrender.com/chat", {
+    const response = await fetch("/api/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question: message })
     });
 
     const data = await response.json();
-    botMsg.innerText = data.reply || "Yanıt alınamadı.";
-  } catch (error) {
-    botMsg.innerText = "Bir hata oluştu. Lütfen tekrar deneyin.";
-    console.error("Hata:", error);
-  }
 
-  // Scroll'u en aşağıya kaydır
-  output.scrollTop = output.scrollHeight;
+    const replyMessage = document.createElement("div");
+    replyMessage.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
+    chatBox.appendChild(replyMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  } catch (err) {
+    const error = document.createElement("div");
+    error.innerHTML = `<strong>Hata:</strong> Yanıt alınamadı.`;
+    chatBox.appendChild(error);
+  }
 }
