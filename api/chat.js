@@ -1,34 +1,35 @@
-async function sendMessage() {
-  const input = document.getElementById("user-input");
+document.addEventListener("DOMContentLoaded", () => {
+  const sendButton = document.getElementById("send-button");
+  const userInput = document.getElementById("user-input");
   const chatBox = document.getElementById("chat-box");
-  const message = input.value.trim();
 
-  if (!message) return;
+  sendButton.addEventListener("click", async () => {
+    const message = userInput.value.trim();
+    if (!message) return;
 
-  // Kullanıcının mesajını göster
-  const userMessage = document.createElement("div");
-  userMessage.innerHTML = `<strong>Sen:</strong> ${message}`;
-  chatBox.appendChild(userMessage);
+    appendMessage("Sen", message, "user");
+    userInput.value = "";
 
-  input.value = "";
-  chatBox.scrollTop = chatBox.scrollHeight;
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: message })
+      });
 
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: message })
-    });
+      const data = await response.json();
+      appendMessage("SibelGPT", data.reply || "Yanıt alınamadı.", "bot");
+    } catch (error) {
+      appendMessage("Hata", "Sunucuyla bağlantı kurulamadı.", "bot");
+      console.error("Chat hatası:", error);
+    }
+  });
 
-    const data = await response.json();
-
-    const replyMessage = document.createElement("div");
-    replyMessage.innerHTML = `<strong>SibelGPT:</strong> ${data.reply}`;
-    chatBox.appendChild(replyMessage);
+  function appendMessage(sender, text, type) {
+    const msg = document.createElement("div");
+    msg.className = `message ${type}`;
+    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatBox.appendChild(msg);
     chatBox.scrollTop = chatBox.scrollHeight;
-  } catch (err) {
-    const error = document.createElement("div");
-    error.innerHTML = `<strong>Hata:</strong> Yanıt alınamadı.`;
-    chatBox.appendChild(error);
   }
-}
+});
