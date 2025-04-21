@@ -2,63 +2,62 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-image: url('public/arka_plan.jpg');
+  background-image: url("arka_plan.jpg");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  color: white;
 }
 
 .chat-container {
-  width: 90%;
-  max-width: 800px;
-  height: 90vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 15px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  height: 100vh;
+  justify-content: flex-end;
 }
 
-#chat-box {
+.chat-box {
   flex: 1;
-  padding: 20px;
   overflow-y: auto;
-  color: white;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  margin: 20px;
+  border-radius: 10px;
 }
 
 .input-area {
   display: flex;
-  padding: 10px;
-  background-color: #222;
   align-items: center;
-}
-
-.input-area input {
-  flex: 1;
   padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  margin-right: 10px;
-}
-
-.input-area button {
-  background-color: #9b59b6;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
+  background-color: #111;
+  margin: 0 20px 20px 20px;
+  border-radius: 10px;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+}
+
+button {
+  margin-left: 10px;
+  padding: 10px 15px;
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5e1ca8;
 }
