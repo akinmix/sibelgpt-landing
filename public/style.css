@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: url('/arka_plan.jpg') no-repeat center center fixed;
+  background: url('arka_plan.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #fff;
   display: flex;
@@ -11,21 +11,24 @@ body {
 }
 
 header {
-  padding: 20px;
   text-align: center;
-  font-size: 28px;
-  font-weight: bold;
-  text-shadow: 1px 1px 3px #000;
+  margin-top: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
 }
 
 .chat-container {
   flex: 1;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   justify-content: flex-end;
+  max-width: 800px;
+  margin: 100px auto 120px auto;
   padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
   overflow-y: auto;
 }
 
@@ -43,26 +46,16 @@ header {
   background-color: rgba(255, 255, 255, 0.2);
   align-self: flex-end;
   text-align: right;
-  color: #fff;
 }
 
 .bot-message {
   background-color: rgba(0, 0, 0, 0.5);
   align-self: flex-start;
-  color: #fff;
-}
-
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  margin-right: 12px;
 }
 
 .chat-input {
   width: 100%;
   max-width: 700px;
-  margin: 20px auto;
   display: flex;
   gap: 10px;
   padding: 12px;
@@ -70,8 +63,10 @@ header {
   border-radius: 12px;
   backdrop-filter: blur(6px);
   border: 1px solid #ccc;
-  position: sticky;
-  bottom: 0;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .chat-input input {
@@ -92,11 +87,4 @@ header {
   background-color: #6a1b9a;
   color: white;
   border: none;
-}
-
-footer {
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  color: #ccc;
 }
