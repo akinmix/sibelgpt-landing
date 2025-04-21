@@ -1,35 +1,29 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const sendButton = document.getElementById("send-button");
-  const userInput = document.getElementById("user-input");
-  const chatBox = document.getElementById("chat-box");
-
-  sendButton.addEventListener("click", async () => {
-    const message = userInput.value.trim();
-    if (!message) return;
-
-    appendMessage("Sen", message, "user");
-    userInput.value = "";
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: message })
-      });
-
-      const data = await response.json();
-      appendMessage("SibelGPT", data.reply || "Yanıt alınamadı.", "bot");
-    } catch (error) {
-      appendMessage("Hata", "Sunucuyla bağlantı kurulamadı.", "bot");
-      console.error("Chat hatası:", error);
-    }
-  });
-
-  function appendMessage(sender, text, type) {
-    const msg = document.createElement("div");
-    msg.className = `message ${type}`;
-    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chatBox.appendChild(msg);
-    chatBox.scrollTop = chatBox.scrollHeight;
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Sadece POST istekleri destekleniyor." });
   }
-});
+
+  try {
+    const { question } = req.body;
+
+    const response = await fetch("https://sibelgpt-backend.onrender.com/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ question })
+    });
+
+    const data = await response.json();
+
+    if (!data || !data.reply) {
+      return res.status(500).json({ reply: "⚠️ Bot şu anda yanıt veremiyor." });
+    }
+
+    return res.status(200).json({ reply: data.reply });
+
+  } catch (error) {
+    console.error("❌ Hata:", error);
+    return res.status(500).json({ reply: "❌ Bir hata oluştu. Sunucuya ulaşılamıyor." });
+  }
+}
