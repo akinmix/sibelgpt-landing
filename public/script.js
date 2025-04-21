@@ -1,31 +1,31 @@
 async function sendMessage() {
-  const inputField = document.getElementById("user-input");
-  const message = inputField.value.trim();
+  const input = document.getElementById("user-input");
+  const message = input.value.trim();
   if (!message) return;
 
-  appendMessage("Sen", message);
-
-  inputField.value = "";
+  appendMessage("Sen", message, "user");
+  input.value = "";
 
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: message })
+      body: JSON.stringify({ question: message }),
     });
 
     const data = await response.json();
-    appendMessage("SibelGPT", data.reply);
+    appendMessage("SibelGPT", data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.", "bot");
   } catch (error) {
-    appendMessage("SibelGPT", "❌ Bir hata oluştu. Lütfen tekrar deneyin.");
+    appendMessage("SibelGPT", "❌ Bir hata oluştu. Sunucuya ulaşılamıyor.", "bot");
     console.error(error);
   }
 }
 
-function appendMessage(sender, message) {
+function appendMessage(sender, text, role) {
   const chatBox = document.getElementById("chat-box");
-  const msgDiv = document.createElement("div");
-  msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
-  chatBox.appendChild(msgDiv);
+  const messageElem = document.createElement("div");
+  messageElem.className = "message " + role;
+  messageElem.innerHTML = `<strong>${sender}:</strong> ${text}`;
+  chatBox.appendChild(messageElem);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
