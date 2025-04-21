@@ -7,7 +7,7 @@ async function sendMessage() {
   input.value = "";
 
   try {
-    const response = await fetch("/api/chat", {
+    const response = await fetch("https://sibelgpt-backend.onrender.com/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: message }),
