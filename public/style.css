@@ -1,0 +1,111 @@
+/* Genel yapı */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+/* Arka plan dünya görseli */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/arka_plan.jpg') no-repeat center center fixed;
+  background-size: cover;
+  z-index: -1;
+  filter: brightness(0.4);
+}
+
+/* Ana chat kutusu */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100vh;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Avatar alanı */
+.avatar {
+  position: absolute;
+  bottom: 100px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Mesaj ekranı */
+.chat-output {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 80px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Kullanıcı mesajı */
+.chat-output .user {
+  align-self: flex-end;
+  background-color: #4c00ff;
+  padding: 10px 15px;
+  border-radius: 12px;
+  max-width: 75%;
+}
+
+/* Bot cevabı */
+.chat-output .bot {
+  align-self: flex-start;
+  background-color: #1e1e2f;
+  padding: 10px 15px;
+  border-radius: 12px;
+  max-width: 75%;
+}
+
+/* Giriş kutusu */
+.chat-input {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.chat-input button {
+  background-color: #6b4eff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
