@@ -8,21 +8,13 @@
 </head>
 <body>
   <div class="chat-container">
-    <div class="chat-box" id="chat-box">
-      <!-- Mesajlar buraya eklenecek -->
-    </div>
-    <div class="input-container">
-      <img src="public/avatar-sibelgpt.png" alt="Avatar" class="avatar" />
-      <input
-        type="text"
-        id="user-input"
-        placeholder="SibelGPT’ye sorunuzu yazın..."
-        autocomplete="off"
-      />
-      <button id="send-button">Gönder</button>
+    <div id="chat-box"></div>
+    <div class="input-area">
+      <img src="public/avatar-sibelgpt.png" class="avatar" />
+      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+      <button onclick="sendMessage()">Gönder</button>
     </div>
   </div>
-
-  <script src="api/chat.js" type="module"></script>
+  <script src="script.js"></script>
 </body>
 </html>
