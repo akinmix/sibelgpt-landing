@@ -27,5 +27,8 @@ function appendMessage(sender, text, role) {
   messageElem.className = "message " + role;
   messageElem.innerHTML = `<strong>${sender}:</strong> ${text}`;
   chatBox.appendChild(messageElem);
+  setTimeout(() => {
   chatBox.scrollTop = chatBox.scrollHeight;
+}, 100);
+
 }
