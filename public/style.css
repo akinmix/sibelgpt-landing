@@ -9,7 +9,7 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
+} 
 .chat-container {
   display: flex;
   flex-direction: column;
