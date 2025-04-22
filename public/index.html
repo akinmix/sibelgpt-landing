@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SibelGPT</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- İkon kütüphanesi ekleyebilirsiniz, örneğin Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body>
@@ -20,31 +19,27 @@
         <a href="#" class="auth-button register-button">Üye Ol</a>
         <a href="#" class="auth-button login-button">Üye Girişi</a>
     </div>
-    <!-- Butonlar Sonu -->
 
     <!-- Ana Layout - Sidebar ve İçerik Alanını İçerir -->
     <div class="main-layout">
       <!-- Sol Yan Panel (Sidebar) -->
       <div class="sidebar">
-        <!-- Sidebar Başlığı: Logo ve SibelGPT Yazısı -->
         <div class="sidebar-header">
-             <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo"> <!-- Logo burada -->
-             <span>SibelGPT</span> <!-- Yazı burada -->
+             <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
+             <span>SibelGPT</span>
         </div>
         <div class="new-chat-button">
             <button>
-                <i class="fas fa-plus"></i> Yeni Sohbet <!-- İkon ekledim -->
+                <i class="fas fa-plus"></i> Yeni Sohbet
             </button>
         </div>
         <div class="history">
             <h2>Geçmiş</h2>
             <ul id="history-list">
-                <!-- Geçmiş sohbet öğeleri buraya JavaScript ile eklenecek -->
-                 <li>Henüz kaydedilmiş sohbet yok.</li> <!-- Başlangıç placeholder'ı -->
+                <li>Henüz kaydedilmiş sohbet yok.</li>
             </ul>
         </div>
 
-        <!-- Web Sitesi ve İlan Linkleri -->
         <div class="sidebar-links-group">
              <a href="https://www.sibelizim.com" target="_blank">
                 <i class="fas fa-external-link-alt"></i> sibelizim.com
@@ -56,18 +51,11 @@
                 <i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım
             </a>
         </div>
-        <!-- Link Grubu Sonu -->
-
       </div>
 
       <!-- İçerik Alanı - Chat Kutusu ve Giriş Alanını İçerir -->
       <div class="content-area">
-        <!-- Mesaj Kutusu -->
         <div class="chat-container" id="chat-box">
-          <!-- Initial Talking Avatar Animation Kodları ÇIKARTILDI -->
-
-          <!-- Mesajlar buraya gelecek -->
-          <!-- Hoş Geldin Mesajı (İlk yüklendiğinde görünebilir) -->
            <div class="message bot-message"><strong>SibelGPT:</strong> Merhaba!SibelGPT, Sibel Kazan Midilli tarafından geliştirilen, yapay zeka destekli bir dijital danışmandır.Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.
             SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın! .</div>
         </div>
@@ -81,11 +69,17 @@
       </div>
     </div> <!-- main-layout sonu -->
 
-    <!-- Footer (sayfanın en altında) -->
+    <!-- Footer -->
     <footer class="footer">
       <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
     </footer>
 
+    <!-- 🎬 GÖRSEL ORTADA ÇIKAN INTRO VİDEO (splash sonrası) -->
+    <video id="intro-video" autoplay muted playsinline>
+      <source src="talking-avatar.mp4" type="video/mp4" />
+    </video>
+
+    <!-- JS bağlantısı -->
     <script src="script.js"></script>
   </body>
 </html>
