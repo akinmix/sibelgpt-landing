@@ -70,7 +70,6 @@ body {
   background-color: rgba(139, 36, 170, 0.6);
 }
 
-/* Ana Layout */
 .main-layout {
   display: flex;
   flex-direction: row;
@@ -78,7 +77,6 @@ body {
   overflow: hidden;
 }
 
-/* Sidebar */
 .sidebar {
   width: 280px;
   background-color: rgba(0, 0, 0, 0.7);
@@ -384,16 +382,38 @@ body {
   }
 }
 
-/* 🎬 Splash sonrası ortada çıkan video için */
-#intro-video {
+/* 🎬 Avatar video alanı ve dinle butonu */
+#video-wrapper {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#intro-video {
   max-width: 80vw;
   max-height: 80vh;
-  z-index: 10000;
-  display: none;
   border-radius: 20px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+#play-button {
+  margin-top: 12px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #8e24aa;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#play-button:hover {
+  background-color: #a739c7;
 }
