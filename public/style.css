@@ -70,6 +70,7 @@ body {
     background-color: rgba(139, 36, 170, 0.6); /* Mor tonunda opak arka plan */
 }
 
+
 /* Ana Layout - Sidebar ve İçerik Yan Yana */
 .main-layout {
     display: flex;
@@ -226,18 +227,17 @@ body {
  }
 
 /* Initial Talking Avatar Animation Stili */
+/* Artık chat-container içinde olduğundan, bu stil flex öğesi gibi davranır */
 #initial-avatar-animation {
     /* Chat container içinde ortala */
-    text-align: center; /* İçindeki görseli/videoyu ortala */
-    margin: 20px auto 30px auto; /* Üstte ve altta boşluk */
+    /* text-align: center;  flexbox kullanıldığı için gerek kalmayabilir */
+    margin: 20px auto 30px auto; /* Üstte ve altta boşluk, yatayda auto ile ortala */
     max-width: 120px; /* Animasyon alanının maksimum genişliği */
-    /* video etiketi inline block gibi davranır, margin auto ile ortalanır */
-    /* position: relative;  Gerekirse içindeki elemanlar için konumlandırma */
 
     /* Başlangıçta gizli */
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out; /* Görünürlük geçişi */
+    display: none; /* JS tarafından değiştirilecek */
+    opacity: 0; /* JS tarafından değiştirilecek */
+    transition: opacity 0.5s ease-in-out;
 }
 
 /* Animasyon Video Stili */
@@ -248,15 +248,27 @@ body {
     max-width: 100%; /* Kapsayıcıdan taşmasını engelle */
     object-fit: contain; /* Video içeriğinin boyutunu koruyarak sığdır */
     border-radius: 50%; /* İsteğe bağlı: Eğer video dairesel olacaksa */
+    /* Video elementinin kendisinde padding veya margin vermeyin, kapsayıcı div'de yönetin */
 }
 
+
+/* İçerik Alanı - Chat ve Input */
+.content-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
 
 /* Mesaj Kutusu */
 .chat-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 20px;
+  padding: 20px; /* Padding'i orijinal haline getirdik */
+  /* Animasyon div'i artık içerde olduğu için, ilk mesajın üst boşluğunu animasyon div'i sağlıyor. */
+  /* chat-container'ın kendi üst padding'i yeterli olmalı. */
   max-width: 900px;
   margin: 0 auto;
   overflow-y: auto;
@@ -264,6 +276,12 @@ body {
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
+
+/* Hoş geldin mesajı için özel üst boşluk (Eğer animasyon div'i yeterli boşluk bırakmazsa) */
+/* Şuanki HTML yapısında animasyon div'i ilk mesajdan önce, margin: 20px auto 30px auto;
+   bu boşluğu sağlamalı. Ancak yine de gerekirse bu kuralı kullanabilirsiniz. */
+/* .chat-container .message:first-of-type { margin-top: 20px; } */
+
 
 .message {
   background: rgba(0, 0, 0, 0.5);
@@ -413,7 +431,7 @@ body {
 
     /* Initial Talking Avatar Animation Responsive */
     #initial-avatar-animation {
-         margin: 15px auto 20px auto;
+         margin: 15px auto 20px auto; /* Küçük ekranlarda boşluğu azalt */
          max-width: 80px;
     }
     #initial-avatar-animation video { /* img yerine video */
