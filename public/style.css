@@ -417,3 +417,11 @@ body {
 #play-button:hover {
   background-color: #a739c7;
 }
+#video-wrapper.fade-out {
+  animation: fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.95); }
+}
