@@ -53,7 +53,8 @@ function hideTypingIndicator() {
 
 async function sendMessage() {
   const message = userInput.value.trim();
-  if (!message) return;
+  // Input pasifse veya mesaj boşsa gönderme
+  if (!message || userInput.disabled) return;
 
   // Kullanıcının mesajını ekle ve currentConversation'a kaydet
   appendMessage("Sen", message, "user", true);
@@ -74,20 +75,33 @@ async function sendMessage() {
       body: JSON.stringify({ question: message }),
     });
 
-    // -------- YAZIYOR ANIMASYONU KALDIRMA (cevap gelince) --------
-    // hideTypingIndicator(); // Finally bloğuna taşıdık
+    if (!response.ok) {
+        // Eğer HTTP status kodu 2xx değilse (örn: 404, 500)
+        // Hata mesajını JSON'dan almaya çalış (eğer backend hata mesajı gönderiyorsa)
+        // Veya genel bir hata mesajı ver
+        let errorData;
+        try {
+            errorData = await response.json();
+        } catch (e) {
+             // JSON parse edilemiyorsa veya response boşsa
+             errorData = { reply: `Sunucu hatası: ${response.status}` };
+        }
+        // Hata mesajını data.reply gibi bir alandan almayı deneyebiliriz
+        throw new Error(errorData.reply || `Sunucu hatası: ${response.status}`);
+    }
+
 
     const data = await response.json();
-    const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
+    const reply = data.reply || "❌ Anlaşılmayan bir cevap alındı."; // Daha spesifik hata
 
     // Gerçek cevabı eklemeden ÖNCE animasyonu kaldırdığımızdan emin olmalıyız (finally yapar)
     appendMessage("SibelGPT", reply, "bot", true); // true: geçmişe ekle
 
   } catch (error) {
-    // -------- YAZIYOR ANIMASYONU KALDIRMA (hata olunca) --------
-    // hideTypingIndicator(); // Finally bloğuna taşıdık
-
-    appendMessage("SibelGPT", "❌ Bir hata oluştu. Sunucuya ulaşılamıyor.", "bot", true); // true: geçmişe ekle
+    // Hata mesajını göster (fetch hatası veya yukarıdaki response.ok hatası)
+    // error.message kullanarak daha detaylı bilgi verebiliriz
+    const errorMessage = error.message || "❌ Bir hata oluştu. Sunucuya ulaşılamıyor veya beklenmedik bir sorun oluştu.";
+    appendMessage("SibelGPT", errorMessage, "bot", true); // true: geçmişe ekle
     console.error("Mesaj gönderirken hata:", error);
   } finally {
     // -------- BU BLOK HER ZAMAN ÇALIŞIR (Hata olsa da olmasa da) --------
@@ -104,28 +118,22 @@ async function sendMessage() {
 function appendMessage(sender, text, role, addToHistory = false) {
   const messageElem = document.createElement("div");
 
-  // ---- DİKKAT: Typing indicator eklerken bu fonksiyon kullanılmayacak ----
-  // Çünkü indicator'ın içeriği farklı (noktalar var, strong tag yok vs.)
-  // Sadece gerçek user ve bot mesajları için kullanılıyor.
-  if (role !== 'typing-indicator') { // Bu kontrol aslında gereksiz çünkü indicator'ı ayrı fonksiyon ekliyor
-      messageElem.className = "message " + role + "-message"; // Sınıf adını düzeltelim (user-message, bot-message)
-      // Güvenlik Notu: Kullanıcıdan veya API'den gelen veriyi doğrudan innerHTML'e basmak
-      // Cross-Site Scripting (XSS) açıklarına yol açabilir.
-      // Eğer API cevabı veya kullanıcı girdisi HTML içermiyorsa textContent kullanmak daha güvenlidir.
-      // Şimdilik bold tag için innerHTML kalıyor, ama dikkatli olunmalı.
-      messageElem.innerHTML = `<strong>${sender}:</strong> `; // Önce gönderen
-      const textNode = document.createTextNode(text); // Sonra metni güvenli ekle
-      messageElem.appendChild(textNode);
-  } else {
-     // Bu kısım artık showTypingIndicator fonksiyonunda ele alınıyor.
-     // messageElem.className = "message bot-message typing-indicator";
-     // // Noktaları ekleme mantığı showTypingIndicator içinde...
-  }
+  // Sınıf adını ayarla (indicator için ayrı bir işlem yok, çünkü ayrı fonksiyonla ekleniyor)
+  messageElem.className = "message " + role + "-message"; // Sınıf adı: message user-message veya message bot-message
 
+  // İçeriği ayarla (Güvenlik odaklı)
+  const senderElem = document.createElement("strong");
+  senderElem.textContent = `${sender}: `; // Gönderen adı (textContent güvenli)
+  messageElem.appendChild(senderElem);
 
+  const textNode = document.createTextNode(text); // Mesaj metni (textContent güvenli)
+  messageElem.appendChild(textNode);
+
+  // Mesajı chat kutusuna ekle
   chatBox.appendChild(messageElem);
 
-  if (addToHistory && role !== 'typing-indicator') { // Indicator'ı geçmişe ekleme
+  // Mesajı konuşma geçmişine ekle (eğer addToHistory true ise ve indicator değilse)
+  if (addToHistory && role !== 'typing-indicator') {
      currentConversation.push({ sender, text, role });
   }
 
@@ -137,8 +145,11 @@ function appendMessage(sender, text, role, addToHistory = false) {
 function scrollToBottom() {
     // Kısa bir gecikme, eleman DOM'a eklendikten sonra scroll yapar
     setTimeout(() => {
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }, 50); // 100ms biraz uzun olabilir, 50ms deneyelim
+      // Önce chatBox'ın varlığını kontrol edelim
+      if (chatBox) {
+          chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }, 50);
 }
 
 
@@ -149,103 +160,104 @@ function handleInputKeyPress(event) {
         return;
     }
     if (event.key === 'Enter') {
-        event.preventDefault();
+        event.preventDefault(); // Formun submit olmasını engelle (gerçi form yok ama alışkanlık)
         sendMessage();
     }
 }
 
 
 // --- Sohbet Geçmişi Fonksiyonları (Local Storage Tabanlı) ---
-// Bu fonksiyonlarda değişiklik yok, öncekiyle aynı...
+// Değişiklik yok...
 
 function loadConversations() {
     const conversationsJson = localStorage.getItem(HISTORY_STORAGE_KEY);
     try {
+        // Eğer local storage boşsa veya geçersiz JSON içeriyorsa boş array döndür
         return conversationsJson ? JSON.parse(conversationsJson) : [];
     } catch (e) {
         console.error("Sohbet geçmişi yüklenirken hata:", e);
-        return [];
+        localStorage.removeItem(HISTORY_STORAGE_KEY); // Hatalı veriyi temizle
+        return []; // Boş array döndür
     }
 }
 
 function saveConversations(conversations) {
+    // conversations'ın bir array olduğundan emin olalım
+    if (!Array.isArray(conversations)) {
+        console.error("Kaydedilecek veri bir dizi değil:", conversations);
+        return;
+    }
     try {
         localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(conversations));
     } catch (e) {
         console.error("Sohbet geçmişi kaydedilirken hata:", e);
+        // Burada depolama alanı doluysa uyarı verilebilir
+        if (e.name === 'QuotaExceededError') {
+             alert("Tarayıcı depolama alanı dolu. Eski sohbetler kaydedilemiyor olabilir.");
+        }
     }
 }
 
 function saveCurrentConversation() {
-    // Sadece welcome mesajı varsa veya hiç mesaj yoksa kaydetme
-    if (currentConversation.length === 0 || (currentConversation.length === 1 && currentConversation[0].role === 'bot' && currentConversation[0].text.includes('Merhaba!'))) {
+    // Mevcut konuşma boşsa veya sadece ilk bot mesajını içeriyorsa kaydetme
+    if (!currentConversation || currentConversation.length === 0 || (currentConversation.length === 1 && currentConversation[0].role === 'bot')) {
+        // console.log("Kaydedilecek anlamlı mesaj yok, atlanıyor.");
         return;
     }
 
-    const chatId = Date.now(); // Basit ID olarak timestamp kullanılıyor
+    // Basit bir ID olarak timestamp kullanılıyor (daha sağlam bir ID sistemi düşünülebilir)
+    const chatId = `chat_${Date.now()}_${Math.random().toString(16).slice(2)}`;
     const title = generateConversationTitle(currentConversation);
 
     const conversations = loadConversations();
 
-    // Aynı sohbetin tekrar tekrar kaydedilmesini önlemek için basit bir kontrol eklenebilir (isteğe bağlı)
-    // Örn: const existingConv = conversations.find(c => c.id === currentConversationId); if(existingConv) ...
+    // Aynı ID ile zaten kayıtlı bir sohbet var mı diye kontrol et (çok düşük ihtimal ama)
+    if (conversations.some(c => c.id === chatId)) {
+        console.warn("Çakışan Sohbet ID'si tespit edildi, kaydetme atlanıyor:", chatId);
+        return;
+    }
 
-    conversations.unshift({ id: chatId, title: title, messages: currentConversation });
+    // Yeni sohbeti en başa ekle
+    conversations.unshift({ id: chatId, title: title, messages: JSON.parse(JSON.stringify(currentConversation)) }); // Deep copy
 
-    // Geçmişi belli bir sayıda tutmak isterseniz burada slice() yapabilirsiniz
-    // const MAX_HISTORY = 20;
-    // if (conversations.length > MAX_HISTORY) {
-    //     conversations = conversations.slice(0, MAX_HISTORY);
-    // }
+    // Geçmişi belli bir sayıda tutmak isterseniz (örneğin son 50 sohbet)
+    const MAX_HISTORY = 50;
+    if (conversations.length > MAX_HISTORY) {
+        conversations.length = MAX_HISTORY; // Sadece ilk 50'yi tut (unshift ile eklediğimiz için sondakiler silinir)
+    }
 
     saveConversations(conversations);
-    displayHistory(); // Geçmişi güncelledikten sonra sidebar'ı yenile
+    displayHistory(); // Sidebar'ı yenile
+    // Yeni sohbet kaydedildiği için sidebar'da seçili olmamalı
+    highlightSelectedChat(null);
+    // console.log("Mevcut sohbet kaydedildi:", chatId);
 }
 
 
 function generateConversationTitle(conversation) {
-    if (!conversation || conversation.length === 0) {
-        return "Boş Sohbet";
-    }
-    // İlk kullanıcı mesajını bul
+    if (!conversation || conversation.length === 0) return "Boş Sohbet";
+
     const firstUserMessage = conversation.find(msg => msg.role === 'user');
     if (firstUserMessage && firstUserMessage.text) {
         const text = firstUserMessage.text.trim();
-        // Başlığı kısaltma mantığı
-        if (text.length > 30) {
-            const trimmedText = text.substring(0, 30);
-            const lastSpaceIndex = trimmedText.lastIndexOf(' ');
-            // Eğer son kelime çok kısaysa veya boşluk yoksa direkt kes
-            if (lastSpaceIndex > 10) {
-                return trimmedText.substring(0, lastSpaceIndex) + '...';
-            }
-            return trimmedText + '...';
-        }
-        return text; // 30 karakterden kısaysa olduğu gibi döndür
+        return text.length > 30 ? text.substring(0, 27) + '...' : text; // Kısaltma
     }
-    // Kullanıcı mesajı yoksa ilk bot mesajını kullan (Hoşgeldin mesajı hariç tutulabilir)
-    const firstMeaningfulBotMessage = conversation.find(msg => msg.role === 'bot' && !msg.text.includes('Merhaba!'));
-    const targetBotMessage = firstMeaningfulBotMessage || conversation.find(msg => msg.role === 'bot'); // Bulamazsa herhangi bir bot mesajı
 
+    const firstMeaningfulBotMessage = conversation.find(msg => msg.role === 'bot' && !msg.text.includes('Merhaba!'));
+    const targetBotMessage = firstMeaningfulBotMessage || conversation.find(msg => msg.role === 'bot');
     if(targetBotMessage && targetBotMessage.text){
         const text = targetBotMessage.text.replace('SibelGPT:', '').trim();
-         // Başlığı kısaltma mantığı
-        if (text.length > 30) {
-            const trimmedText = text.substring(0, 30);
-            const lastSpaceIndex = trimmedText.lastIndexOf(' ');
-             if (lastSpaceIndex > 10) {
-                 return "Bot: " + trimmedText.substring(0, lastSpaceIndex) + '...';
-             }
-             return "Bot: " + trimmedText + '...';
-        }
-        return "Bot: " + text;
+        return "Bot: " + (text.length > 25 ? text.substring(0, 22) + '...' : text); // Kısaltma
     }
-    return "Yeni Sohbet"; // Hiç anlamlı mesaj yoksa
+
+    return "Yeni Sohbet Başlığı";
 }
 
 
 function clearChat() {
+    if (!chatBox) return; // Henüz yüklenmediyse çık
     chatBox.innerHTML = ''; // Tüm mesajları sil
+
     // HTML'den gelen ilk bot mesajını tekrar ekle
     const initialBotMessageDiv = document.createElement("div");
     initialBotMessageDiv.className = "message bot-message";
@@ -256,11 +268,12 @@ function clearChat() {
     currentConversation = [{ sender: 'SibelGPT', text: initialBotMessageDiv.textContent.replace('SibelGPT:', '').trim(), role: 'bot' }];
 
     highlightSelectedChat(null); // Sidebar vurgusunu kaldır
-    userInput.focus(); // Input'a odaklan
+    if (userInput) userInput.focus(); // Input'a odaklan
 }
 
 
 function displayHistory() {
+    if (!historyList) return; // Henüz yüklenmediyse çık
     const conversations = loadConversations();
     historyList.innerHTML = ''; // Önce listeyi temizle
 
@@ -275,43 +288,47 @@ function displayHistory() {
 
     conversations.forEach(conv => {
         const listItem = document.createElement('li');
-        listItem.textContent = conv.title || "Başlıksız Sohbet"; // Başlık yoksa varsayılan
+        listItem.textContent = conv.title || "Başlıksız Sohbet";
         listItem.setAttribute('data-chat-id', conv.id);
-        listItem.addEventListener('click', handleHistoryItemClick); // Tıklama olayını ekle
+        // Tıklama olayı artık delegation ile yönetiliyor, burada eklemeye gerek yok
         historyList.appendChild(listItem);
     });
 }
 
-// Geçmişten sohbet yükleme fonksiyonu
+
 function loadConversation(chatId) {
-    // Mevcut sohbet farklıysa ve boş değilse kaydet
-    // (Kendi üzerine tekrar tıklayınca kaydetmemek için kontrol eklenebilir)
-     saveCurrentConversationIfNeeded(chatId); // Yeni yardımcı fonksiyon
+    if (!chatBox) return; // Henüz yüklenmediyse çık
+
+    // Mevcut sohbeti gerekirse kaydet (load etmeden önce)
+    saveCurrentConversationIfNeeded(chatId);
 
     const conversations = loadConversations();
-    const conversationToLoad = conversations.find(conv => conv.id == chatId); // == yerine === kullanmak daha güvenli ama id tipine bağlı
+    const conversationToLoad = conversations.find(conv => conv.id == chatId);
 
-    if (conversationToLoad) {
+    if (conversationToLoad && Array.isArray(conversationToLoad.messages)) { // Mesajların array olduğunu kontrol et
         chatBox.innerHTML = ''; // ChatBox'ı temizle
         currentConversation = []; // Geçici olarak sıfırla
 
         conversationToLoad.messages.forEach(msg => {
-            // addToHistory = false olmalı ki tekrar geçmişe eklenmesin
-            appendMessage(msg.sender, msg.text, msg.role, false);
+            // Mesaj formatı kontrolü
+            if (msg && msg.sender && typeof msg.text === 'string' && msg.role) {
+                 appendMessage(msg.sender, msg.text, msg.role, false); // addToHistory = false
+            } else {
+                console.warn("Geçmişten hatalı formatta mesaj yüklendi, atlanıyor:", msg);
+            }
         });
 
-        // currentConversation'ı yüklenen sohbetle güncelle (geçmişe ekleme flag'i önemli)
+        // currentConversation'ı yüklenen sohbetle güncelle
         currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages));
 
         highlightSelectedChat(chatId);
-        userInput.focus(); // Yükledikten sonra inputa odaklan
+        if (userInput) userInput.focus(); // Yükledikten sonra inputa odaklan
 
     } else {
-        console.error("Yüklenmek istenen sohbet bulunamadı:", chatId);
-        // Hata mesajını sadece chatBox'a ekle, currentConversation'ı değiştirme
+        console.error("Yüklenmek istenen sohbet bulunamadı veya mesajlar hatalı:", chatId);
         const errorMsg = document.createElement("div");
         errorMsg.className = "message bot-message";
-        errorMsg.innerHTML = "<strong>SibelGPT:</strong> ❌ Bu sohbet yüklenirken bir hata oluştu.";
+        errorMsg.innerHTML = "<strong>SibelGPT:</strong> ❌ Seçili sohbet yüklenirken bir hata oluştu.";
         chatBox.appendChild(errorMsg);
         scrollToBottom();
     }
@@ -319,19 +336,21 @@ function loadConversation(chatId) {
 
 // Yardımcı fonksiyon: Gerekirse mevcut sohbeti kaydet
 function saveCurrentConversationIfNeeded(loadingChatId) {
-    // Eğer currentConversation boşsa veya sadece ilk mesajı içeriyorsa kaydetme
-    if (currentConversation.length === 0 || (currentConversation.length === 1 && currentConversation[0].role === 'bot' && currentConversation[0].text.includes('Merhaba!'))) {
+    // Henüz sohbet başlamadıysa veya sadece başlangıç mesajı varsa kaydetme
+    if (!currentConversation || currentConversation.length === 0 || (currentConversation.length === 1 && currentConversation[0].role === 'bot')) {
        return;
     }
-    // Eğer yüklenmek istenen ID ile mevcut sohbetin ID'si aynıysa kaydetme (ID takibi eklenirse)
-    // if (currentConversationId === loadingChatId) return; // currentConversationId takibi gerekir
 
-    // Diğer durumlarda kaydet
-    saveCurrentConversation();
+    // Yüklenmek istenen sohbet zaten mevcut sohbetse tekrar kaydetme
+    // (Bunun için mevcut sohbetin ID'sini bilmemiz gerekir, şimdilik bu kontrol atlanıyor)
+    // if (currentConversationId === loadingChatId) return;
+
+    saveCurrentConversation(); // Yukarıdaki kontrollerden geçtiyse kaydet
 }
 
 
 function highlightSelectedChat(chatId) {
+    if (!historyList) return;
     // Tüm 'selected' sınıflarını kaldır
     historyList.querySelectorAll('li').forEach(li => {
         li.classList.remove('selected');
@@ -350,85 +369,107 @@ function highlightSelectedChat(chatId) {
 // --- Olay Dinleyicileri ve Başlangıç Kodları (Güncellendi) ---
 
 window.addEventListener("load", () => {
-  // Element referanslarını ata
-  chatBox = document.getElementById("chat-box");
-  userInput = document.getElementById("user-input");
-  // Gönder butonunu seç (HTML'deki butona ID vermek daha sağlam olabilir)
-  sendButton = document.querySelector(".chat-input button");
-  newChatButton = document.querySelector(".new-chat-button button");
-  historyList = document.getElementById("history-list");
-  splashScreen = document.getElementById("splash-screen");
+  // Element referanslarını ata (try-catch içine almak daha sağlam olabilir)
+  try {
+      chatBox = document.getElementById("chat-box");
+      userInput = document.getElementById("user-input");
+      sendButton = document.querySelector(".chat-input button"); // Butonun varlığını kontrol et
+      newChatButton = document.querySelector(".new-chat-button button");
+      historyList = document.getElementById("history-list");
+      splashScreen = document.getElementById("splash-screen");
 
-  // Splash ekranı yönetimi
-  const splashComputedStyle = getComputedStyle(splashScreen);
-  if (splashComputedStyle.opacity == 0 || splashComputedStyle.display == 'none') {
-      initializeChatInterface();
-  } else {
-      splashScreen.addEventListener('animationend', () => {
-          splashScreen.style.opacity = 0;
-          setTimeout(() => {
-              splashScreen.style.display = "none";
-              initializeChatInterface(); // Splash bittikten sonra arayüzü başlat
-          }, 500); // Opacity geçişi için süre
-      }, { once: true }); // Olay dinleyicisinin sadece bir kez çalışmasını sağla
+      // Splash ekranı yönetimi
+      if (splashScreen) { // splashScreen null değilse devam et
+          const splashComputedStyle = getComputedStyle(splashScreen);
+          if (splashComputedStyle.display === 'none' || splashComputedStyle.opacity == 0) {
+              initializeChatInterface();
+          } else {
+               // Animasyon bitişini bekle
+              splashScreen.addEventListener('animationend', () => {
+                  splashScreen.style.opacity = 0; // Önce soluklaştır
+                  setTimeout(() => {
+                      splashScreen.style.display = "none"; // Sonra gizle
+                      initializeChatInterface();
+                  }, 500); // Opacity geçiş süresi kadar bekle
+              }, { once: true }); // Sadece bir kez çalıştır
+          }
+      } else {
+           // Splash ekranı yoksa doğrudan başlat
+           initializeChatInterface();
+      }
+
+
+      // Kalıcı olay dinleyicileri (elementler varsa ekle)
+      if (userInput) {
+          userInput.addEventListener("keypress", handleInputKeyPress);
+      } else { console.error("User input element not found!"); }
+
+      if (sendButton) {
+          // HTML'deki onclick="sendMessage()" KESİNLİKLE kaldırılmalı!
+          sendButton.addEventListener("click", sendMessage);
+      } else { console.error("Send button element not found!"); }
+
+      if (newChatButton) {
+          newChatButton.addEventListener("click", handleNewChat);
+      } else { console.error("New chat button element not found!"); }
+
+       // historyList için tıklama dinleyicisi initializeChatInterface içinde ekleniyor.
+
+      // İlk hoş geldiniz mesajını currentConversation'a ekle (eğer chatBox varsa)
+      if (chatBox && currentConversation.length === 0) {
+          const initialBotMessageElement = chatBox.querySelector('.message.bot-message');
+          if(initialBotMessageElement) {
+              currentConversation.push({ sender: 'SibelGPT', text: initialBotMessageElement.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
+          }
+      }
+
+  } catch (error) {
+      console.error("Sayfa yüklenirken kritik bir hata oluştu:", error);
+      // Kullanıcıya bir hata mesajı gösterilebilir
+      document.body.innerHTML = "Uygulama yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin veya daha sonra tekrar deneyin.";
   }
 
-  // Kalıcı olay dinleyicileri
-  userInput.addEventListener("keypress", handleInputKeyPress);
-  // Gönder butonuna tıklama olayını da ekleyelim (onclick yerine)
-  if(sendButton) { // Butonun varlığını kontrol et
-      sendButton.addEventListener("click", sendMessage);
-      // HTML'deki onclick="sendMessage()" kısmını kaldırabilirsiniz,
-      // çünkü artık buradan ekliyoruz. Çift dinleyici olmasın.
-  }
-  newChatButton.addEventListener("click", handleNewChat);
-  // historyList için tıklama yöneticisi initializeChatInterface içinde eklenecek
-  // çünkü liste içeriği dinamik olarak yükleniyor.
-
-  // İlk hoş geldiniz mesajını currentConversation'a ekle
-  const initialBotMessageElement = chatBox.querySelector('.message.bot-message');
-   if(initialBotMessageElement && currentConversation.length === 0) { // Sadece başlangıçta ekle
-       currentConversation.push({ sender: 'SibelGPT', text: initialBotMessageElement.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
-   }
-
-  // Başlangıçta inputa odaklanma initializeChatInterface'e taşındı
 });
 
 
 // Splash ekranı bittikten veya atlandıktan sonra arayüzü başlatan fonksiyon
 function initializeChatInterface() {
     console.log("Chat arayüzü başlatılıyor...");
-    displayHistory(); // Geçmiş sohbetleri yükle ve sidebar'da göster
-    // Geçmiş listesine tıklama olayını burada ekleyelim (event delegation)
-    historyList.addEventListener("click", handleHistoryClickDelegation);
+    if (!historyList) {
+        console.error("History list element not found during initialization!");
+        // Belki kullanıcıya bir uyarı gösterilebilir
+    } else {
+        displayHistory(); // Geçmiş sohbetleri yükle ve sidebar'da göster
+        // Geçmiş listesine tıklama olayını burada ekleyelim (event delegation)
+        historyList.addEventListener("click", handleHistoryClickDelegation);
+    }
 
-    userInput.focus(); // Arayüz hazır olunca inputa odaklan
+    if (userInput) {
+        userInput.focus(); // Arayüz hazır olunca inputa odaklan
+    }
 }
 
 
 // "Yeni Sohbet" butonu tıklama yöneticisi
 function handleNewChat() {
+    // console.log("Yeni sohbet butonu tıklandı.");
     saveCurrentConversationIfNeeded(null); // Mevcut sohbeti gerekirse kaydet
     clearChat(); // Chat kutusunu temizle ve currentConversation'ı sıfırla
-    console.log("Yeni sohbet başlatıldı.");
 }
 
 // Geçmiş listesi için Event Delegation ile tıklama yöneticisi
 function handleHistoryClickDelegation(event) {
-    const clickedElement = event.target.closest('li[data-chat-id]'); // Tıklanan LI'yı bul
+    // Tıklanan elemanın kendisi veya üst elemanlarından biri LI[data-chat-id] mi?
+    const clickedElement = event.target.closest('li[data-chat-id]');
 
     if (clickedElement) {
         const chatId = clickedElement.getAttribute('data-chat-id');
-        console.log("Geçmiş sohbet yükleniyor:", chatId);
+        // console.log("Geçmiş sohbet yükleniyor:", chatId);
         loadConversation(chatId);
     }
 }
 
-// Eski handleHistoryItemClick fonksiyonu kaldırıldı, yerine delegation kullanıldı.
-
-
-// Sayfa kapatılmadan önce mevcut sohbeti kaydet
+// Sayfa kapatılmadan önce mevcut sohbeti kaydet (throttle/debounce eklenebilir)
 window.addEventListener('beforeunload', () => {
-    // Çok kısa veya sadece başlangıç mesajı içerenleri kaydetme
     saveCurrentConversationIfNeeded(null);
 });
