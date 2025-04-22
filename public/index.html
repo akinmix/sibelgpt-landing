@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SibelGPT</title>
     <link rel="stylesheet" href="style.css" />
+    <!-- İkon kütüphanesi ekleyebilirsiniz, örneğin Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body>
 
@@ -13,17 +15,48 @@
       <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
     </div>
 
-    <!-- Mesaj Kutusu -->
-    <div class="chat-container" id="chat-box">
-      <!-- Mesajlar buraya gelecek -->
-    </div>
+    <!-- Ana Layout - Sidebar ve İçerik Alanını İçerir -->
+    <div class="main-layout">
+      <!-- Sol Yan Panel (Sidebar) -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+            <!-- SibelGPT Logosu veya Başlığı -->
+            SibelGPT
+        </div>
+        <div class="new-chat-button">
+            <button>
+                <i class="fas fa-plus"></i> Yeni Sohbet <!-- İkon ekledim -->
+            </button>
+        </div>
+        <div class="history">
+            <h2>Geçmiş</h2>
+            <ul id="history-list">
+                <!-- Geçmiş sohbet öğeleri buraya JavaScript ile eklenecek -->
+                <!-- Örnek öğeler: -->
+                <li data-chat-id="1">Emlak sorusu 1</li>
+                <li data-chat-id="2">Numeroloji analizim</li>
+                <li data-chat-id="3">Finansal tavsiye</li>
+            </ul>
+        </div>
+      </div>
 
-    <!-- Chat Giriş Kutusu -->
-    <div class="chat-input">
-      <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-      <button onclick="sendMessage()">Gönder</button>
-    </div>
+      <!-- İçerik Alanı - Chat Kutusu ve Giriş Alanını İçerir -->
+      <div class="content-area">
+        <!-- Mesaj Kutusu -->
+        <div class="chat-container" id="chat-box">
+          <!-- Mesajlar buraya gelecek -->
+          <!-- Hoş Geldin Mesajı (İlk yüklendiğinde görünebilir) -->
+           <div class="message bot-message">Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.</div>
+        </div>
+
+        <!-- Chat Giriş Kutusu -->
+        <div class="chat-input">
+          <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+          <button onclick="sendMessage()">Gönder</button>
+        </div>
+      </div>
+    </div> <!-- main-layout sonu -->
 
     <!-- Footer (sayfanın en altında) -->
     <footer class="footer">
