@@ -48,6 +48,8 @@ body {
     display: flex; /* Butonları yan yana dizer */
     gap: 10px; /* Butonlar arasına boşluk */
     align-items: center; /* Dikeyde ortala */
+    /* Küçük ekranlarda sidebar'a yakınlaşmaması için sağdan biraz daha boşluk verilebilir */
+    /* @media (max-width: 768px) { right: 10px; top: 10px; gap: 5px; } */
 }
 
 .auth-button {
@@ -220,7 +222,6 @@ body {
     transition: color 0.2s ease, background-color 0.2s ease;
     padding: 10px; /* Tıklama alanı için padding */
     border-radius: 6px;
-    /* background-color: rgba(255, 255, 255, 0.05);  Hafif bir arka plan isteğe bağlı */
 }
 
 .sidebar-links-group a:hover {
@@ -228,7 +229,6 @@ body {
      background-color: rgba(255, 255, 255, 0.15); /* Üzerine gelince arka planı koyulaştır */
 }
  .sidebar-links-group a i {
-    /* İkon için stil */
      font-size: 16px; /* İkon boyutu */
  }
 
@@ -381,14 +381,24 @@ body {
      }
 
     .history {
-         /* Küçük ekranda history bölümünü gizleyebilirsiniz, veya farklı bir yere taşıyabilirsiniz */
-         display: none; /* Şimdilik gizleyelim */
+         display: none; /* Küçük ekranda history bölümünü gizleyelim */
     }
 
     /* Sidebar Link Grubu Stili Responsive Ayarlar */
     .sidebar-links-group {
-         /* Küçük ekranda link grubunu gizleyebilirsiniz veya yatay düzende nasıl yerleşeceğini ayarlayın */
-        display: none; /* Şimdilik gizleyelim */
+        display: none; /* Küçük ekranda link grubunu gizleyelim */
+    }
+
+     /* Küçük ekranda sağ üst butonlar */
+    .top-right-buttons {
+        top: 10px;
+        right: 10px;
+        gap: 5px;
+    }
+
+    .auth-button {
+        padding: 6px 10px; /* Buton paddingini azalt */
+        font-size: 12px; /* Buton fontunu azalt */
     }
 
 
