@@ -215,10 +215,15 @@ function playIntroVideo() {
   if (video && wrapper) {
     video.muted = false;
     video.currentTime = 0;
-    video.play().catch(e => console.warn("Video oynatılamadı:", e));
+    wrapper.classList.remove("fade-out"); // varsa kaldır
     wrapper.style.display = "flex";
+    video.play().catch(e => console.warn("Video oynatılamadı:", e));
     video.onended = () => {
-      wrapper.style.display = "none";
+      wrapper.classList.add("fade-out");
+      setTimeout(() => {
+        wrapper.style.display = "none";
+        wrapper.classList.remove("fade-out");
+      }, 1500); // animasyon süresi kadar bekle
     };
   }
 }
