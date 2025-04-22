@@ -2,23 +2,51 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
+  /* Arka plan görseli ve ayarları */
   background: url('arka_plan.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #fff;
-  height: 100vh;
-  overflow: hidden;
+  height: 100vh; /* Sayfanın tam yüksekliği */
+  overflow: hidden; /* Genel kaydırmayı engelle, chat konteyneri kendi içinde kaydıracak */
   display: flex;
-  flex-direction: column;
-} 
+  flex-direction: column; /* Öğeleri dikey olarak sırala (splash, chat, input, footer) */
+}
+
+/* Splash ekran stilleri */
+#splash-screen {
+  position: fixed; /* Sabit kalacak */
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Diğer her şeyin üzerinde olacak */
+  transition: opacity 1s ease;
+}
+
+.splash-logo {
+  width: 850px; /* Veya istediğiniz boyut */
+  animation: fadeInOut 4s ease-in-out forwards; /* Animasyon */
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.8); }
+  30% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
 .chat-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 20px;
   max-width: 900px;
-  margin: 0 auto;
-  overflow-y: auto;
-  height: calc(100vh - 120px); /* üst kısımdan input kadar alan bırak */
+  margin: 0 auto; /* Yatayda ortala */
+  overflow-y: auto; /* İçerik taştığında dikey kaydırma çubuğu */
+  /* height: calc(100vh - 120px);  Bu satırı kaldırıyoruz */
+  flex-grow: 1; /* Flex konteyner içindeki boş alanı doldur */
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
@@ -33,20 +61,20 @@ body {
 }
 
 .user-message {
-  align-self: flex-end;
+  align-self: flex-end; /* Konteyner içinde sağa hizala */
   background-color: rgba(255, 255, 255, 0.2);
   text-align: right;
 }
 
 .bot-message {
-  align-self: flex-start;
+  align-self: flex-start; /* Konteyner içinde sola hizala */
   background-color: rgba(0, 0, 0, 0.6);
 }
 
 .chat-input {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  width: 100%; /* Üst konteynerin (body'nin) genişliğini al */
+  max-width: 900px; /* Maksimum genişlik */
+  margin: 0 auto; /* Yatayda ortala */
   display: flex;
   align-items: center;
   gap: 10px;
@@ -54,14 +82,15 @@ body {
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
   border-top: 1px solid #888;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  /* position: fixed;  Bu satırları kaldırıyoruz */
+  /* bottom: 0; */
+  /* left: 0; */
+  /* right: 0; */
+  /* Flexbox ile en altta yer alacak */
 }
 
 .chat-input input {
-  flex: 1;
+  flex: 1; /* Geri kalan alanı doldur */
   padding: 14px;
   font-size: 16px;
   border-radius: 8px;
@@ -75,7 +104,7 @@ body {
   padding: 14px 20px;
   font-size: 16px;
   border-radius: 8px;
-  background-color: #8e24aa;
+  background-color: #8e24aa; /* Mor tonu */
   color: white;
   border: none;
   cursor: pointer;
@@ -86,32 +115,12 @@ body {
   height: 50px;
   border-radius: 50%;
 }
-/* Splash ekran stilleri */
-#splash-screen {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 1s ease;
-}
 
-.splash-logo {
-  width: 850px;
-  animation: fadeInOut 4s ease-in-out forwards;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: scale(1); }
-  70% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.2); }
-}
+/* Footer (sayfanın en altında) */
 .footer {
-  width: 100%;
+  width: 100%; /* Üst konteynerin (body'nin) genişliğini al */
+  /* max-width: 900px;  Eğer footer da ortalanıp max-width'e sahip olacaksa eklenebilir */
+  /* margin: 0 auto; */ /* Footer içeriği max-width'e sahip olacaksa bu da eklenir */
   text-align: center;
   font-size: 13px;
   color: #ffffff;
@@ -119,8 +128,8 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
-  margin-top: 30px;
-  position: relative;
-  z-index: 0;
+  /* margin-top: 30px; Bu satırı kaldırıyoruz, flexbox boşluğu ayarlayacak */
+  /* position: relative; Bu satırları kaldırıyoruz */
+  /* z-index: 0; */
+  /* Flexbox ile en altta yer alacak */
 }
-
