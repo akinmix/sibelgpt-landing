@@ -12,15 +12,16 @@
 
     <!-- Açılış Splash Ekranı -->
     <div id="splash-screen">
+      <!-- Splash ekranı için intro-logo.png dosyasını kullanmaya devam ediyorum -->
       <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
-    </div>
+      </div>
 
     <!-- Ana Layout - Sidebar ve İçerik Alanını İçerir -->
     <div class="main-layout">
       <!-- Sol Yan Panel (Sidebar) -->
       <div class="sidebar">
         <div class="sidebar-header">
-            <!-- SibelGPT Logosu veya Başlığı -->
+            <!-- Sidebar başlığı veya logosu (isteğe bağlı, isterseniz buraya da logo ekleyebilirsiniz) -->
             SibelGPT
         </div>
         <div class="new-chat-button">
@@ -33,20 +34,28 @@
             <ul id="history-list">
                 <!-- Geçmiş sohbet öğeleri buraya JavaScript ile eklenecek -->
                 <!-- Örnek öğeler: -->
-                <li data-chat-id="1">Emlak sorusu 1</li>
-                <li data-chat-id="2">Numeroloji analizim</li>
-                <li data-chat-id="3">Finansal tavsiye</li>
+                <!-- <li data-chat-id="1">Emlak sorusu 1</li> -->
+                <!-- <li data-chat-id="2">Numeroloji analizim</li> -->
+                <!-- <li data-chat-id="3">Finansal tavsiye</li> -->
+                 <li>Henüz kaydedilmiş sohbet yok.</li> <!-- Başlangıç placeholder'ı -->
             </ul>
         </div>
       </div>
 
       <!-- İçerik Alanı - Chat Kutusu ve Giriş Alanını İçerir -->
       <div class="content-area">
+        <!-- Sohbet Başlık Alanı -->
+        <div class="chat-header">
+            <!-- Logonuzu buraya ekledik -->
+            <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="chat-logo">
+            <span>SibelGPT</span>
+        </div>
+
         <!-- Mesaj Kutusu -->
         <div class="chat-container" id="chat-box">
           <!-- Mesajlar buraya gelecek -->
           <!-- Hoş Geldin Mesajı (İlk yüklendiğinde görünebilir) -->
-           <div class="message bot-message">Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.</div>
+           <div class="message bot-message"><strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.</div>
         </div>
 
         <!-- Chat Giriş Kutusu -->
