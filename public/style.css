@@ -59,13 +59,34 @@ body {
     border-right: 1px solid rgba(255, 255, 255, 0.1); /* Hafif kenarlık */
 }
 
+/* Sidebar Başlığı: Logo ve Yazı Şimdi Burada */
 .sidebar-header {
+    display: flex; /* Logo ve yazıyı yan yana dizer */
+    align-items: center; /* Dikeyde ortala */
+    gap: 10px; /* Logo ve yazı arasına boşluk */
     font-size: 24px;
     font-weight: bold;
     color: #fff;
     margin-bottom: 30px;
-    text-align: center; /* Başlığı ortala */
+    /* text-align: center;  Flexbox ile center align kullanıldığı için buna gerek kalmayabilir, ya da flex konteynerini ortalayabilirsiniz */
+    justify-content: center; /* İçeriği yatayda ortala */
 }
+
+/* Sidebar Başlığındaki Logo */
+.sidebar-header .app-logo {
+    height: 35px; /* Logo yüksekliğini ayarlayın */
+    width: auto; /* Oranını koru */
+    /* border-radius: 50%;  Logo daire şeklinde ise */
+    object-fit: contain; /* Resmin tamamını sığdır */
+}
+
+/* Sidebar Başlığındaki Yazı (SibelGPT) */
+.sidebar-header span {
+    font-size: 24px; /* Sidebar header font boyutuyla aynı */
+    font-weight: bold;
+    color: #fff;
+}
+
 
 .new-chat-button {
     margin-bottom: 20px;
@@ -134,64 +155,29 @@ body {
 .content-area {
     flex-grow: 1; /* Sidebar hariç kalan tüm yatay alanı kapla */
     display: flex;
-    flex-direction: column; /* Chat Header, Chat ve Input'u dikey sırala */
+    flex-direction: column; /* Chat ve Input'u dikey sırala */
     overflow: hidden; /* Kendi içinde kaydırmayı yönetir, burayı gizle */
     position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
 }
 
-/* Sohbet Başlık Alanı */
-.chat-header {
-    display: flex; /* Çocukları (logo ve span) yan yana dizer */
-    flex-direction: row; /* Açıkça belirtiyoruz (varsayılan da olsa) */
-    align-items: center; /* Dikeyde ortala */
-    gap: 15px; /* Logo ve metin arasına boşluk */
-    padding: 15px 20px;
-    background-color: rgba(0, 0, 0, 0.7); /* Sidebar ile aynı veya benzer arka plan */
-    backdrop-filter: blur(5px); /* Arka planı bulanıklaştır */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
-
-    /* --- DEBUGGING BORDERS --- */
-    /* Temporarily add borders to see the boundaries of header and its children */
-    /* border: 1px dashed red; */ /* Chat Header border */
-    /* --- END DEBUGGING BORDERS --- */
-}
-
-.chat-header .chat-logo {
-    height: 40px; /* Logonuzun yüksekliğini ayarlayın */
-    width: auto; /* Oranını koru */
-    border-radius: 50%; /* Logonuz daire şeklinde değilse bu satırı silebilirsiniz */
-    object-fit: cover; /* Resim boyutunu koruyarak sığdır */
-
-     /* --- DEBUGGING BORDERS --- */
-    /* border: 1px dashed yellow; */ /* Logo border */
-    /* --- END DEBUGGING BORDERS --- */
-}
-
-.chat-header span {
-    font-size: 20px;
-    font-weight: bold;
-    color: #fff; /* Beyaz veya tema renginiz */
-
-     /* --- DEBUGGING BORDERS --- */
-    /* border: 1px dashed green; */ /* Span border */
-    /* --- END DEBUGGING BORDERS --- */
-}
-
+/* Chat Başlık Alanı Kaldırıldığı İçin İlgili CSS'ler de Kaldırıldı */
 
 /* Mesaj Kutusu */
 .chat-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* Üst padding'i chat-header'ın yüksekliğine yer açın */
-  /* Padding hesaplama: chat-header üst/alt padding (15+15=30) + logo yüksekliği (40) + gap (15) + üstte ek boşluk (örn 10px) */
-  padding: calc(30px + 40px + 15px + 10px) 20px 20px 20px; /* Cömert bir başlangıç */
+  padding: 20px; /* Padding'i orijinal haline getirdik */
   max-width: 900px; /* Ortada sabit genişlik */
   margin: 0 auto; /* Yatayda ortala (içerik alanının ortasında) */
   overflow-y: auto; /* İçerik taştığında dikey kaydırma çubuğu */
-  flex-grow: 1; /* İçerik alanında header ve input hariç kalan dikey boşluğu doldur */
+  flex-grow: 1; /* İçerik alanında input hariç kalan dikey boşluğu doldur */
   box-sizing: border-box;
   scroll-behavior: smooth;
+
+  /* Artık chat-header olmadığı için ekstra padding-top'a genellikle gerek yok. */
+  /* Eğer ilk mesaj çok yukarıdaysa, ilk mesaja özel margin-top verebilirsiniz */
+  /* .chat-container .message:first-child { margin-top: 20px; } */
 }
 
 .message {
@@ -291,37 +277,36 @@ body {
         padding: 10px; /* Padding azaltılabilir */
     }
 
+    /* Sidebar Başlığı Responsive Ayarlar */
     .sidebar-header {
-        margin-bottom: 10px; /* Başlık alt boşluğu azaltılabilir */
+        justify-content: flex-start; /* Küçük ekranda sola hizala */
+        font-size: 20px; /* Font boyutu küçült */
+        margin-bottom: 15px;
     }
+
+    .sidebar-header .app-logo {
+        height: 30px; /* Küçük ekranda logo boyutu */
+    }
+
+    .sidebar-header span {
+         font-size: 20px; /* Başlık font boyutuyla aynı */
+    }
+
 
     .new-chat-button, .history {
         padding: 0 10px; /* Sidebar içindeki öğelere yatay padding */
     }
 
-    .chat-header {
-        /* Küçük ekranlarda header'ın stili ayarlanabilir */
-        padding: 10px;
-        gap: 10px;
-    }
-
-    .chat-header .chat-logo {
-        height: 30px; /* Küçük ekranlarda logo boyutu */
-    }
-
-    .chat-header span {
-        font-size: 18px; /* Küçük ekranlarda yazı boyutu */
-    }
+    /* Chat Başlık Alanı Kaldırıldığı İçin İlgili Responsive CSS'ler de Kaldırıldı */
 
     .chat-container, .chat-input {
         padding: 10px; /* Padding azaltılabilir */
     }
 
-     .chat-container {
-        /* Küçük ekranlarda chat-header yüksekliğine göre üst padding ayarı */
-         /* Hesaplama: chat-header üst/alt padding (10+10=20) + logo yüksekliği (30) + gap (10) + üstte ek boşluk (örn 10px) */
-        padding-top: calc(20px + 30px + 10px + 10px); /* Örnek hesaplama */
-     }
+    .chat-container {
+        /* Küçük ekranda da artık chat-header olmadığı için padding-top normal */
+        padding-top: 10px; /* Veya isteğe bağlı olarak biraz daha fazla */
+    }
 
     .avatar {
         width: 40px; /* Avatar boyutu küçültülebilir */
