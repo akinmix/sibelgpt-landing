@@ -64,14 +64,13 @@
       <div class="content-area">
         <!-- Mesaj Kutusu -->
         <div class="chat-container" id="chat-box">
-          <!-- Initial Talking Avatar Animation -->
+          <!-- Initial Talking Avatar Animation (Şimdi Chat Kutusu İçinde) -->
           <div id="initial-avatar-animation">
              <!-- Lütfen /talking-avatar.mp4 dosyasını public klasörünüze yükleyin -->
-             <!-- Video kontrol butonları olmadan, otomatik oynasın, ses olmasın ve tekrar oynasın -->
-             <video id="talking-avatar-video" src="/talking-avatar.mp4" autoplay loop muted playsinline></video>
+             <!-- muted kaldırıldı, autoplay engellenme riski var -->
+             <video id="talking-avatar-video" src="/talking-avatar.mp4" autoplay loop playsinline></video>
              <!-- autoplay: Video otomatik başlar -->
              <!-- loop: Video bittiğinde tekrar başlar -->
-             <!-- muted: Videonun sesi kapatılır (genellikle autoplay ile birlikte istenir) -->
              <!-- playsinline: iOS'te video inline olarak oynatılır (tam ekran olmaz) -->
              <!-- controls: Eğer video kontrol butonları isterseniz ekleyebilirsiniz -->
           </div>
