@@ -226,49 +226,66 @@ body {
      font-size: 16px;
  }
 
-/* Initial Talking Avatar Animation Stili */
-/* Artık chat-container içinde olduğundan, bu stil flex öğesi gibi davranır */
+/* Initial Talking Avatar Animation Kapsayıcısı Stili */
+/* Bu div artık chat-container içinde, flex öğesi gibi davranır */
 #initial-avatar-animation {
     /* Chat container içinde ortala */
-    /* text-align: center;  flexbox kullanıldığı için gerek kalmayabilir */
+    text-align: center; /* İçindeki görseli/videoyu/yedeği ortala */
     margin: 20px auto 30px auto; /* Üstte ve altta boşluk, yatayda auto ile ortala */
     max-width: 120px; /* Animasyon alanının maksimum genişliği */
+    position: relative; /* İçindeki yedek eleman için konumlandırma */
+    cursor: pointer; /* Tıklanabilir olduğunu belirt */
 
-    /* Başlangıçta gizli */
-    display: none; /* JS tarafından değiştirilecek */
-    opacity: 0; /* JS tarafından değiştirilecek */
+    /* Başlangıçta gizli (JS tarafından değiştirilecek) */
+    display: none;
+    opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
 /* Animasyon Video Stili */
 #initial-avatar-animation video {
-    display: block; /* Margin auto ile ortalamak için block yap */
+    display: block; /* Kapsayıcı içindeki margin auto ile ortalamak için block yap */
     height: 100px; /* Animasyon görselinin yüksekliği */
     width: auto; /* Oranını koru */
     max-width: 100%; /* Kapsayıcıdan taşmasını engelle */
     object-fit: contain; /* Video içeriğinin boyutunu koruyarak sığdır */
-    border-radius: 50%; /* İsteğe bağlı: Eğer video dairesel olacaksa */
+    border-radius: 50%; /* Eğer video dairesel olacaksa */
     /* Video elementinin kendisinde padding veya margin vermeyin, kapsayıcı div'de yönetin */
 }
 
-
-/* İçerik Alanı - Chat ve Input */
-.content-area {
-    flex-grow: 1;
-    display: flex;
+/* Autoplay Engellendiğinde Görünecek Yedek Stili */
+.autoplay-fallback {
+    position: absolute; /* Video üzerinde ortala */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex; /* İçindeki ikon ve yazıyı ortala */
     flex-direction: column;
-    overflow: hidden;
-    position: relative;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Hafif koyu arka plan */
+    color: #fff;
+    font-size: 14px;
+    border-radius: 50%; /* Video ile aynı yuvarlaklık */
+    /* Başlangıçta gizli */
+    display: none;
+    opacity: 0; /* Fade geçişi için */
+    transition: opacity 0.3s ease-in-out;
 }
+
+.autoplay-fallback i {
+    font-size: 24px; /* İkon boyutu */
+    margin-bottom: 5px; /* İkon ve yazı arasına boşluk */
+}
+
 
 /* Mesaj Kutusu */
 .chat-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 20px; /* Padding'i orijinal haline getirdik */
-  /* Animasyon div'i artık içerde olduğu için, ilk mesajın üst boşluğunu animasyon div'i sağlıyor. */
-  /* chat-container'ın kendi üst padding'i yeterli olmalı. */
+  padding: 20px;
   max-width: 900px;
   margin: 0 auto;
   overflow-y: auto;
@@ -431,12 +448,19 @@ body {
 
     /* Initial Talking Avatar Animation Responsive */
     #initial-avatar-animation {
-         margin: 15px auto 20px auto; /* Küçük ekranlarda boşluğu azalt */
+         margin: 15px auto 20px auto;
          max-width: 80px;
     }
     #initial-avatar-animation video { /* img yerine video */
          height: 80px;
     }
+     .autoplay-fallback {
+         font-size: 12px; /* Küçük ekranda yazı boyutu */
+     }
+     .autoplay-fallback i {
+         font-size: 20px; /* Küçük ekranda ikon boyutu */
+     }
+
 
     .chat-container, .chat-input {
         padding: 10px;
