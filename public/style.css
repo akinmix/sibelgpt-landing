@@ -118,8 +118,9 @@ body {
   padding: 15px 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(5px);
-  margin-top: 20px;
-  z-index: 1;
+  backdrop-filter: blur(4px);
+  margin-top: 30px;
+  position: relative;
+  z-index: 0;
 }
 
