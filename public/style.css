@@ -9,7 +9,8 @@ body {
   height: 100vh;
   overflow: hidden; /* Sayfanın ana kaydırmasını engelle */
   display: flex;
-  flex-direction: column; /* Ana öğeleri (Main Layout, Footer) dikey sırala */
+  flex-direction: column; /* Ana öğeleri (Top Buttons, Main Layout, Footer) dikey sırala */
+  position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
 }
 
 /* Splash ekran stilleri */
@@ -38,6 +39,40 @@ body {
   100% { opacity: 0; transform: scale(1.2); }
 }
 
+/* Sağ Üst Köşe Butonları Stili (Yeni Eklendi) */
+.top-right-buttons {
+    position: absolute; /* Body'e göre konumlandır */
+    top: 20px; /* Üstten 20px boşluk */
+    right: 20px; /* Sağdan 20px boşluk */
+    z-index: 10; /* Diğer içeriklerin üzerinde görünmesini sağla */
+    display: flex; /* Butonları yan yana dizer */
+    gap: 10px; /* Butonlar arasına boşluk */
+    align-items: center; /* Dikeyde ortala */
+}
+
+.auth-button {
+    display: inline-block; /* Linklerin button gibi davranmasını sağlar */
+    padding: 8px 15px; /* Buton içi boşluk */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Kenarlık */
+    border-radius: 5px; /* Köşe yuvarlaklığı */
+    color: rgba(255, 255, 255, 0.8); /* Yazı rengi */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+    font-size: 14px; /* Yazı boyutu */
+    background-color: rgba(0, 0, 0, 0.3); /* Hafif opak arka plan */
+    backdrop-filter: blur(3px); /* Arka planı hafif bulanıklaştır */
+    cursor: pointer; /* Mouse imlecini el yap */
+    transition: all 0.3s ease; /* Geçişler için animasyon */
+}
+
+.auth-button:hover {
+    border-color: #a739c7; /* Mor kenarlık */
+    color: #fff; /* Yazı rengini beyaz yap */
+    background-color: rgba(139, 36, 170, 0.6); /* Mor tonunda opak arka plan */
+    /* İsteğe bağlı: Hafif bir box-shadow ekleyebilirsiniz */
+    /* box-shadow: 0 0 8px rgba(139, 36, 170, 0.5); */
+}
+
+
 /* Ana Layout - Sidebar ve İçerik Yan Yana */
 .main-layout {
     display: flex; /* İçindeki sidebar ve content-area'yı yan yana dizer */
@@ -55,7 +90,6 @@ body {
     flex-shrink: 0; /* Flex içinde küçülmesini engelle */
     display: flex;
     flex-direction: column; /* Sidebar içindeki öğeleri dikey sırala */
-    /* overflow-y: auto;  Sidebar'ın ana kaydırmasını kaldırdık */
     border-right: 1px solid rgba(255, 255, 255, 0.1); /* Hafif kenarlık */
 }
 
@@ -77,7 +111,6 @@ body {
     height: 35px; /* Logo yüksekliğini ayarlayın */
     width: auto; /* Oranını koru */
     max-width: 100%; /* Kapsayıcıdan taşmasını engelle */
-    /* border-radius: 50%;  Logo daire şeklinde ise */
     object-fit: contain; /* Resmin tamamını sığdır */
     flex-shrink: 0; /* Logonun küçülmesini engelle */
 }
@@ -166,7 +199,7 @@ body {
     padding-left: 6px; /* Çizgi için içeriden boşluk */
 }
 
-/* Sidebar Link Grubu Stili (Yeni Eklendi) */
+/* Sidebar Link Grubu Stili */
 .sidebar-links-group {
     flex-shrink: 0; /* Küçülmesini engelle */
     margin-top: auto; /* Sidebar'ın alt kısmına itmek için */
