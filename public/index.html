@@ -17,7 +17,6 @@
 
     <!-- Sağ Üst Köşe Butonları -->
     <div class="top-right-buttons">
-        <!-- Şimdilik boş href verelim, ileride değiştirirsiniz -->
         <a href="#" class="auth-button register-button">Üye Ol</a>
         <a href="#" class="auth-button login-button">Üye Girişi</a>
     </div>
@@ -46,7 +45,7 @@
         </div>
 
         <!-- Web Sitesi ve İlan Linkleri -->
-        <div class="sidebar-links-group"> <!-- Linkleri gruplamak için yeni bir div -->
+        <div class="sidebar-links-group">
              <a href="https://www.sibelizim.com" target="_blank">
                 <i class="fas fa-external-link-alt"></i> Sibelizim.com
             </a>
@@ -65,6 +64,18 @@
       <div class="content-area">
         <!-- Mesaj Kutusu -->
         <div class="chat-container" id="chat-box">
+          <!-- Initial Talking Avatar Animation -->
+          <div id="initial-avatar-animation">
+             <!-- Lütfen /talking-avatar.mp4 dosyasını public klasörünüze yükleyin -->
+             <!-- Video kontrol butonları olmadan, otomatik oynasın, ses olmasın ve tekrar oynasın -->
+             <video id="talking-avatar-video" src="/talking-avatar.mp4" autoplay loop muted playsinline></video>
+             <!-- autoplay: Video otomatik başlar -->
+             <!-- loop: Video bittiğinde tekrar başlar -->
+             <!-- muted: Videonun sesi kapatılır (genellikle autoplay ile birlikte istenir) -->
+             <!-- playsinline: iOS'te video inline olarak oynatılır (tam ekran olmaz) -->
+             <!-- controls: Eğer video kontrol butonları isterseniz ekleyebilirsiniz -->
+          </div>
+
           <!-- Mesajlar buraya gelecek -->
           <!-- Hoş Geldin Mesajı (İlk yüklendiğinde görünebilir) -->
            <div class="message bot-message"><strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.</div>
