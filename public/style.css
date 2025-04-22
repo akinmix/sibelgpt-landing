@@ -1,427 +1,507 @@
 /* Genel ve Arka Plan */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: url('arka_plan.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #fff;
-  height: 100vh;
-  overflow: hidden; /* Sayfanın ana kaydırmasını engelle */
-  display: flex;
-  flex-direction: column; /* Ana öğeleri (Top Buttons, Main Layout, Footer) dikey sırala */
-  position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: url('arka_plan.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  height: 100vh;
+  overflow: hidden; /* Sayfanın ana kaydırmasını engelle */
+  display: flex;
+  flex-direction: column; /* Ana öğeleri (Top Buttons, Main Layout, Footer) dikey sırala */
+  position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
 }
 
 /* Splash ekran stilleri */
 #splash-screen {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 1s ease;
-  pointer-events: none; /* Splash varken arkadaki elementlerle etkileşimi engelle */
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 1s ease;
+  pointer-events: none; /* Splash varken arkadaki elementlerle etkileşimi engelle */
 }
 
 .splash-logo {
-  width: 850px; /* Veya istediğiniz boyut */
-  animation: fadeInOut 4s ease-in-out forwards;
+  width: 850px; /* Veya istediğiniz boyut */
+  animation: fadeInOut 4s ease-in-out forwards;
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: 1; }
-  70% { opacity: 1; transform: 1; }
-  100% { opacity: 0; transform: scale(1.2); }
+  0% { opacity: 0; transform: scale(0.8); }
+  30% { opacity: 1; transform: scale(1); } /* scale(1) olmalı */
+  70% { opacity: 1; transform: scale(1); } /* scale(1) olmalı */
+  100% { opacity: 0; transform: scale(1.2); }
 }
 
 /* Sağ Üst Köşe Butonları Stili */
 .top-right-buttons {
-    position: absolute; /* Body'e göre konumlandır */
-    top: 20px; /* Üstten 20px boşluk */
-    right: 20px; /* Sağdan 20px boşluk */
-    z-index: 10; /* Diğer içeriklerin üzerinde görünmesini sağla */
-    display: flex; /* Butonları yan yana dizer */
-    gap: 10px; /* Butonlar arasına boşluk */
-    align-items: center; /* Dikeyde ortala */
+    position: absolute; /* Body'e göre konumlandır */
+    top: 20px; /* Üstten 20px boşluk */
+    right: 20px; /* Sağdan 20px boşluk */
+    z-index: 10; /* Diğer içeriklerin üzerinde görünmesini sağla */
+    display: flex; /* Butonları yan yana dizer */
+    gap: 10px; /* Butonlar arasına boşluk */
+    align-items: center; /* Dikeyde ortala */
 }
 
 .auth-button {
-    display: inline-block; /* Linklerin button gibi davranmasını sağlar */
-    padding: 8px 15px; /* Buton içi boşluk */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Kenarlık */
-    border-radius: 5px; /* Köşe yuvarlaklığı */
-    color: rgba(255, 255, 255, 0.8); /* Yazı rengi */
-    text-decoration: none; /* Alt çizgiyi kaldır */
-    font-size: 14px; /* Yazı boyutu */
-    background-color: rgba(0, 0, 0, 0.3); /* Hafif opak arka plan */
-    backdrop-filter: blur(3px); /* Arka planı hafif bulanıklaştır */
-    cursor: pointer; /* Mouse imlecini el yap */
-    transition: all 0.3s ease; /* Geçişler için animasyon */
+    display: inline-block; /* Linklerin button gibi davranmasını sağlar */
+    padding: 8px 15px; /* Buton içi boşluk */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Kenarlık */
+    border-radius: 5px; /* Köşe yuvarlaklığı */
+    color: rgba(255, 255, 255, 0.8); /* Yazı rengi */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+    font-size: 14px; /* Yazı boyutu */
+    background-color: rgba(0, 0, 0, 0.3); /* Hafif opak arka plan */
+    backdrop-filter: blur(3px); /* Arka planı hafif bulanıklaştır */
+    cursor: pointer; /* Mouse imlecini el yap */
+    transition: all 0.3s ease; /* Geçişler için animasyon */
 }
 
 .auth-button:hover {
-    border-color: #a739c7; /* Mor kenarlık */
-    color: #fff; /* Yazı rengini beyaz yap */
-    background-color: rgba(139, 36, 170, 0.6); /* Mor tonunda opak arka plan */
+    border-color: #a739c7; /* Mor kenarlık */
+    color: #fff; /* Yazı rengini beyaz yap */
+    background-color: rgba(139, 36, 170, 0.6); /* Mor tonunda opak arka plan */
 }
 
 /* Ana Layout - Sidebar ve İçerik Yan Yana */
 .main-layout {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
 /* Sol Yan Panel (Sidebar) */
 .sidebar {
-    width: 280px;
-    background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    padding: 20px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    width: 280px;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    padding: 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Sidebar Başlığı: Logo ve Yazı */
 .sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 30px;
-    justify-content: center;
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 30px;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 /* Sidebar Başlığındaki Logo */
 .sidebar-header .app-logo {
-    height: 35px;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-    flex-shrink: 0;
+    height: 35px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 /* Sidebar Başlığındaki Yazı (SibelGPT) */
 .sidebar-header span {
-    font-size: 24px;
-    font-weight: bold;
-    color: #fff;
-    flex-shrink: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    flex-shrink: 0;
 }
 
 .new-chat-button {
-    margin-bottom: 20px;
-    flex-shrink: 0;
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .new-chat-button button {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 16px;
-    border-radius: 8px;
-    background-color: #8e24aa;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background-color 0.2s ease;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #8e24aa;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
 }
 
 .new-chat-button button:hover {
-    background-color: #a739c7;
+    background-color: #a739c7;
 }
 
 .history {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    overflow: hidden;
-     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .history h2 {
-    font-size: 18px;
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: rgba(255, 255, 255, 0.8);
-    flex-shrink: 0;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    flex-shrink: 0;
 }
 
 .history ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto; /* Sadece bu kısım scroll etmeli */
 }
 
 .history li {
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.1);
-    font-size: 15px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition: background-color 0.2s ease;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-left 0.2s ease; /* border-left geçişini ekle */
 }
 
 .history li:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Sidebar'da seçili öğe stili */
 .history li.selected {
-    background-color: rgba(255, 255, 255, 0.3);
-    font-weight: bold;
-    border-left: 4px solid #8e24aa;
-    padding-left: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    border-left: 4px solid #8e24aa;
+    padding-left: 6px; /* Soldan iç boşluğu biraz azaltalım */
 }
 
 /* Sidebar Link Grubu Stili */
 .sidebar-links-group {
-    flex-shrink: 0;
-    margin-top: auto;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    flex-shrink: 0;
+    margin-top: auto; /* Kendini en alta iter */
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .sidebar-links-group a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-size: 15px;
-    transition: color 0.2s ease, background-color 0.2s ease;
-    padding: 10px;
-    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: 10px;
+    border-radius: 6px;
 }
 
 .sidebar-links-group a:hover {
-     color: #fff;
-     background-color: rgba(255, 255, 255, 0.15);
+     color: #fff;
+     background-color: rgba(255, 255, 255, 0.15);
 }
- .sidebar-links-group a i {
-     font-size: 16px;
- }
-
-/* Initial Talking Avatar Animation Stilleri ÇIKARTILDI */
-/* #initial-avatar-animation { ... } */
-/* #initial-avatar-animation video { ... } */
-/* .autoplay-fallback { ... } */
-
+ .sidebar-links-group a i {
+     font-size: 16px; /* Font Awesome ikon boyutu */
+ }
 
 /* İçerik Alanı - Chat ve Input */
 .content-area {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
+    flex-grow: 1; /* Kalan tüm alanı kapla */
+    display: flex;
+    flex-direction: column; /* Chat container ve input alt alta */
+    overflow: hidden; /* İçerik taşmasını engelle */
+    position: relative; /* Gerekirse iç pozisyonlamalar için */
 }
 
 /* Mesaj Kutusu */
 .chat-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-  overflow-y: auto;
-  flex-grow: 1;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-
-  /* Welcome mesajı HTML'den geliyor, ekstra üst boşluk gerekirse buraya eklenir */
-  /* .chat-container .message:first-child { margin-top: 20px; } */
+  display: flex; /* Mesajları alt alta dizmek için */
+  flex-direction: column;
+  justify-content: flex-start; /* Mesajları yukarıdan başlat */
+  padding: 20px; /* İç boşluk */
+  max-width: 900px; /* Maksimum genişlik */
+  width: 100%; /* Genişliği doldur */
+  margin: 0 auto; /* Yatayda ortala */
+  overflow-y: auto; /* Dikeyde scroll eklensin */
+  flex-grow: 1; /* Kendine ayrılan alanı doldursun */
+  box-sizing: border-box; /* Padding hesaba katılsın */
+  scroll-behavior: smooth; /* Yumuşak kaydırma */
 }
 
+/* Genel mesaj stili */
 .message {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 14px 20px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  max-width: 80%;
-  font-size: 16px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  max-width: 80%; /* Mesaj genişliği */
+  font-size: 16px;
+  line-height: 1.5; /* Satır yüksekliği */
+  word-wrap: break-word; /* Uzun kelimeler kırılsın */
 }
 
+/* Kullanıcı mesajı stili */
 .user-message {
-  align-self: flex-end;
-  background-color: rgba(255, 255, 255, 0.2);
-  text-align: right;
+  align-self: flex-end; /* Sağa yasla */
+  background-color: rgba(255, 255, 255, 0.2); /* Arka plan */
+  color: #fff; /* Yazı rengi */
+  border-bottom-right-radius: 4px; /* Sağ alt köşeyi biraz düzleştir */
 }
 
+/* Bot mesajı stili */
 .bot-message {
-  align-self: flex-start;
-  background-color: rgba(0, 0, 0, 0.6);
+  align-self: flex-start; /* Sola yasla */
+  background-color: rgba(0, 0, 0, 0.6); /* Arka plan */
+  color: #eee; /* Yazı rengi */
+  border-bottom-left-radius: 4px; /* Sol alt köşeyi biraz düzleştir */
 }
+
+/* Mesaj içindeki strong etiketi */
+.message strong {
+    font-weight: 600; /* Biraz daha kalın */
+    margin-right: 5px; /* Gönderen adından sonra boşluk */
+    color: #a739c7; /* Gönderen adını mor yapabiliriz */
+}
+.user-message strong {
+    color: #f0f0f0; /* Kullanıcı adı rengi farklı olabilir */
+}
+
 
 /* Chat Giriş Kutusu */
 .chat-input {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  border-top: 1px solid #888;
-  box-sizing: border-box;
+  width: 100%;
+  max-width: 900px; /* Chat container ile aynı genişlik */
+  margin: 0 auto; /* Yatayda ortala */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Elemanlar arası boşluk */
+  padding: 14px 20px; /* İç boşluk (padding-right önemli) */
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2); /* Üst kenarlık */
+  box-sizing: border-box; /* Padding hesaba katılsın */
+  flex-shrink: 0; /* Küçülmesin */
 }
 
-.chat-input input {
-  flex: 1;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  background: white;
-  color: black;
+.chat-input input[type="text"] {
+  flex: 1; /* Kalan tüm alanı kapla */
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.9); /* Hafif opak beyaz */
+  color: black;
 }
+/* Input pasifken stil */
+.chat-input input[type="text"]:disabled {
+    background-color: rgba(200, 200, 200, 0.7);
+    cursor: not-allowed;
+}
+
 
 .chat-input button {
-  padding: 14px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  background-color: #8e24aa;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  padding: 14px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #8e24aa;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .chat-input button:hover {
-    background-color: #a739c7;
+    background-color: #a739c7;
+}
+/* Buton pasifken stil */
+.chat-input button:disabled {
+    background-color: #5a5a5a; /* Gri tonu */
+    cursor: not-allowed;
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  flex-shrink: 0;
+  width: 45px; /* Biraz küçülttük */
+  height: 45px;
+  border-radius: 50%;
+  flex-shrink: 0; /* Küçülmesini engelle */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* İnce bir kenarlık */
 }
 
 /* Footer (sayfanın en altında) */
 .footer {
-  width: 100%;
-  text-align: center;
-  font-size: 13px;
-  color: #ffffff;
-  padding: 15px 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8); /* Biraz daha soluk */
+  padding: 15px 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  box-sizing: border-box;
+  flex-shrink: 0; /* Footer küçülmesin */
 }
+.footer strong {
+    color: #fff; /* Footer içindeki strong daha belirgin */
+}
+
 
 /* Responsive İyileştirmeler (Örnek) */
 @media (max-width: 768px) {
-    .main-layout {
-        flex-direction: column;
+    .main-layout {
+        flex-direction: column; /* Küçük ekranda alt alta */
+    }
+
+    .sidebar {
+        width: 100%; /* Tam genişlik */
+        height: auto; /* İçeriğe göre yükseklik */
+        /* max-height: 150px; Bu kısıtlamayı kaldırabiliriz */
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 10px 15px; /* Padding ayarı */
+        flex-direction: row; /* İçerik yan yana */
+        justify-content: space-between; /* İki uca yasla */
+        align-items: center; /* Dikeyde ortala */
+    }
+
+    /* Sidebar Başlığı Responsive */
+    .sidebar-header {
+        justify-content: flex-start; /* Sola yasla */
+        font-size: 18px; /* Boyut küçült */
+        margin-bottom: 0;
+        gap: 8px; /* Logo ile yazı arası boşluk */
+    }
+
+    .sidebar-header .app-logo {
+        height: 28px; /* Logo küçült */
+    }
+
+    .sidebar-header span {
+         font-size: 18px; /* Yazı küçült */
+    }
+
+    .new-chat-button {
+        margin-bottom: 0;
+    }
+     .new-chat-button button {
+         padding: 8px 12px;
+         font-size: 14px;
+     }
+
+    .history {
+         display: none; /* Küçük ekranda geçmişi gizle */
+    }
+
+    /* Sidebar Link Grubu Responsive */
+    .sidebar-links-group {
+        display: none; /* Küçük ekranda linkleri gizle */
+    }
+
+     /* Küçük ekranda sağ üst butonlar */
+    .top-right-buttons {
+        top: 10px;
+        right: 10px;
+        gap: 5px;
+    }
+
+    .auth-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    /* Content ve Input alanı padding'leri */
+    .chat-container, .chat-input {
+        padding: 10px 15px; /* Yan boşlukları arttırabiliriz */
+        max-width: 100%; /* Tam genişlik kullan */
+    }
+
+    /* Mesaj genişliği */
+    .message {
+        max-width: 90%; /* Mesajlar biraz daha geniş olabilir */
     }
 
-    .sidebar {
-        width: 100%;
-        height: auto;
-        max-height: 150px;
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Avatar küçült */
+    .avatar {
+        width: 35px;
+        height: 35px;
+    }
+    /* Input ve Buton boyutu */
+    .chat-input input[type="text"], .chat-input button {
         padding: 10px;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+        font-size: 15px;
+    }
+    .chat-input button {
+        padding: 10px 15px; /* Buton biraz daha geniş olabilir */
     }
 
-    /* Sidebar Başlığı Responsive */
-    .sidebar-header {
-        justify-content: flex-start;
-        font-size: 20px;
-        margin-bottom: 0;
-        flex-shrink: 0;
-    }
-
-    .sidebar-header .app-logo {
-        height: 30px;
-    }
-
-    .sidebar-header span {
-         font-size: 20px;
-    }
-
-    .new-chat-button {
-        margin-bottom: 0;
-        flex-shrink: 0;
-    }
-     .new-chat-button button {
-         padding: 8px 12px;
-         font-size: 14px;
-     }
-
-    .history {
-         display: none;
-    }
-
-    /* Sidebar Link Grubu Responsive */
-    .sidebar-links-group {
-        display: none;
-    }
-
-     /* Küçük ekranda sağ üst butonlar */
-    .top-right-buttons {
-        top: 10px;
-        right: 10px;
-        gap: 5px;
-    }
-
-    .auth-button {
-        padding: 6px 10px;
+    /* Footer */
+    .footer {
+        padding: 10px 0;
         font-size: 12px;
-    }
-
-    /* Initial Talking Avatar Animation Responsive Stilleri ÇIKARTILDI */
-    /* #initial-avatar-animation { ... } */
-    /* #initial-avatar-animation video { ... } */
-    /* .autoplay-fallback { ... } */
-
-
-    .chat-container, .chat-input {
-        padding: 10px;
-    }
-
-    .chat-container {
-        padding-top: 10px;
-    }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
-    }
-
-    .footer {
-        padding: 10px 0;
-    }
+    }
 }
+
+/* --- Typing Indicator Styles --- */
+
+/* Animasyonun görüneceği mesaj balonu için ek stil (gerekirse) */
+/* Genellikle .message ve .bot-message stillerini miras alması yeterli olacaktır. */
+/* İsteğe bağlı: Noktaların sığması için dikey padding'i biraz azaltabiliriz. */
+.typing-indicator {
+  padding-top: 15px;    /* Dikey padding'i biraz ayarlayalım */
+  padding-bottom: 15px; /* Dikey padding'i biraz ayarlayalım */
+  display: flex;        /* Noktaları yan yana dizmek için */
+  align-items: center;  /* Noktaları dikeyde ortalamak için */
+  /* Diğer .message, .bot-message stillerini devralır */
+}
+
+/* Yanıp sönen her bir nokta için stil */
+.typing-dot {
+  width: 8px;                      /* Nokta genişliği */
+  height: 8px;                     /* Nokta yüksekliği */
+  background-color: rgba(255, 255, 255, 0.6); /* Nokta rengi (mevcut temaya uygun) */
+  border-radius: 50%;              /* Noktayı yuvarlak yapar */
+  display: inline-block;           /* Yan yana durmalarını sağlar */
+  margin: 0 3px;                   /* Noktalar arası boşluk */
+
+  /* Animasyon tanımını uygula */
+  animation: typing-blink 1.4s infinite both; /* Animasyon adı, süresi, tekrarı */
+}
+
+/* İkinci noktaya animasyon gecikmesi */
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+/* Üçüncü noktaya animasyon gecikmesi */
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Yanıp Sönme Animasyonunun Tanımı (@keyframes) */
+@keyframes typing-blink {
+  0% { opacity: 0.2; }   /* Başlangıçta soluk */
+  20% { opacity: 1; }    /* Ortada belirgin */
+  100% { opacity: 0.2; } /* Sonda tekrar soluk */
+}
+
+/* --- End Typing Indicator Styles --- */
