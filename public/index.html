@@ -1,330 +1,78 @@
-/* Genel ve Arka Plan */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: url('arka_plan.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #fff;
-  height: 100vh;
-  overflow: hidden; /* Sayfanın ana kaydırmasını engelle */
-  display: flex;
-  flex-direction: column; /* Ana öğeleri (Main Layout, Footer) dikey sırala */
-}
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SibelGPT</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- İkon kütüphanesi ekleyebilirsiniz, örneğin Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  </head>
+  <body>
 
-/* Splash ekran stilleri */
-#splash-screen {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 1s ease;
-  pointer-events: none; /* Splash varken arkadaki elementlerle etkileşimi engelle */
-}
+    <!-- Açılış Splash Ekranı -->
+    <div id="splash-screen">
+      <!-- Splash ekranı için intro-logo.png dosyasını kullanmaya devam ediyorum -->
+      <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
+      </div>
 
-.splash-logo {
-  width: 850px; /* Veya istediğiniz boyut */
-  animation: fadeInOut 4s ease-in-out forwards;
-}
+    <!-- Ana Layout - Sidebar ve İçerik Alanını İçerir -->
+    <div class="main-layout">
+      <!-- Sol Yan Panel (Sidebar) -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+            <!-- Sidebar başlığı veya logosu (isteğe bağlı, isterseniz buraya da logo ekleyebilirsiniz) -->
+            SibelGPT
+        </div>
+        <div class="new-chat-button">
+            <button>
+                <i class="fas fa-plus"></i> Yeni Sohbet <!-- İkon ekledim -->
+            </button>
+        </div>
+        <div class="history">
+            <h2>Geçmiş</h2>
+            <ul id="history-list">
+                <!-- Geçmiş sohbet öğeleri buraya JavaScript ile eklenecek -->
+                <!-- Örnek öğeler: -->
+                <!-- <li data-chat-id="1">Emlak sorusu 1</li> -->
+                <!-- <li data-chat-id="2">Numeroloji analizim</li> -->
+                <!-- <li data-chat-id="3">Finansal tavsiye</li> -->
+                 <li>Henüz kaydedilmiş sohbet yok.</li> <!-- Başlangıç placeholder'ı -->
+            </ul>
+        </div>
+      </div>
 
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: scale(1); }
-  70% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.2); }
-}
+      <!-- İçerik Alanı - Chat Kutusu ve Giriş Alanını İçerir -->
+      <div class="content-area">
+        <!-- Sohbet Başlık Alanı -->
+        <div class="chat-header">
+            <!-- Logonuzu buraya ekledik -->
+            <!-- SRC YOLUNUN DOĞRULUĞUNDAN EMİN OLUN -->
+            <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="chat-logo">
+            <span>SibelGPT</span>
+        </div>
 
-/* Ana Layout - Sidebar ve İçerik Yan Yana */
-.main-layout {
-    display: flex; /* İçindeki sidebar ve content-area'yı yan yana dizer */
-    flex-direction: row;
-    flex-grow: 1; /* Body içinde footer hariç kalan tüm dikey alanı kapla */
-    overflow: hidden; /* İçerik taşarsa bu katmanda kaydırmayı engelle */
-}
+        <!-- Mesaj Kutusu -->
+        <div class="chat-container" id="chat-box">
+          <!-- Mesajlar buraya gelecek -->
+          <!-- Hoş Geldin Mesajı (İlk yüklendiğinde görünebilir) -->
+           <div class="message bot-message"><strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.</div>
+        </div>
 
-/* Sol Yan Panel (Sidebar) */
-.sidebar {
-    width: 280px; /* Sabit genişlik */
-    background-color: rgba(0, 0, 0, 0.7); /* Hafif opak koyu arka plan */
-    backdrop-filter: blur(5px); /* Arka planı bulanıklaştır */
-    padding: 20px;
-    flex-shrink: 0; /* Flex içinde küçülmesini engelle */
-    display: flex;
-    flex-direction: column; /* Sidebar içindeki öğeleri dikey sırala */
-    overflow-y: auto; /* İçerik taşarsa dikey kaydırma çubuğu */
-    border-right: 1px solid rgba(255, 255, 255, 0.1); /* Hafif kenarlık */
-}
+        <!-- Chat Giriş Kutusu -->
+        <div class="chat-input">
+          <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+          <button onclick="sendMessage()">Gönder</button>
+        </div>
+      </div>
+    </div> <!-- main-layout sonu -->
 
-.sidebar-header {
-    font-size: 24px;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 30px;
-    text-align: center; /* Başlığı ortala */
-}
+    <!-- Footer (sayfanın en altında) -->
+    <footer class="footer">
+      <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
+    </footer>
 
-.new-chat-button {
-    margin-bottom: 20px;
-}
-
-.new-chat-button button {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 16px;
-    border-radius: 8px;
-    background-color: #8e24aa; /* Mor tonu */
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex; /* İkon ve metni yan yana hizala */
-    align-items: center;
-    justify-content: center; /* İçeriği ortala */
-    gap: 8px; /* İkon ve metin arasına boşluk */
-    transition: background-color 0.2s ease;
-}
-
-.new-chat-button button:hover {
-    background-color: #a739c7; /* Hover rengi */
-}
-
-.history h2 {
-    font-size: 18px;
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.history ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.history li {
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.1); /* Hafif arka plan */
-    font-size: 15px;
-    overflow: hidden; /* Metin taşarsa gizle */
-    text-overflow: ellipsis; /* Taşan metin yerine üç nokta koy */
-    white-space: nowrap; /* Metni tek satırda tut */
-    transition: background-color 0.2s ease;
-}
-
-.history li:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Hover rengi */
-}
-
-/* Sidebar'da seçili öğe stili (script.js'te 'selected' sınıfı eklenir) */
-.history li.selected {
-    background-color: rgba(255, 255, 255, 0.3);
-    font-weight: bold; /* Veya başka bir vurgu */
-    border-left: 4px solid #8e24aa; /* Seçili olduğunu gösteren çizgi */
-    padding-left: 6px; /* Çizgi için içeriden boşluk */
-}
-
-
-/* İçerik Alanı - Chat ve Input */
-.content-area {
-    flex-grow: 1; /* Sidebar hariç kalan tüm yatay alanı kapla */
-    display: flex;
-    flex-direction: column; /* Chat Header, Chat ve Input'u dikey sırala */
-    overflow: hidden; /* Kendi içinde kaydırmayı yönetir, burayı gizle */
-    position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
-}
-
-/* Sohbet Başlık Alanı */
-.chat-header {
-    display: flex; /* Çocukları (logo ve span) yan yana dizer */
-    flex-direction: row; /* Açıkça belirtiyoruz (varsayılan da olsa) */
-    align-items: center; /* Dikeyde ortala */
-    gap: 15px; /* Logo ve metin arasına boşluk */
-    padding: 15px 20px;
-    background-color: rgba(0, 0, 0, 0.7); /* Sidebar ile aynı veya benzer arka plan */
-    backdrop-filter: blur(5px); /* Arka planı bulanıklaştır */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
-
-    /* --- DEBUGGING BORDERS --- */
-    /* Temporarily add borders to see the boundaries of header and its children */
-    /* border: 1px dashed red; */ /* Chat Header border */
-    /* --- END DEBUGGING BORDERS --- */
-}
-
-.chat-header .chat-logo {
-    height: 40px; /* Logonuzun yüksekliğini ayarlayın */
-    width: auto; /* Oranını koru */
-    border-radius: 50%; /* Logonuz daire şeklinde değilse bu satırı silebilirsiniz */
-    object-fit: cover; /* Resim boyutunu koruyarak sığdır */
-
-     /* --- DEBUGGING BORDERS --- */
-    /* border: 1px dashed yellow; */ /* Logo border */
-    /* --- END DEBUGGING BORDERS --- */
-}
-
-.chat-header span {
-    font-size: 20px;
-    font-weight: bold;
-    color: #fff; /* Beyaz veya tema renginiz */
-
-     /* --- DEBUGGING BORDERS --- */
-    /* border: 1px dashed green; */ /* Span border */
-    /* --- END DEBUGGING BORDERS --- */
-}
-
-
-/* Mesaj Kutusu */
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* Üst padding'i chat-header'ın yüksekliğine yer açın */
-  /* Padding hesaplama: chat-header üst/alt padding (15+15=30) + logo yüksekliği (40) + gap (15) + üstte ek boşluk (örn 10px) */
-  padding: calc(30px + 40px + 15px + 10px) 20px 20px 20px; /* Cömert bir başlangıç */
-  max-width: 900px; /* Ortada sabit genişlik */
-  margin: 0 auto; /* Yatayda ortala (içerik alanının ortasında) */
-  overflow-y: auto; /* İçerik taştığında dikey kaydırma çubuğu */
-  flex-grow: 1; /* İçerik alanında header ve input hariç kalan dikey boşluğu doldur */
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-}
-
-.message {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 14px 20px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  max-width: 80%;
-  font-size: 16px;
-}
-
-.user-message {
-  align-self: flex-end;
-  background-color: rgba(255, 255, 255, 0.2);
-  text-align: right;
-}
-
-.bot-message {
-  align-self: flex-start;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-/* Chat Giriş Kutusu */
-.chat-input {
-  width: 100%; /* İçerik alanının genişliğini al */
-  max-width: 900px; /* Ortada sabit genişlik */
-  margin: 0 auto; /* Yatayda ortala (içerik alanının ortasında) */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  border-top: 1px solid #888;
-  box-sizing: border-box; /* Paddingin genişliğe dahil edilmesi */
-}
-
-.chat-input input {
-  flex: 1;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  background: white;
-  color: black;
-}
-
-.chat-input button {
-  padding: 14px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  background-color: #8e24aa;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.chat-input button:hover {
-    background-color: #a739c7;
-}
-
-.avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  flex-shrink: 0; /* Küçülmesini engelle */
-}
-
-/* Footer (sayfanın en altında) */
-.footer {
-  width: 100%; /* Body'nin genişliğini alır */
-  text-align: center;
-  font-size: 13px;
-  color: #ffffff;
-  padding: 15px 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  box-sizing: border-box;
-}
-
-/* Responsive İyileştirmeler (Örnek) */
-@media (max-width: 768px) {
-    .main-layout {
-        flex-direction: column; /* Küçük ekranlarda sidebar ve içerik alt alta */
-    }
-
-    .sidebar {
-        width: 100%; /* Sidebar tam genişlik */
-        height: auto; /* Yükseklik içeriğe göre ayarlanır */
-        max-height: 150px; /* Veya sabit bir yükseklik verilebilir */
-        overflow-y: auto; /* Gerekirse sidebar kendi içinde kaydırılır */
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
-        padding: 10px; /* Padding azaltılabilir */
-    }
-
-    .sidebar-header {
-        margin-bottom: 10px; /* Başlık alt boşluğu azaltılabilir */
-    }
-
-    .new-chat-button, .history {
-        padding: 0 10px; /* Sidebar içindeki öğelere yatay padding */
-    }
-
-    .chat-header {
-        /* Küçük ekranlarda header'ın stili ayarlanabilir */
-        padding: 10px;
-        gap: 10px;
-    }
-
-    .chat-header .chat-logo {
-        height: 30px; /* Küçük ekranlarda logo boyutu */
-    }
-
-    .chat-header span {
-        font-size: 18px; /* Küçük ekranlarda yazı boyutu */
-    }
-
-    .chat-container, .chat-input {
-        padding: 10px; /* Padding azaltılabilir */
-    }
-
-     .chat-container {
-        /* Küçük ekranlarda chat-header yüksekliğine göre üst padding ayarı */
-         /* Hesaplama: chat-header üst/alt padding (10+10=20) + logo yüksekliği (30) + gap (10) + üstte ek boşluk (örn 10px) */
-        padding-top: calc(20px + 30px + 10px + 10px); /* Örnek hesaplama */
-     }
-
-    .avatar {
-        width: 40px; /* Avatar boyutu küçültülebilir */
-        height: 40px;
-    }
-}
+    <script src="script.js"></script>
+  </body>
+</html>
