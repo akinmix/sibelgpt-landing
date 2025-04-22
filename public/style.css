@@ -121,24 +121,61 @@ body {
     background-color: rgba(255, 255, 255, 0.2); /* Hover rengi */
 }
 
+/* Sidebar'da seçili öğe stili (script.js'te 'selected' sınıfı eklenir) */
+.history li.selected {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: bold; /* Veya başka bir vurgu */
+    border-left: 4px solid #8e24aa; /* Seçili olduğunu gösteren çizgi */
+    padding-left: 6px; /* Çizgi için içeriden boşluk */
+}
+
+
 /* İçerik Alanı - Chat ve Input */
 .content-area {
     flex-grow: 1; /* Sidebar hariç kalan tüm yatay alanı kapla */
     display: flex;
-    flex-direction: column; /* Chat ve Input'u dikey sırala */
+    flex-direction: column; /* Chat Header, Chat ve Input'u dikey sırala */
     overflow: hidden; /* Kendi içinde kaydırmayı yönetir, burayı gizle */
+    position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
 }
+
+/* Sohbet Başlık Alanı */
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Logo ve metin arasına boşluk */
+    padding: 15px 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Sidebar ile aynı veya benzer arka plan */
+    backdrop-filter: blur(5px); /* Arka planı bulanıklaştır */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
+}
+
+.chat-header .chat-logo {
+    height: 40px; /* Logonuzun yüksekliğini ayarlayın */
+    width: auto; /* Oranını koru */
+    border-radius: 50%; /* Logonuz daire şeklindeyse */
+    object-fit: cover; /* Resim boyutunu koruyarak sığdır */
+}
+
+.chat-header span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff; /* Beyaz veya tema renginiz */
+}
+
 
 /* Mesaj Kutusu */
 .chat-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 20px;
+  /* Üst padding'i chat-header'ın yüksekliğine göre ayarlayın */
+  /* Padding hesaplama: chat-header üst/alt padding (15+15=30) + logo yüksekliği (40) + üstte ek boşluk (örn 10px) */
+  padding: calc(30px + 40px + 10px) 20px 20px 20px; /* Örnek hesaplama, ince ayar gerekebilir */
   max-width: 900px; /* Ortada sabit genişlik */
   margin: 0 auto; /* Yatayda ortala (içerik alanının ortasında) */
   overflow-y: auto; /* İçerik taştığında dikey kaydırma çubuğu */
-  flex-grow: 1; /* İçerik alanında input hariç kalan dikey boşluğu doldur */
+  flex-grow: 1; /* İçerik alanında header ve input hariç kalan dikey boşluğu doldur */
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
@@ -175,11 +212,6 @@ body {
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
   border-top: 1px solid #888;
-  /* Position fixed kaldırıldı */
-  /* bottom: 0; */
-  /* left: 0; */
-  /* right: 0; */
-  /* Artık flexbox ile content-area'nın altında yer alacak */
   box-sizing: border-box; /* Paddingin genişliğe dahil edilmesi */
 }
 
@@ -209,7 +241,6 @@ body {
     background-color: #a739c7;
 }
 
-
 .avatar {
   width: 50px;
   height: 50px;
@@ -227,8 +258,6 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
-  /* position ve z-index kaldırıldı */
-  /* Flexbox ile main-layout altında yer alacak */
   box-sizing: border-box;
 }
 
@@ -256,9 +285,29 @@ body {
         padding: 0 10px; /* Sidebar içindeki öğelere yatay padding */
     }
 
+    .chat-header {
+        /* Küçük ekranlarda header'ın stili ayarlanabilir */
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .chat-header .chat-logo {
+        height: 30px; /* Küçük ekranlarda logo boyutu */
+    }
+
+    .chat-header span {
+        font-size: 18px; /* Küçük ekranlarda yazı boyutu */
+    }
+
     .chat-container, .chat-input {
         padding: 10px; /* Padding azaltılabilir */
     }
+
+     .chat-container {
+        /* Küçük ekranlarda chat-header yüksekliğine göre üst padding ayarı */
+         /* Hesaplama: chat-header üst/alt padding (10+10=20) + logo yüksekliği (30) + üstte ek boşluk (örn 10px) */
+        padding-top: calc(20px + 30px + 10px); /* Örnek hesaplama */
+     }
 
     .avatar {
         width: 40px; /* Avatar boyutu küçültülebilir */
