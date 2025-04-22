@@ -39,3 +39,41 @@ body {
   70% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.2); }
 }
+/* Sağ Üst Köşe Butonları Stili */
+.top-right-buttons {
+  position: absolute; /* Body'e göre konumlandır */
+  top: 20px; /* Üstten 20px boşluk */
+  right: 20px; /* Sağdan 20px boşluk */
+  z-index: 10; /* Diğer içeriklerin üzerinde görünmesini sağla */
+  display: flex; /* Butonları yan yana dizer */
+  gap: 10px; /* Butonlar arasına boşluk */
+  align-items: center; /* Dikeyde ortala */
+}
+
+.auth-button {
+  display: inline-block; /* Linklerin button gibi davranmasını sağlar */
+  padding: 8px 15px; /* Buton içi boşluk */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Kenarlık */
+  border-radius: 5px; /* Köşe yuvarlaklığı */
+  color: rgba(255, 255, 255, 0.8); /* Yazı rengi */
+  text-decoration: none; /* Alt çizgiyi kaldır */
+  font-size: 14px; /* Yazı boyutu */
+  background-color: rgba(0, 0, 0, 0.3); /* Hafif opak arka plan */
+  backdrop-filter: blur(3px); /* Arka planı hafif bulanıklaştır */
+  cursor: pointer; /* Mouse imlecini el yap */
+  transition: all 0.3s ease; /* Geçişler için animasyon */
+}
+
+.auth-button:hover {
+  border-color: #a739c7; /* Mor kenarlık */
+  color: #fff; /* Yazı rengini beyaz yap */
+  background-color: rgba(139, 36, 170, 0.6); /* Mor tonunda opak arka plan */
+}
+
+/* Ana Layout - Sidebar ve İçerik Yan Yana */
+.main-layout {
+  display: flex;
+  flex-direction: row; /* Yan yana diz */
+  flex-grow: 1; /* Mevcut alanı doldur */
+  overflow: hidden; /* Taşmayı engelle */
+}
