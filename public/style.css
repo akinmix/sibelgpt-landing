@@ -100,8 +100,8 @@ body {
 }
 
 .splash-logo {
-  width: 300px;
-  animation: fadeInOut 3s ease-in-out forwards;
+  width: 450px;
+  animation: fadeInOut 4s ease-in-out forwards;
 }
 
 @keyframes fadeInOut {
