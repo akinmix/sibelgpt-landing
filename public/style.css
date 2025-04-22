@@ -121,6 +121,7 @@ body {
     flex-direction: column;
     flex-grow: 1; /* Sidebar içinde kalan boşluğu doldur */
     overflow: hidden; /* Liste taşarsa history div'inin taşmasını engelle */
+     margin-bottom: 20px; /* Link ile arasına boşluk */
 }
 
 
@@ -165,6 +166,37 @@ body {
     padding-left: 6px; /* Çizgi için içeriden boşluk */
 }
 
+/* Sibelizim.com Linki Stili (Yeni Eklendi) */
+.sidebar-link-website {
+    /* flex-grow: 1;  Bu linkin sidebar'ın geri kalan boşluğunu doldurmasına gerek yok */
+    flex-shrink: 0; /* Küçülmesini engelle */
+    margin-top: auto; /* Sidebar'ın alt kısmına itmek için (eğer history flex-grow 1 ise) */
+    padding-top: 15px; /* Üstüne boşluk */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Üstüne ince çizgi */
+}
+
+.sidebar-link-website a {
+    display: flex; /* İkon ve metni yan yana dizer */
+    align-items: center; /* Dikeyde ortala */
+    gap: 10px; /* İkon ve metin arasına boşluk */
+    color: rgba(255, 255, 255, 0.8); /* Varsayılan metin rengi */
+    text-decoration: none; /* Alt çizgiyi kaldır */
+    font-size: 15px; /* Geçmiş listesi öğeleriyle aynı boyut */
+    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: 10px; /* Tıklama alanı için padding */
+    border-radius: 6px;
+    /* background-color: rgba(255, 255, 255, 0.05);  Hafif bir arka plan isteğe bağlı */
+}
+
+.sidebar-link-website a:hover {
+     color: #fff; /* Üzerine gelince beyaz yap */
+     background-color: rgba(255, 255, 255, 0.15); /* Üzerine gelince arka planı koyulaştır */
+}
+ .sidebar-link-website a i {
+    /* İkon için stil */
+     font-size: 16px; /* İkon boyutu */
+ }
+
 
 /* İçerik Alanı - Chat ve Input */
 .content-area {
@@ -174,7 +206,6 @@ body {
     overflow: hidden; /* Kendi içinde kaydırmayı yönetir, burayı gizle */
     position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
 }
-
 
 /* Mesaj Kutusu */
 .chat-container {
@@ -319,11 +350,19 @@ body {
          font-size: 14px; /* Buton fontu azalt */
      }
 
-
     .history {
          /* Küçük ekranda history bölümünü gizleyebilirsiniz, veya farklı bir yere taşıyabilirsiniz */
          display: none; /* Şimdilik gizleyelim */
          /* Eğer göstermek isterseniz, yatay düzende nasıl yerleşeceğini ayarlamanız gerekir */
+    }
+
+    /* Sibelizim.com Linki Stili Responsive Ayarlar */
+    .sidebar-link-website {
+        display: none; /* Küçük ekranda gizle (isteğe bağlı) */
+        /* Ya da küçük ekranda yatay düzende nasıl yerleşeceğini ayarlayın */
+        /* margin-top: 0; */
+        /* padding-top: 0; */
+        /* border-top: none; */
     }
 
 
@@ -332,7 +371,6 @@ body {
     }
 
     .chat-container {
-        /* Küçük ekranda chat-header kaldırıldığı için padding-top normal */
         padding-top: 10px; /* Veya isteğe bağlı olarak biraz daha fazla */
     }
 
