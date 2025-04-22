@@ -1,85 +1,80 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SibelGPT</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SibelGPT</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
 
-    <!-- Açılış Splash Ekranı -->
-    <div id="splash-screen">
-      <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
+  <!-- Splash ekranı -->
+  <div id="splash-screen">
+    <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
+  </div>
+
+  <!-- Sağ üst köşe butonları -->
+  <div class="top-right-buttons">
+    <a href="#" class="auth-button register-button">Üye Ol</a>
+    <a href="#" class="auth-button login-button">Üye Girişi</a>
+  </div>
+
+  <!-- Ana Layout -->
+  <div class="main-layout" style="display: none;" id="main-interface">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
+        <span>SibelGPT</span>
+      </div>
+      <div class="new-chat-button">
+        <button><i class="fas fa-plus"></i> Yeni Sohbet</button>
+      </div>
+      <div class="history">
+        <h2>Geçmiş</h2>
+        <ul id="history-list">
+          <li>Henüz kaydedilmiş sohbet yok.</li>
+        </ul>
+      </div>
+      <div class="sidebar-links-group">
+        <a href="https://www.sibelizim.com" target="_blank"><i class="fas fa-external-link-alt"></i> sibelizim.com</a>
+        <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
+        <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
+      </div>
     </div>
 
-    <!-- Sağ Üst Köşe Butonları -->
-    <div class="top-right-buttons">
-        <a href="#" class="auth-button register-button">Üye Ol</a>
-        <a href="#" class="auth-button login-button">Üye Girişi</a>
-    </div>
-
-    <!-- Ana Layout - Sidebar ve İçerik Alanını İçerir -->
-    <div class="main-layout">
-      <!-- Sol Yan Panel (Sidebar) -->
-      <div class="sidebar">
-        <div class="sidebar-header">
-             <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
-             <span>SibelGPT</span>
-        </div>
-        <div class="new-chat-button">
-            <button>
-                <i class="fas fa-plus"></i> Yeni Sohbet
-            </button>
-        </div>
-        <div class="history">
-            <h2>Geçmiş</h2>
-            <ul id="history-list">
-                <li>Henüz kaydedilmiş sohbet yok.</li>
-            </ul>
-        </div>
-
-        <div class="sidebar-links-group">
-             <a href="https://www.sibelizim.com" target="_blank">
-                <i class="fas fa-external-link-alt"></i> sibelizim.com
-            </a>
-             <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank">
-                <i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım
-            </a>
-             <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank">
-                <i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım
-            </a>
+    <!-- İçerik Alanı -->
+    <div class="content-area">
+      <div class="chat-container" id="chat-box">
+        <div class="message bot-message">
+          <strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.
+          SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!
         </div>
       </div>
 
-      <!-- İçerik Alanı - Chat Kutusu ve Giriş Alanını İçerir -->
-      <div class="content-area">
-        <div class="chat-container" id="chat-box">
-           <div class="message bot-message"><strong>SibelGPT:</strong> Merhaba!SibelGPT, Sibel Kazan Midilli tarafından geliştirilen, yapay zeka destekli bir dijital danışmandır.Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder.
-            SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın! .</div>
-        </div>
-
-        <!-- Chat Giriş Kutusu -->
-        <div class="chat-input">
-          <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-          <button onclick="sendMessage()">Gönder</button>
-        </div>
+      <!-- Chat Giriş Kutusu -->
+      <div class="chat-input">
+        <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+        <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+        <button onclick="sendMessage()">Gönder</button>
       </div>
-    </div> <!-- main-layout sonu -->
+    </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
-    </footer>
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
+  </footer>
 
-    <!-- 🎬 GÖRSEL ORTADA ÇIKAN INTRO VİDEO (splash sonrası) -->
-    <video id="intro-video" autoplay muted playsinline>
+  <!-- 🎬 Avatar Video ve Buton -->
+  <div id="video-wrapper">
+    <video id="intro-video">
       <source src="talking-avatar.mp4" type="video/mp4" />
     </video>
+    <button id="play-button" onclick="playIntroVideo()">🎤 Dinle</button>
+  </div>
 
-    <!-- JS bağlantısı -->
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
 </html>
