@@ -32,10 +32,11 @@ body {
   animation: fadeInOut 4s ease-in-out forwards;
 }
 
+/* DÜZELTME: transform: 1; yerine transform: scale(1); kullanıldı */
 @keyframes fadeInOut {
   0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: scale(1); } /* scale(1) olmalı */
-  70% { opacity: 1; transform: scale(1); } /* scale(1) olmalı */
+  30% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.2); }
 }
 
@@ -472,6 +473,10 @@ body {
   display: flex;        /* Noktaları yan yana dizmek için */
   align-items: center;  /* Noktaları dikeyde ortalamak için */
   /* Diğer .message, .bot-message stillerini devralır */
+  /* Önemli: align-self'in bot-message'dan geldiğinden emin olalım */
+  align-self: flex-start; /* Sola yasla */
+  background-color: rgba(0, 0, 0, 0.6); /* bot-message ile aynı arka plan */
+  border-bottom-left-radius: 4px; /* bot-message ile aynı köşe */
 }
 
 /* Yanıp sönen her bir nokta için stil */
