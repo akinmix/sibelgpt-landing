@@ -121,7 +121,7 @@ body {
     flex-direction: column;
     flex-grow: 1; /* Sidebar içinde kalan boşluğu doldur */
     overflow: hidden; /* Liste taşarsa history div'inin taşmasını engelle */
-     margin-bottom: 20px; /* Link ile arasına boşluk */
+     margin-bottom: 20px; /* Link grubu ile arasına boşluk */
 }
 
 
@@ -166,16 +166,18 @@ body {
     padding-left: 6px; /* Çizgi için içeriden boşluk */
 }
 
-/* Sibelizim.com Linki Stili (Yeni Eklendi) */
-.sidebar-link-website {
-    /* flex-grow: 1;  Bu linkin sidebar'ın geri kalan boşluğunu doldurmasına gerek yok */
+/* Sidebar Link Grubu Stili (Yeni Eklendi) */
+.sidebar-links-group {
     flex-shrink: 0; /* Küçülmesini engelle */
-    margin-top: auto; /* Sidebar'ın alt kısmına itmek için (eğer history flex-grow 1 ise) */
+    margin-top: auto; /* Sidebar'ın alt kısmına itmek için */
     padding-top: 15px; /* Üstüne boşluk */
     border-top: 1px solid rgba(255, 255, 255, 0.1); /* Üstüne ince çizgi */
+    display: flex; /* İçindeki linkleri dikey sırala */
+    flex-direction: column;
+    gap: 5px; /* Linkler arasına boşluk */
 }
 
-.sidebar-link-website a {
+.sidebar-links-group a {
     display: flex; /* İkon ve metni yan yana dizer */
     align-items: center; /* Dikeyde ortala */
     gap: 10px; /* İkon ve metin arasına boşluk */
@@ -188,11 +190,11 @@ body {
     /* background-color: rgba(255, 255, 255, 0.05);  Hafif bir arka plan isteğe bağlı */
 }
 
-.sidebar-link-website a:hover {
+.sidebar-links-group a:hover {
      color: #fff; /* Üzerine gelince beyaz yap */
      background-color: rgba(255, 255, 255, 0.15); /* Üzerine gelince arka planı koyulaştır */
 }
- .sidebar-link-website a i {
+ .sidebar-links-group a i {
     /* İkon için stil */
      font-size: 16px; /* İkon boyutu */
  }
@@ -219,10 +221,6 @@ body {
   flex-grow: 1; /* İçerik alanında input hariç kalan dikey boşluğu doldur */
   box-sizing: border-box;
   scroll-behavior: smooth;
-
-  /* Artık chat-header olmadığı için ekstra padding-top'a genellikle gerek yok. */
-  /* Eğer ilk mesaj çok yukarıdaysa, ilk mesaja özel margin-top verebilirsiniz */
-  /* .chat-container .message:first-child { margin-top: 20px; } */
 }
 
 .message {
@@ -316,7 +314,6 @@ body {
         width: 100%; /* Sidebar tam genişlik */
         height: auto; /* Yükseklik içeriğe göre ayarlanır */
         max-height: 150px; /* Veya sabit bir yükseklik verilebilir */
-        /* overflow-y: auto;  Sidebar'ın ana kaydırmasını kaldırdık */
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
         padding: 10px; /* Padding azaltılabilir */
@@ -353,16 +350,12 @@ body {
     .history {
          /* Küçük ekranda history bölümünü gizleyebilirsiniz, veya farklı bir yere taşıyabilirsiniz */
          display: none; /* Şimdilik gizleyelim */
-         /* Eğer göstermek isterseniz, yatay düzende nasıl yerleşeceğini ayarlamanız gerekir */
     }
 
-    /* Sibelizim.com Linki Stili Responsive Ayarlar */
-    .sidebar-link-website {
-        display: none; /* Küçük ekranda gizle (isteğe bağlı) */
-        /* Ya da küçük ekranda yatay düzende nasıl yerleşeceğini ayarlayın */
-        /* margin-top: 0; */
-        /* padding-top: 0; */
-        /* border-top: none; */
+    /* Sidebar Link Grubu Stili Responsive Ayarlar */
+    .sidebar-links-group {
+         /* Küçük ekranda link grubunu gizleyebilirsiniz veya yatay düzende nasıl yerleşeceğini ayarlayın */
+        display: none; /* Şimdilik gizleyelim */
     }
 
 
