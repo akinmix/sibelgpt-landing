@@ -55,7 +55,7 @@ body {
     flex-shrink: 0; /* Flex içinde küçülmesini engelle */
     display: flex;
     flex-direction: column; /* Sidebar içindeki öğeleri dikey sırala */
-    overflow-y: auto; /* İçerik taşarsa dikey kaydırma çubuğu */
+    /* overflow-y: auto;  Sidebar'ın ana kaydırmasını kaldırdık */
     border-right: 1px solid rgba(255, 255, 255, 0.1); /* Hafif kenarlık */
 }
 
@@ -68,16 +68,18 @@ body {
     font-weight: bold;
     color: #fff;
     margin-bottom: 30px;
-    /* text-align: center;  Flexbox ile center align kullanıldığı için buna gerek kalmayabilir, ya da flex konteynerini ortalayabilirsiniz */
     justify-content: center; /* İçeriği yatayda ortala */
+    flex-shrink: 0; /* Başlığın küçülmesini engelle */
 }
 
 /* Sidebar Başlığındaki Logo */
 .sidebar-header .app-logo {
     height: 35px; /* Logo yüksekliğini ayarlayın */
     width: auto; /* Oranını koru */
+    max-width: 100%; /* Kapsayıcıdan taşmasını engelle */
     /* border-radius: 50%;  Logo daire şeklinde ise */
     object-fit: contain; /* Resmin tamamını sığdır */
+    flex-shrink: 0; /* Logonun küçülmesini engelle */
 }
 
 /* Sidebar Başlığındaki Yazı (SibelGPT) */
@@ -85,11 +87,13 @@ body {
     font-size: 24px; /* Sidebar header font boyutuyla aynı */
     font-weight: bold;
     color: #fff;
+    flex-shrink: 0; /* Yazının küçülmesini engelle */
 }
 
 
 .new-chat-button {
     margin-bottom: 20px;
+    flex-shrink: 0; /* Butonun küçülmesini engelle */
 }
 
 .new-chat-button button {
@@ -112,17 +116,28 @@ body {
     background-color: #a739c7; /* Hover rengi */
 }
 
+.history {
+    display: flex; /* Başlık (h2) ve liste (ul) için flex */
+    flex-direction: column;
+    flex-grow: 1; /* Sidebar içinde kalan boşluğu doldur */
+    overflow: hidden; /* Liste taşarsa history div'inin taşmasını engelle */
+}
+
+
 .history h2 {
     font-size: 18px;
     margin-top: 0;
     margin-bottom: 10px;
     color: rgba(255, 255, 255, 0.8);
+    flex-shrink: 0; /* Başlığın küçülmesini engelle */
 }
 
 .history ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    flex-grow: 1; /* History div'i içinde kalan boşluğu doldur */
+    overflow-y: auto; /* SADECE LİSTE İÇİN KAYDIRMA ÇUBUĞU */
 }
 
 .history li {
@@ -160,7 +175,6 @@ body {
     position: relative; /* İçindeki position: absolute elemanlar için referans noktası */
 }
 
-/* Chat Başlık Alanı Kaldırıldığı İçin İlgili CSS'ler de Kaldırıldı */
 
 /* Mesaj Kutusu */
 .chat-container {
@@ -271,17 +285,21 @@ body {
         width: 100%; /* Sidebar tam genişlik */
         height: auto; /* Yükseklik içeriğe göre ayarlanır */
         max-height: 150px; /* Veya sabit bir yükseklik verilebilir */
-        overflow-y: auto; /* Gerekirse sidebar kendi içinde kaydırılır */
+        /* overflow-y: auto;  Sidebar'ın ana kaydırmasını kaldırdık */
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
         padding: 10px; /* Padding azaltılabilir */
+        flex-direction: row; /* Küçük ekranda sidebar içeriğini yatay sırala */
+        justify-content: space-between; /* Öğeler arasına boşluk koy */
+        align-items: center; /* Dikeyde ortala */
     }
 
     /* Sidebar Başlığı Responsive Ayarlar */
     .sidebar-header {
-        justify-content: flex-start; /* Küçük ekranda sola hizala */
+        justify-content: flex-start; /* Sola hizala */
         font-size: 20px; /* Font boyutu küçült */
-        margin-bottom: 15px;
+        margin-bottom: 0; /* Yatay düzende alt boşluk gereksiz */
+        flex-shrink: 0; /* Küçülmesini engelle */
     }
 
     .sidebar-header .app-logo {
@@ -292,24 +310,38 @@ body {
          font-size: 20px; /* Başlık font boyutuyla aynı */
     }
 
+    .new-chat-button {
+        margin-bottom: 0; /* Yatay düzende alt boşluk gereksiz */
+        flex-shrink: 0; /* Küçülmesini engelle */
+    }
+     .new-chat-button button {
+         padding: 8px 12px; /* Buton paddingi azalt */
+         font-size: 14px; /* Buton fontu azalt */
+     }
 
-    .new-chat-button, .history {
-        padding: 0 10px; /* Sidebar içindeki öğelere yatay padding */
+
+    .history {
+         /* Küçük ekranda history bölümünü gizleyebilirsiniz, veya farklı bir yere taşıyabilirsiniz */
+         display: none; /* Şimdilik gizleyelim */
+         /* Eğer göstermek isterseniz, yatay düzende nasıl yerleşeceğini ayarlamanız gerekir */
     }
 
-    /* Chat Başlık Alanı Kaldırıldığı İçin İlgili Responsive CSS'ler de Kaldırıldı */
 
     .chat-container, .chat-input {
         padding: 10px; /* Padding azaltılabilir */
     }
 
     .chat-container {
-        /* Küçük ekranda da artık chat-header olmadığı için padding-top normal */
+        /* Küçük ekranda chat-header kaldırıldığı için padding-top normal */
         padding-top: 10px; /* Veya isteğe bağlı olarak biraz daha fazla */
     }
 
     .avatar {
         width: 40px; /* Avatar boyutu küçültülebilir */
         height: 40px;
+    }
+
+    .footer {
+        padding: 10px 0; /* Küçük ekranda footer paddingi azalt */
     }
 }
