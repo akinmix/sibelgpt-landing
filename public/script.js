@@ -2,7 +2,6 @@
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
 // Şu anki sohbetin mesajlarını tutacak dizi
-// Her mesaj { sender: 'Sen'/'SibelGPT', text: '...', role: 'user'/'bot' } formatında olacak
 let currentConversation = [];
 
 // DOM elementlerine referanslar (sayfa yüklendiğinde atanacak)
@@ -11,12 +10,24 @@ let userInput;
 let newChatButton;
 let historyList;
 let splashScreen;
+// Yeni: Animasyon video elementine referans
+let talkingAvatarVideo;
+// Animasyonun kapsayıcı div'ine referans (görünürlük kontrolü için)
+let initialAvatarAnimationContainer;
+
+
+// Yeni: Animasyonun gizlenmesi için kullanılacak timeout ID'si
+let animationTimeout;
+
 
 // --- Mesaj Gönderme ve Alma Fonksiyonları ---
 
 async function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
+
+  // Yeni: Kullanıcı mesaj yazdığında animasyonu durdur
+  stopInitialAnimation(); // stopInitialAnimation artık video elementini yönetecek
 
   // Kullanıcının mesajını ekle ve currentConversation'a kaydet
   appendMessage("Sen", message, "user", true); // true: geçmişe ekle
@@ -48,190 +59,273 @@ async function sendMessage() {
 function appendMessage(sender, text, role, addToHistory = false) {
   const messageElem = document.createElement("div");
   messageElem.className = "message " + role;
-  // Güvenlik için textContent kullanıyoruz, eğer HTML içeriği gösterecekseniz innerHTML kullanırken dikkatli olun
-  messageElem.innerHTML = `<strong>${sender}:</strong> ${text}`; // Şimdilik bold için innerHTML kullandık
+  messageElem.innerHTML = `<strong>${sender}:</strong> ${text}`;
 
   chatBox.appendChild(messageElem);
 
-  // Yeni mesajı currentConversation'a ekle (eğer kaydetme isteniyorsa)
   if (addToHistory) {
       currentConversation.push({ sender, text, role });
   }
 
-
-  // Chat kutusunu en alta kaydır
-  // Küçük bir timeout, elemanın DOM'a eklenip boyutunun hesaplanması için bazen gerekli olabilir
   setTimeout(() => {
       chatBox.scrollTop = chatBox.scrollHeight;
-  }, 100); // 100ms gecikme
+  }, 100);
 }
-
 
 // Klavyeden Enter tuşuna basıldığında mesaj gönderme
 function handleInputKeyPress(event) {
     if (event.key === 'Enter') {
-        event.preventDefault(); // Varsayılan Enter davranışını (yeni satır) engelle
+        event.preventDefault();
         sendMessage();
     }
 }
 
 
 // --- Sohbet Geçmişi Fonksiyonları (Local Storage Tabanlı) ---
+// (Bu fonksiyonlarda video animasyonuyla doğrudan bir değişiklik yok)
 
-// Tüm kayıtlı sohbetleri Local Storage'dan yükler
 function loadConversations() {
     const conversationsJson = localStorage.getItem(HISTORY_STORAGE_KEY);
     try {
         return conversationsJson ? JSON.parse(conversationsJson) : [];
     } catch (e) {
         console.error("Sohbet geçmişi yüklenirken hata:", e);
-        return []; // Hata olursa boş dizi döndür
+        return [];
     }
 }
 
-// Sohbetleri Local Storage'a kaydeder
 function saveConversations(conversations) {
     try {
         localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(conversations));
     } catch (e) {
         console.error("Sohbet geçmişi kaydedilirken hata:", e);
-        // Local Storage dolu olabilir vb. Kullanıcıya bilgi verilebilir.
     }
 }
 
-// Mevcut sohbeti geçmişe kaydeder
 function saveCurrentConversation() {
-    // Eğer mevcut sohbet boşsa veya sadece ilk hoş geldiniz mesajını içeriyorsa kaydetme
-    if (currentConversation.length <= 1) {
+    if (currentConversation.length <= 1) { // En az bir kullanıcı mesajı olmalı
         return;
     }
 
-    // Yeni bir sohbet ID'si oluştur (timestamp veya daha robust bir UUID kullanılabilir)
     const chatId = Date.now();
-    const title = generateConversationTitle(currentConversation); // Sohbet için başlık oluştur
+    const title = generateConversationTitle(currentConversation);
 
-    // Kayıtlı sohbetleri yükle
     const conversations = loadConversations();
 
-    // Mevcut sohbeti listeye ekle (en yeni üste gelebilir)
     conversations.unshift({ id: chatId, title: title, messages: currentConversation });
 
-    // Sohbetleri kaydet
     saveConversations(conversations);
-
-    // Geçmiş listesini yeniden çiz
     displayHistory();
 }
 
-
-// Bir sohbetten otomatik başlık oluşturur (örneğin ilk kullanıcı mesajının ilk 20 karakteri)
 function generateConversationTitle(conversation) {
     if (!conversation || conversation.length === 0) {
         return "Boş Sohbet";
     }
-    // İlk kullanıcı mesajını bul
     const firstUserMessage = conversation.find(msg => msg.role === 'user');
     if (firstUserMessage && firstUserMessage.text) {
         const text = firstUserMessage.text.trim();
-        // İlk 30 karakteri al, kelime sınırında kes ve sonuna üç nokta ekle
         if (text.length > 30) {
-             return text.substring(0, 30).split(' ').slice(0, -1).join(' ') + '...';
+             const trimmedText = text.substring(0, 30);
+             const lastSpaceIndex = trimmedText.lastIndexOf(' ');
+             if (lastSpaceIndex > 10) {
+                 return trimmedText.substring(0, lastSpaceIndex) + '...';
+             }
+             return trimmedText + '...';
         }
         return text;
     }
-    // Kullanıcı mesajı yoksa botun ilk mesajını kullan (veya varsayılan)
     const firstBotMessage = conversation.find(msg => msg.role === 'bot');
     if(firstBotMessage && firstBotMessage.text){
-         const text = firstBotMessage.text.trim();
+         const text = firstBotMessage.text.replace('SibelGPT:', '').trim();
           if (text.length > 30) {
-             return text.substring(0, 30).split(' ').slice(0, -1).join(' ') + '...';
+             const trimmedText = text.substring(0, 30);
+             const lastSpaceIndex = trimmedText.lastIndexOf(' ');
+             if (lastSpaceIndex > 10) {
+                 return "Bot: " + trimmedText.substring(0, lastSpaceIndex) + '...';
+             }
+             return "Bot: " + trimmedText + '...';
         }
-        return text;
+        return "Bot: " + text;
     }
-    return "Yeni Sohbet"; // Varsayılan başlık
+    return "Yeni Sohbet";
 }
 
-
-// Chat kutusunu temizler ve başlangıç mesajını ekler
 function clearChat() {
-    chatBox.innerHTML = ''; // Tüm mesajları sil
+    chatBox.innerHTML = '';
 
-    // Başlangıç hoş geldiniz mesajını tekrar ekle (isterseniz HTML'den kaldırıp buradan da ekleyebilirsiniz)
-    // const initialMessage = document.createElement("div");
-    // initialMessage.className = "message bot-message";
-    // initialMessage.innerHTML = `<strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim?...`;
-    // chatBox.appendChild(initialMessage);
+    const initialMessage = document.createElement("div");
+    initialMessage.className = "message bot-message";
+    initialMessage.innerHTML = `<strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.`;
+    chatBox.appendChild(initialMessage);
 
-    // Mevcut sohbeti sıfırla
     currentConversation = [];
+    currentConversation.push({ sender: 'SibelGPT', text: initialMessage.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
+
+    highlightSelectedChat(null);
+
+    // Yeni sohbette animasyonu tekrar oynat
+    playInitialAnimation(); // Yeni sohbette tekrar oynatmak için bu satırı ekledik
 }
 
-
-// Sidebar'daki geçmiş listesini günceller
 function displayHistory() {
     const conversations = loadConversations();
-    historyList.innerHTML = ''; // Mevcut listeyi temizle
+    historyList.innerHTML = '';
 
     if (conversations.length === 0) {
-        historyList.innerHTML = '<li>Henüz kaydedilmiş sohbet yok.</li>';
-        // Bu placeholder öğesine tıklama olayını engellemek gerekebilir
-        const placeholder = historyList.querySelector('li');
-        if(placeholder) placeholder.style.cursor = 'default';
-         return;
+        const placeholder = document.createElement('li');
+        placeholder.textContent = 'Henüz kaydedilmiş sohbet yok.';
+        placeholder.style.cursor = 'default';
+        placeholder.style.opacity = '0.7';
+        historyList.appendChild(placeholder);
+        return;
     }
 
     conversations.forEach(conv => {
         const listItem = document.createElement('li');
         listItem.textContent = conv.title;
-        listItem.setAttribute('data-chat-id', conv.id); // Sohbet ID'sini data-* özniteliğinde sakla
+        listItem.setAttribute('data-chat-id', conv.id);
         historyList.appendChild(listItem);
     });
 }
 
-// Geçmişten belirli bir sohbeti yükler ve chat kutusunda gösterir
 function loadConversation(chatId) {
+    saveCurrentConversation();
+
     const conversations = loadConversations();
-    const conversationToLoad = conversations.find(conv => conv.id == chatId); // data-* öznitelikleri string döner
+    const conversationToLoad = conversations.find(conv => conv.id == chatId);
 
     if (conversationToLoad) {
-        clearChat(); // Önce mevcut sohbeti temizle
+        clearChat(); // Önce temizle (bu da welcome mesajını ekler)
 
         // Yüklenen sohbetin mesajlarını göster
-        conversationToLoad.messages.forEach(msg => {
-             // appendMessage'i burada addToHistory=false ile çağırıyoruz, çünkü sadece görüntülüyoruz, kaydetmiyoruz
-            appendMessage(msg.sender, msg.text, msg.role, false);
-        });
+        // clearChat welcome mesajını eklediği için, eğer yüklenen sohbette de ilk mesaj buysa atla
+         conversationToLoad.messages.forEach((msg, index) => {
+             // Eğer mesaj welcome mesajı değilse veya welcome mesajıysa ama yüklenen sohbette ilk mesaj değilse ekle
+             // Basitlik için welcome mesajını clearChat'ten kaldırıp tüm mesajları buradan ekleyebiliriz.
+             // Ya da şu anki gibi devam edip welcome mesajını kontrol ederiz.
+             const isWelcomeMessage = msg.role === 'bot' && msg.text.includes('Merhaba! Size nasıl yardımcı olabilirim?');
+             if (!isWelcomeMessage || index > 0) { // Welcome mesajı değilse ekle VEYA welcome mesajı ama ilk mesaj değilse ekle
+                  appendMessage(msg.sender, msg.text, msg.role, false);
+             } else if (isWelcomeMessage && index === 0) {
+                  // Yüklenen sohbetin ilk mesajı welcome mesajı ve HTML/clearChat zaten ekledi, bir şey yapma.
+             }
+         });
 
-        // currentConversation'ı yüklenen sohbetin mesajlarıyla güncelle
-        currentConversation = [...conversationToLoad.messages]; // Kopya oluşturarak ata
 
-        // Yüklenen sohbeti sidebar'da vurgulayabilirsiniz (isteğe bağlı)
+        currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages));
+
         highlightSelectedChat(chatId);
+        stopInitialAnimation(); // Geçmişten sohbet yüklenince animasyonu durdur
+        userInput.focus();
 
     } else {
         console.error("Yüklenmek istenen sohbet bulunamadı:", chatId);
-        // Kullanıcıya hata mesajı gösterilebilir
+        appendMessage("SibelGPT", "❌ Bu sohbet yüklenirken bir hata oluştu.", "bot", false);
     }
 }
 
-// Sidebar'da seçili sohbeti görsel olarak vurgular
 function highlightSelectedChat(chatId) {
-    // Önceki vurguları kaldır
     historyList.querySelectorAll('li').forEach(li => {
         li.classList.remove('selected');
     });
 
-    // Yeni seçili öğeyi bul ve vurgula
-    const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
-    if (selectedItem) {
-        selectedItem.classList.add('selected');
+    if(chatId !== null){
+        const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('selected');
+        }
     }
+}
+
+
+// Yeni: Başlangıç animasyonunu durduran fonksiyon
+function stopInitialAnimation() {
+    // Animasyonun kapsayıcısı görünürse ve video oynuyorsa
+    if (initialAvatarAnimationContainer && initialAvatarAnimationContainer.style.display !== 'none' && initialAvatarAnimationContainer.style.opacity > 0) {
+         if(talkingAvatarVideo) {
+             talkingAvatarVideo.pause(); // Videoyu duraklat
+             talkingAvatarVideo.currentTime = 0; // Video süresini başa al (isteğe bağlı)
+         }
+         initialAvatarAnimationContainer.style.opacity = 0; // Fade out başlat
+         if (animationTimeout) {
+             clearTimeout(animationTimeout);
+             animationTimeout = null;
+         }
+         setTimeout(() => {
+             if (initialAvatarAnimationContainer) { // Element hala varsa kontrolü
+                 initialAvatarAnimationContainer.style.display = 'none';
+             }
+         }, 500); // CSS geçiş süresiyle aynı olmalı (0.5s)
+
+         // Kullanıcı inputuna/keydown'una bağlı listenerları kaldır
+         userInput.removeEventListener("input", stopInitialAnimationInstant); // anlık durdurma
+         userInput.removeEventListener("keydown", stopInitialAnimationOnEnterKey); // Enter ile durdurma
+    }
+}
+
+// Yeni: Başlangıç animasyonunu oynatan fonksiyon
+function playInitialAnimation() {
+     // Video elementi ve kapsayıcısı varsa
+     if (talkingAvatarVideo && initialAvatarAnimationContainer) {
+        console.log("Initial animation başlatılıyor...");
+        // Animasyon divini görünür yap
+        initialAvatarAnimationContainer.style.display = 'block';
+        // Kısa bir gecikme ile fade-in başlat
+        setTimeout(() => {
+            initialAvatarAnimationContainer.style.opacity = 1;
+            // Videoyu oynat
+            talkingAvatarVideo.play().catch(error => {
+                 // Autoplay engellenmiş olabilir
+                 console.warn("Video autoplay hatası:", error);
+                 // Kullanıcıya bir mesaj gösterebilir veya manuel başlatmasını isteyebilirsiniz.
+                 // Örneğin: "Lütfen videoyu oynatmak için buraya tıklayın" gibi bir UI elemanı ekleyebilirsiniz.
+             });
+        }, 10); // Küçük gecikme
+
+        // Animasyonun ne kadar süreceğini tahmin et (welcome mesajı uzunluğuna göre)
+        const welcomeMessageElement = chatBox.querySelector('.bot-message strong');
+        const welcomeMessageText = welcomeMessageElement ? welcomeMessageElement.nextSibling.textContent : '';
+        const welcomeMessageLength = welcomeMessageText.length;
+        const durationPerChar = 60; // ms/karakter
+        const minDuration = 4000; // Minimum süre (ms)
+
+        // Tahmini süreyi hesapla
+        const animationDuration = Math.max(minDuration, welcomeMessageLength * durationPerChar);
+        console.log(`Initial animation süresi: ${animationDuration}ms`);
+
+        // Belirlenen süre sonunda animasyonu gizle
+        animationTimeout = setTimeout(() => {
+            stopInitialAnimation();
+            console.log("Initial animation otomatik bitti.");
+        }, animationDuration);
+
+        // Kullanıcı inputuna veya Enter'a basılmasına tepki vererek animasyonu durdur
+        // Sadece bir kere tetiklenmeli
+        userInput.addEventListener("input", stopInitialAnimationInstant, { once: true }); // Yazmaya başlarsa anında durdur
+        userInput.addEventListener("keydown", stopInitialAnimationOnEnterKey, { once: true }); // Enter'a basarsa durdur
+     } else {
+         console.error("Talking avatar video elementi veya kapsayıcısı bulunamadı.");
+     }
+}
+
+// Yeni: Kullanıcı input alanına yazı yazdığında animasyonu anında durdur
+function stopInitialAnimationInstant() {
+     console.log("Kullanıcı yazmaya başladı, animasyon durduruluyor.");
+     stopInitialAnimation();
+}
+
+// Yeni: Kullanıcı Enter tuşuna bastığında animasyonu durdur
+function stopInitialAnimationOnEnterKey(event) {
+     if (event.key === 'Enter') {
+        console.log("Kullanıcı Enter'a bastı, animasyon durduruluyor.");
+        stopInitialAnimation();
+     }
 }
 
 
 // --- Olay Dinleyicileri ve Başlangıç Kodları ---
 
-// Sayfa tamamen yüklendiğinde çalışacak kod
 window.addEventListener("load", () => {
   // Element referanslarını ata
   chatBox = document.getElementById("chat-box");
@@ -239,76 +333,82 @@ window.addEventListener("load", () => {
   newChatButton = document.querySelector(".new-chat-button button");
   historyList = document.getElementById("history-list");
   splashScreen = document.getElementById("splash-screen");
+  // Yeni: Animasyon video elementine ve kapsayıcısına referans
+  talkingAvatarVideo = document.getElementById("talking-avatar-video");
+  initialAvatarAnimationContainer = document.getElementById("initial-avatar-animation");
 
-
-  // Splash ekranını gizle
-  // setTimeout(() => {
-  //   splashScreen.style.opacity = 0;
-  //   setTimeout(() => {
-  //     splashScreen.style.display = "none";
-  //   }, 1000); // fade-out süresi kadar gecikme
-  // }, 4000); // splash toplam gösterim süresi
-
-  // Splash ekranının bitişini dinleyerek sonraki işlemleri yap
-  splashScreen.addEventListener('animationend', () => {
-    splashScreen.style.opacity = 0;
-     // Kısa bir gecikme daha ekleyerek opacity geçişinin tamamlanmasını bekle
-    setTimeout(() => {
-      splashScreen.style.display = "none";
-      // Splash bittikten sonra ilk yapılacaklar
-      initializeChatInterface();
-    }, 100); // Küçük bir gecikme
-  });
-
-   // Eğer splash ekran animasyonu yoksa veya tamamlandıysa (sayfa yenileme vs.)
-   // display özelliği hala 'flex' ise animasyon henüz bitmemiştir.
-   // Eğer display 'none' ise veya opacity 0 ise, animasyon muhtemelen bitti varsayılabilir.
-   // Ancak animationend en güvenli yoldur. Fallback olarak:
-   if (getComputedStyle(splashScreen).opacity == 0 || getComputedStyle(splashScreen).display == 'none') {
-        initializeChatInterface();
+  // Animasyon div'ini başlangıçta JS ile de gizle (CSS'te de gizli ama emin olalım)
+   if (initialAvatarAnimationContainer) {
+       initialAvatarAnimationContainer.style.display = 'none';
+       initialAvatarAnimationContainer.style.opacity = 0;
    }
 
 
-  // Olay dinleyicilerini ekle
-  userInput.addEventListener("keypress", handleInputKeyPress); // Enter tuşu dinleyicisi
+  // Splash ekranının bitişini dinle
+  const splashComputedStyle = getComputedStyle(splashScreen);
+  if (splashComputedStyle.opacity == 0 || splashComputedStyle.display == 'none') {
+      // Eğer splash zaten gizliyse doğrudan arayüzü başlat
+      initializeChatInterface();
+  } else {
+      // Splash animasyonu bitince arayüzü başlat
+      splashScreen.addEventListener('animationend', () => {
+        splashScreen.style.opacity = 0;
+        setTimeout(() => {
+          splashScreen.style.display = "none";
+          initializeChatInterface(); // Splash bittikten sonra ilk yapılacaklar
+        }, 100); // Küçük bir gecikme
+      });
+  }
+
+
+  // Olay dinleyicilerini ekle (genel olarak sayfa ömrü boyunca kalacaklar)
+  userInput.addEventListener("keypress", handleInputKeyPress); // Enter tuşu dinleyicisi (sendMessage çağırır)
   newChatButton.addEventListener("click", handleNewChat); // Yeni sohbet butonu
   historyList.addEventListener("click", handleHistoryClick); // Geçmiş listesi (event delegation)
 
-   // Eğer HTML'de ilk hoş geldin mesajı varsa, onu currentConversation'a ekle
-   // Bunu sadece sayfa ilk yüklendiğinde yapmak önemlidir, clearChat() fonksiyonunda yapmamak
-   // Eğer clearChat() içinde yaparsak, her yeni sohbette geçmişe otomatik eklenir ve karışır.
-   // HTML'deki mesajı bul ve currentConversation'a ekle (addToHistory=false ile, henüz kaydedilmeyecek)
-   const initialBotMessageElement = chatBox.querySelector('.bot-message');
-   if(initialBotMessageElement && initialBotMessageElement.textContent.includes('Merhaba! Size nasıl yardımcı olabilirim?')) {
-       currentConversation.push({ sender: 'SibelGPT', text: initialBotMessageElement.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
-   }
+  // NOT: Kullanıcı inputuna bağlı animasyon durdurma listenerları, playInitialAnimation içinde eklenir.
 });
 
 // Splash ekranı bittikten veya atlandıktan sonra arayüzü başlatan fonksiyon
 function initializeChatInterface() {
+    console.log("Chat arayüzü başlatılıyor...");
     // Geçmiş sohbetleri yükle ve sidebar'da göster
     displayHistory();
 
-    // Sayfa yüklendiğinde ilk sohbeti (varsa) otomatik yükleyebilir veya boş bırakabilirsiniz.
-    // Şimdilik boş bırakıp kullanıcı etkileşimini bekleyelim.
-    // Eğer en son konuşmayı yüklemek isterseniz:
-    // const conversations = loadConversations();
-    // if (conversations.length > 0) {
-    //     loadConversation(conversations[0].id); // En son sohbeti yükle
-    // }
+    // Sayfa yüklendiğinde, eğer geçmiş yüklü değilse (yani ilk kez açılıyorsa)
+    // hoş geldiniz mesajını currentConversation'a ekle ve başlangıç animasyonunu başlat
+    const conversations = loadConversations();
+     // Eğer hiç kaydedilmiş sohbet yoksa VEYA kaydedilmiş sohbet olsa bile şu anki sohbet boşsa (clearChat veya ilk açılış sonrası)
+    if (conversations.length === 0 || (conversations.length > 0 && currentConversation.length <= 1)) {
+         // clearChat() içinde zaten welcome mesajı ekleniyor ve currentConversation güncelleniyor.
+         // Bu yüzden sadece animasyonu başlatmamız yeterli.
+         console.log("İlk yükleme veya boş sohbet, animasyon başlatılıyor.");
+         playInitialAnimation();
+    } else {
+         console.log("Geçmiş yüklendi veya sohbet devam ediyor, animasyon oynatılmıyor.");
+         // Eğer geçmiş yüklendiğinde playInitialAnimation'ı durdurmak istiyorsak,
+         // loadConversation() içinde stopInitialAnimation() çağrılmalı.
+         // Bu zaten loadConversation içinde yapılıyor.
+    }
+
+    // Sayfa yüklendiğinde inputa odaklan
+    // Küçük bir gecikme, splash ekranı tamamen kalktıktan sonra odaklanmak için iyi olabilir
+    setTimeout(() => {
+        userInput.focus();
+    }, 100); // 100ms gecikme
 }
 
 
 // "Yeni Sohbet" butonu tıklama yöneticisi
 function handleNewChat() {
-    // Mevcut sohbeti kaydet (eğer boş değilse)
-    saveCurrentConversation();
+    saveCurrentConversation(); // Mevcut sohbeti kaydet
 
-    // Chat kutusunu temizle ve yeni sohbete başla
-    clearChat();
+    clearChat(); // Chat kutusunu temizle ve welcome mesajını ekle
 
-    // Geçmiş listesini yeniden çiz (yeni kaydedilen sohbeti göstermek için)
-    // displayHistory(); // saveCurrentConversation içinde zaten çağrılıyor
+    // Yeni sohbete başlarken animasyonu tekrar oynat
+    playInitialAnimation(); // playInitialAnimation artık clearChat içinde değil, burada çağırılmalı
+
+    userInput.focus();
 }
 
 
@@ -316,29 +416,21 @@ function handleNewChat() {
 function handleHistoryClick(event) {
     const clickedElement = event.target;
 
-    // Tıklanan elementin bir <li> öğesi olup olmadığını kontrol et
-    // ve data-chat-id özniteliğine sahip olup olmadığını kontrol et (placeholder'ları elemek için)
     if (clickedElement.tagName === 'LI' && clickedElement.hasAttribute('data-chat-id')) {
         const chatId = clickedElement.getAttribute('data-chat-id');
         console.log("Geçmiş sohbet yükleniyor:", chatId);
-        loadConversation(chatId);
+         if (currentConversation.length > 0 && currentConversation[0].id == chatId) {
+             console.log("Aynı sohbet zaten açık.");
+             highlightSelectedChat(chatId);
+         } else {
+            loadConversation(chatId); // loadConversation içinde saveCurrentConversation ve stopInitialAnimation var
+         }
+         userInput.focus();
     }
-     // İsteğe bağlı: Tıklanan element bir <li> değilse veya data-chat-id yoksa bir şey yapma
 }
 
 
 // Sayfa kapatılmadan önce mevcut sohbeti kaydet
-// Bu, kullanıcı sayfayı kapatırsa veya yenilerse son sohbetin kaybolmasını engeller.
 window.addEventListener('beforeunload', () => {
     saveCurrentConversation();
 });
-
-
-// Sidebar'da seçili sohbetin stilini CSS'te tanımlayın:
-/*
-.history li.selected {
-    background-color: rgba(255, 255, 255, 0.3);
-    font-weight: bold; // Veya başka bir vurgu
-    // İsteğe bağlı: border-left veya başka bir görsel işaretçi
-}
-*/
