@@ -32,3 +32,13 @@ function appendMessage(sender, text, role) {
 }, 100);
 
 }
+window.addEventListener("load", () => {
+  const splash = document.getElementById("splash-screen");
+
+  setTimeout(() => {
+    splash.style.opacity = 0; // görünürlüğü azalt
+    setTimeout(() => {
+      splash.style.display = "none"; // ekrandan tamamen kaldır
+    }, 1000); // fade-out geçişi tamamlanınca
+  }, 3000); // toplam bekleme süresi: 3 saniye
+});
