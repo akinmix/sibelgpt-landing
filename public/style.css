@@ -1,40 +1,41 @@
 /* Genel ve Arka Plan */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: url('arka_plan.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #fff;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  /* Arka plan resminin yolunun doğru olduğundan ve dosyanın projede var olduğundan emin olun */
+  background: url('arka_plan.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 /* Splash ekran stilleri */
 #splash-screen {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 1s ease;
-  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 1s ease;
+  pointer-events: none;
 }
 
 .splash-logo {
-  width: 850px; /* Veya istediğiniz boyut */
-  animation: fadeInOut 4s ease-in-out forwards;
+  width: 850px; /* Veya istediğiniz boyut */
+  animation: fadeInOut 4s ease-in-out forwards;
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: scale(1); }
-  70% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.2); }
+  0% { opacity: 0; transform: scale(0.8); }
+  30% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.2); }
 }
