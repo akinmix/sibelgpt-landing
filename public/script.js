@@ -2,7 +2,7 @@
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
 let currentConversation = [];
-let chatBox, userInput, newChatButton, historyList, splashScreen;
+let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 
 async function sendMessage() {
   const message = userInput.value.trim();
@@ -175,19 +175,21 @@ window.addEventListener("load", () => {
   newChatButton = document.querySelector(".new-chat-button button");
   historyList = document.getElementById("history-list");
   splashScreen = document.getElementById("splash-screen");
+  mainInterface = document.getElementById("main-interface");
 
-  const splashComputedStyle = getComputedStyle(splashScreen);
-  if (splashComputedStyle.opacity == 0 || splashComputedStyle.display == 'none') {
-    initializeChatInterface();
-  } else {
-    splashScreen.addEventListener('animationend', () => {
-      splashScreen.style.opacity = 0;
-      setTimeout(() => {
-        splashScreen.style.display = "none";
-        initializeChatInterface();
-      }, 100);
-    });
-  }
+  splashScreen.addEventListener('animationend', () => {
+    splashScreen.style.opacity = 0;
+    setTimeout(() => {
+      splashScreen.style.display = "none";
+      mainInterface.style.display = "flex";
+      initializeChatInterface();
+
+      // 🎬 Avatar video alanını göster
+      const wrapper = document.getElementById("video-wrapper");
+      if (wrapper) wrapper.style.display = "flex";
+
+    }, 300);
+  });
 
   userInput.addEventListener("keypress", handleInputKeyPress);
   newChatButton.addEventListener("click", handleNewChat);
@@ -201,32 +203,29 @@ window.addEventListener("load", () => {
   setTimeout(() => {
     userInput.focus();
   }, 100);
-
-  initializeChatInterface();
 });
 
 function initializeChatInterface() {
-  console.log("Chat arayüzü başlatılıyor (animasyonsuz)...");
   displayHistory();
+}
 
-  // 🎬 Intro video 2 saniye sonra gösterilir ve bittiğinde kapanır
-  setTimeout(() => {
-    const introVideo = document.getElementById("intro-video");
-    if (introVideo) {
-      introVideo.style.display = "block";
-      introVideo.muted = false;
-      introVideo.play().catch(e => console.warn("Video oynatılmadı:", e));
-      introVideo.onended = () => {
-        introVideo.style.display = "none";
-      };
-    }
-  }, 2000);
+function playIntroVideo() {
+  const video = document.getElementById("intro-video");
+  const wrapper = document.getElementById("video-wrapper");
+  if (video && wrapper) {
+    video.muted = false;
+    video.currentTime = 0;
+    video.play().catch(e => console.warn("Video oynatılamadı:", e));
+    wrapper.style.display = "flex";
+    video.onended = () => {
+      wrapper.style.display = "none";
+    };
+  }
 }
 
 function handleNewChat() {
   saveCurrentConversation();
   clearChat();
-  console.log("Yeni sohbet başlatıldı.");
   userInput.focus();
 }
 
@@ -234,9 +233,7 @@ function handleHistoryClick(event) {
   const clickedElement = event.target;
   if (clickedElement.tagName === 'LI' && clickedElement.hasAttribute('data-chat-id')) {
     const chatId = clickedElement.getAttribute('data-chat-id');
-    console.log("Geçmiş sohbet yükleniyor:", chatId);
     if (currentConversation.length > 0 && currentConversation[0].id == chatId) {
-      console.log("Aynı sohbet zaten açık.");
       highlightSelectedChat(chatId);
     } else {
       loadConversation(chatId);
