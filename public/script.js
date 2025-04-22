@@ -14,9 +14,15 @@ let splashScreen;
 let talkingAvatarVideo;
 // Animasyonun kapsayıcı div'ine referans (görünürlük kontrolü için)
 let initialAvatarAnimationContainer;
+// Autoplay yedek elementine referans
+let autoplayFallback;
+
 
 // Animasyonun gizlenmesi için kullanılacak timeout ID'si
 let animationTimeout;
+
+// Video manuel olarak başlatıldı mı? (Autoplay engellendiğinde tıklanırsa)
+let isVideoManuallyPlayed = false;
 
 
 // --- Mesaj Gönderme ve Alma Fonksiyonları ---
@@ -26,11 +32,11 @@ async function sendMessage() {
   if (!message) return;
 
   // Kullanıcı mesaj yazdığında animasyonu durdur
-  stopInitialAnimation(); // stopInitialAnimation video elementini yönetecek
+  stopInitialAnimation();
 
   // Kullanıcının mesajını ekle ve currentConversation'a kaydet
-  appendMessage("Sen", message, "user", true); // true: geçmişe ekle
-  userInput.value = ""; // Giriş alanını temizle
+  appendMessage("Sen", message, "user", true);
+  userInput.value = "";
 
   try {
     // Backend API'sine mesajı gönder
@@ -40,21 +46,17 @@ async function sendMessage() {
       body: JSON.stringify({ question: message }),
     });
 
-    // API'den gelen cevabı işle
     const data = await response.json();
     const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
 
-    // Botun cevabını ekle ve currentConversation'a kaydet
-    appendMessage("SibelGPT", reply, "bot", true); // true: geçmişe ekle
+    appendMessage("SibelGPT", reply, "bot", true);
 
   } catch (error) {
-    // Hata durumunda bot mesajı ekle
-    appendMessage("SibelGPT", "❌ Bir hata oluştu. Sunucuya ulaşılamıyor.", "bot", true); // true: geçmişe ekle
+    appendMessage("SibelGPT", "❌ Bir hata oluştu. Sunucuya ulaşılamıyor.", "bot", true);
     console.error("Mesaj gönderirken hata:", error);
   }
 }
 
-// Mesajı chat kutusuna ekler ve isteğe bağlı olarak geçmişe kaydeder
 function appendMessage(sender, text, role, addToHistory = false) {
   const messageElem = document.createElement("div");
   messageElem.className = "message " + role;
@@ -71,7 +73,6 @@ function appendMessage(sender, text, role, addToHistory = false) {
   }, 100);
 }
 
-// Klavyeden Enter tuşuna basıldığında mesaj gönderme
 function handleInputKeyPress(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
@@ -81,6 +82,7 @@ function handleInputKeyPress(event) {
 
 
 // --- Sohbet Geçmişi Fonksiyonları (Local Storage Tabanlı) ---
+// (Bu fonksiyonlarda video animasyonuyla doğrudan bir değişiklik yok)
 
 function loadConversations() {
     const conversationsJson = localStorage.getItem(HISTORY_STORAGE_KEY);
@@ -101,7 +103,7 @@ function saveConversations(conversations) {
 }
 
 function saveCurrentConversation() {
-    if (currentConversation.length <= 1) { // En az bir kullanıcı mesajı olmalı (welcome mesajı + 1 kullanıcı mesajı)
+    if (currentConversation.length <= 1) {
         return;
     }
 
@@ -152,24 +154,18 @@ function generateConversationTitle(conversation) {
 function clearChat() {
     chatBox.innerHTML = '';
 
-    // Yeni sohbette de ilk hoş geldiniz mesajı görünsün (HTML'deki gibi)
     const initialMessage = document.createElement("div");
     initialMessage.className = "message bot-message";
     initialMessage.innerHTML = `<strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim? Emlak danışmanlığı, numeroloji, finans, yapay zeka veya genel kültür hakkında sorularınız varsa cevaplamaktan memnuniyet duyarım. Lütfen konuyu belirtirseniz size daha iyi yardımcı olabilirim.`;
     chatBox.appendChild(initialMessage);
 
-
     currentConversation = [];
-    // Welcome mesajını currentConversation'a ekle
     currentConversation.push({ sender: 'SibelGPT', text: initialMessage.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
-
 
     highlightSelectedChat(null);
 
-    // Yeni sohbete başlarken animasyonu tekrar oynat
-    playInitialAnimation(); // Yeni sohbette tekrar oynatmak için bu satırı etkinleştirdik
+    playInitialAnimation(); // Yeni sohbette animasyonu tekrar oynat
 
-    // Yeni sohbette inputa odaklan
     userInput.focus();
 }
 
@@ -195,7 +191,7 @@ function displayHistory() {
 }
 
 function loadConversation(chatId) {
-    saveCurrentConversation(); // Önce o anki sohbeti kaydet
+    saveCurrentConversation();
 
     const conversations = loadConversations();
     const conversationToLoad = conversations.find(conv => conv.id == chatId);
@@ -203,16 +199,13 @@ function loadConversation(chatId) {
     if (conversationToLoad) {
         clearChat(); // Önce mevcut sohbeti temizle (ve welcome mesajını ekle)
 
-        // Yüklenen sohbetin mesajlarını göster
-        // clearChat welcome mesajını eklediği için, eğer yüklenen sohbette de ilk mesaj buysa atla
          conversationToLoad.messages.forEach((msg, index) => {
              const isWelcomeMessage = msg.role === 'bot' && msg.text.includes('Merhaba! Size nasıl yardımcı olabilirim?');
-             if (!isWelcomeMessage || index > 0) { // Welcome mesajı değilse ekle VEYA welcome mesajı ama ilk mesaj değilse ekle
-                  appendMessage(msg.sender, msg.text, msg.role, false); // Sadece göster, tekrar kaydetme
+             if (!isWelcomeMessage || index > 0) {
+                  appendMessage(msg.sender, msg.text, msg.role, false);
              }
          });
 
-        // currentConversation'ı yüklenen sohbetin mesajlarıyla güncelle (derin kopya al)
         currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages));
 
         highlightSelectedChat(chatId);
@@ -241,25 +234,38 @@ function highlightSelectedChat(chatId) {
 
 // Yeni: Başlangıç animasyonunu durduran fonksiyon
 function stopInitialAnimation() {
-    // Animasyonun kapsayıcısı görünürse ve video elementi varsa
-    if (initialAvatarAnimationContainer && initialAvatarAnimationContainer.style.display !== 'none' && talkingAvatarVideo) {
-         talkingAvatarVideo.pause(); // Videoyu duraklat
-         // talkingAvatarVideo.currentTime = 0; // Video süresini başa al (isteğe bağlı, isterseniz kaldırın)
+    // Animasyonun kapsayıcısı görünürse
+    if (initialAvatarAnimationContainer && initialAvatarAnimationContainer.style.display !== 'none') {
+         if(talkingAvatarVideo) {
+             talkingAvatarVideo.pause(); // Videoyu duraklat
+             // talkingAvatarVideo.currentTime = 0; // Süreyi başa al
+         }
 
          initialAvatarAnimationContainer.style.opacity = 0; // Fade out başlat
          if (animationTimeout) {
              clearTimeout(animationTimeout);
              animationTimeout = null;
          }
+
+         // Autoplay yedeği görünüyorsa gizle
+         if (autoplayFallback) {
+             autoplayFallback.style.opacity = 0;
+             setTimeout(() => {
+                 if (autoplayFallback) autoplayFallback.style.display = 'none';
+             }, 300); // Yedek için kısa fade out süresi
+         }
+
+
          setTimeout(() => {
              if (initialAvatarAnimationContainer) {
                  initialAvatarAnimationContainer.style.display = 'none';
              }
-         }, 500); // CSS geçiş süresiyle aynı olmalı (0.5s)
+         }, 500); // Ana kapsayıcı fade out süresi (CSS ile aynı)
 
          // Kullanıcı inputuna/keydown'una bağlı listenerları kaldır
          userInput.removeEventListener("input", stopInitialAnimationInstant);
          userInput.removeEventListener("keydown", stopInitialAnimationOnEnterKey);
+
          console.log("Initial animation durduruldu.");
     }
 }
@@ -273,20 +279,39 @@ function playInitialAnimation() {
         initialAvatarAnimationContainer.style.display = 'block';
         // Video süresini başa al (her başladığında baştan oynasın)
         talkingAvatarVideo.currentTime = 0;
+        // isVideoManuallyPlayed bayrağını sıfırla (autoplay denenecek)
+        isVideoManuallyPlayed = false;
+
          // Fade-in başlat
         setTimeout(() => {
             initialAvatarAnimationContainer.style.opacity = 1;
-            // Videoyu oynat
-            talkingAvatarVideo.play().catch(error => {
-                 // Autoplay engellenmiş olabilir
-                 console.warn("Video autoplay hatası:", error);
-                 // Kullanıcıya bilgi verebilir veya tıklandığında başlatmasını isteyebilirsiniz.
-                 // Örneğin, animasyon container div'ine click listener ekleyip play() çağırabilirsiniz.
-                 // initialAvatarAnimationContainer.addEventListener('click', () => talkingAvatarVideo.play());
+            // Videoyu oynatma denemesi
+            talkingAvatarVideo.play().then(() => {
+                 // Autoplay başarılı oldu
+                 console.log("Video autoplay başarılı.");
+                 // Yedek elemanı gizle (başlangıçta gizli olsa da emin olalım)
+                 if (autoplayFallback) {
+                     autoplayFallback.style.display = 'none';
+                     autoplayFallback.style.opacity = 0;
+                 }
+
+            }).catch(error => {
+                 // Autoplay engellendi
+                 console.warn("Video autoplay engellendi:", error);
+                 // Yedek elemanı görünür yap ve oynatmak için tıkla mesajını göster
+                 if (autoplayFallback) {
+                     autoplayFallback.style.display = 'flex'; // Flex olarak ayarladık CSS'te
+                     setTimeout(() => { // Kısa gecikme ile fade-in
+                         if (autoplayFallback) autoplayFallback.style.opacity = 1;
+                     }, 10);
+                 }
+                 // isVideoManuallyPlayed = false olarak kalır
              });
         }, 10); // Küçük gecikme
 
         // Animasyonun ne kadar süreceğini tahmin et (welcome mesajı uzunluğuna göre)
+        // Eğer autoplay engellenirse bu süre sonunda video durmayacak, sadece container gizlenecek.
+        // Bu durumda kullanıcı manuel başlatmadıysa sadece static ilk frame görünecek.
         const welcomeMessageElement = chatBox.querySelector('.bot-message strong');
         const welcomeMessageText = welcomeMessageElement ? welcomeMessageElement.nextSibling.textContent : '';
         const welcomeMessageLength = welcomeMessageText.length;
@@ -298,14 +323,35 @@ function playInitialAnimation() {
 
         // Belirlenen süre sonunda animasyonu gizle
         animationTimeout = setTimeout(() => {
-            stopInitialAnimation();
-            console.log("Initial animation otomatik bitti.");
+            // Eğer video manuel olarak başlatılmadıysa ve autoplay de engellendiyse
+            // (yani hala autoplayFallback görünüyorsa), sadece container'ı gizle.
+            // Video zaten oynamıyordur.
+            if (!isVideoManuallyPlayed && autoplayFallback && autoplayFallback.style.display !== 'none') {
+                 console.log("Animasyon süresi doldu, video oynamıyordu, sadece container gizleniyor.");
+                 initialAvatarAnimationContainer.style.opacity = 0;
+                  if (autoplayFallback) { // Yedek de gizlensin
+                     autoplayFallback.style.opacity = 0;
+                     setTimeout(() => {
+                         if (autoplayFallback) autoplayFallback.style.display = 'none';
+                     }, 300);
+                 }
+                 setTimeout(() => {
+                    if (initialAvatarAnimationContainer) initialAvatarAnimationContainer.style.display = 'none';
+                 }, 500);
+
+            } else {
+                // Video oynuyorsa (autoplay veya manuel başlatıldıysa), normal durdurma fonksiyonunu çağır
+                console.log("Animasyon süresi doldu, video oynuyordu, normal durdurma.");
+                stopInitialAnimation();
+            }
+            animationTimeout = null; // Timeout bitti, null yap
         }, animationDuration);
 
         // Kullanıcı inputuna veya Enter'a basılmasına tepki vererek animasyonu durdur
         // Sadece bir kere tetiklenmeli
-        userInput.addEventListener("input", stopInitialAnimationInstant, { once: true }); // Yazmaya başlarsa anında durdur
-        userInput.addEventListener("keydown", stopInitialAnimationOnEnterKey, { once: true }); // Enter'a basarsa durdur
+        userInput.addEventListener("input", stopInitialAnimationInstant, { once: true });
+        userInput.addEventListener("keydown", stopInitialAnimationOnEnterKey, { once: true });
+
      } else {
          console.error("Talking avatar video elementi veya kapsayıcısı bulunamadı.");
      }
@@ -319,11 +365,33 @@ function stopInitialAnimationInstant() {
 
 // Yeni: Kullanıcı Enter tuşuna bastığında animasyonu durdur
 function stopInitialAnimationOnEnterKey(event) {
-     // Sadece Enter tuşu için
      if (event.key === 'Enter') {
         console.log("Kullanıcı Enter'a bastı, animasyon durduruluyor.");
         stopInitialAnimation();
      }
+}
+
+// Yeni: Animasyon kapsayıcısına tıklanınca videoyu başlat
+function handleAnimationContainerClick() {
+    // Eğer video duraklatılmışsa (autoplay engellendiği için olabilir)
+    if (talkingAvatarVideo && talkingAvatarVideo.paused) {
+        console.log("Animasyon kapsayıcısına tıklandı, video oynatılıyor...");
+        talkingAvatarVideo.play().then(() => {
+             // Oynatma başarılı oldu
+             isVideoManuallyPlayed = true; // Manuel başlatıldı bayrağını set et
+             // Yedek elemanı gizle
+             if (autoplayFallback) {
+                 autoplayFallback.style.opacity = 0;
+                 setTimeout(() => {
+                    if (autoplayFallback) autoplayFallback.style.display = 'none';
+                 }, 300);
+             }
+        }).catch(error => {
+            console.error("Video manuel oynatma hatası:", error);
+            // Kullanıcıya hala oynatılamadığı bilgisi verilebilir
+        });
+    }
+    // Eğer video zaten oynuyorsa veya oynamaya çalışıyorsa bir şey yapma.
 }
 
 
@@ -339,123 +407,170 @@ window.addEventListener("load", () => {
   // Animasyon video elementine ve kapsayıcısına referans
   talkingAvatarVideo = document.getElementById("talking-avatar-video");
   initialAvatarAnimationContainer = document.getElementById("initial-avatar-animation");
+  // Autoplay yedek elementine referans
+  autoplayFallback = document.querySelector("#initial-avatar-animation .autoplay-fallback");
 
-  // Animasyon div'ini başlangıçta JS ile de gizle (CSS'te de gizli ama emin olalım)
+
+  // Animasyon div'ini başlangıçta JS ile de gizle
    if (initialAvatarAnimationContainer) {
        initialAvatarAnimationContainer.style.display = 'none';
        initialAvatarAnimationContainer.style.opacity = 0;
    }
+    // Yedek elemanı da başlangıçta gizle
+   if (autoplayFallback) {
+       autoplayFallback.style.display = 'none';
+       autoplayFallback.style.opacity = 0;
+   }
 
 
-  // Splash ekranının bitişini dinle
+  // Splash ekranının bitişini dinle veya zaten gizliyse başlat
   const splashComputedStyle = getComputedStyle(splashScreen);
   if (splashComputedStyle.opacity == 0 || splashComputedStyle.display == 'none') {
-      // Eğer splash zaten gizliyse doğrudan arayüzü başlat
       initializeChatInterface();
   } else {
-      // Splash animasyonu bitince arayüzü başlat
       splashScreen.addEventListener('animationend', () => {
         splashScreen.style.opacity = 0;
         setTimeout(() => {
           splashScreen.style.display = "none";
-          initializeChatInterface(); // Splash bittikten sonra ilk yapılacaklar
-        }, 100); // Küçük bir gecikme
+          initializeChatInterface();
+        }, 100);
       });
   }
 
-
   // Olay dinleyicilerini ekle (genel olarak sayfa ömrü boyunca kalacaklar)
-  // Enter tuşu ile gönderme listener'ı (bu sendMessage'ı çağırır, sendMessage da animasyonu durdurur)
   userInput.addEventListener("keypress", handleInputKeyPress);
-  // Yeni sohbet butonu
   newChatButton.addEventListener("click", handleNewChat);
-  // Geçmiş listesi (event delegation)
   historyList.addEventListener("click", handleHistoryClick);
 
-  // NOT: Kullanıcı inputuna bağlı animasyon durdurma listenerları, playInitialAnimation içinde eklenir.
+  // Yeni: Animasyon kapsayıcısına tıklama dinleyicisi ekle
+  if (initialAvatarAnimationContainer) {
+       initialAvatarAnimationContainer.addEventListener('click', handleAnimationContainerClick);
+  }
+
 });
 
 // Splash ekranı bittikten veya atlandıktan sonra arayüzü başlatan fonksiyon
 function initializeChatInterface() {
     console.log("Chat arayüzü başlatılıyor...");
-    // Geçmiş sohbetleri yükle ve sidebar'da göster
     displayHistory();
 
-    // Sayfa yüklendiğinde, eğer mevcut sohbet boşsa (welcome mesajı haricinde)
-    // animasyonu başlat ve hoş geldiniz mesajını ekle (clearChat içinde zaten ekleniyor)
-    // Local Storage'da hiç sohbet olmaması durumu initializeChatInterface'e özel bir durum değil.
-    // clearChat() fonksiyonu artık hem chatBox'ı temizliyor hem de welcome mesajını ekliyor
-    // ve currentConversation'ı welcome mesajıyla başlatıyor.
-    // playInitialAnimation ise clearChat içinde çağrılıyor.
-    // Yani, initializeChatInterface fonksiyonunda sadece clearChat() çağırmamız yeterli.
-    // Bu, ilk yüklemede de chatBox'ı temizleyecek, welcome mesajını ekleyecek ve animasyonu oynatacak.
+     // Sayfa yüklendiğinde, eğer currentConversation boşsa (welcome mesajı haricinde)
+     // currentConversation'ı welcome mesajıyla başlatır ve animasyonu oynatır.
+     // clearChat() içinde zaten welcome mesajı ekleniyor ve currentConversation güncelleniyor
+     // ve clearChat playInitialAnimation'ı çağırıyor.
+     // Bu durumda initializeChatInterface sadece clearChat çağırmalı.
 
-    // initializeChatInterface çağrıldığında *her zaman* chatBox'ı temizleyip welcome mesajını ekleyelim.
-    // Eğer geçmiş yüklendiğinde bunu istemiyorsak, loadConversation içinde clearChat'i çağırmayız.
-    // Şu anki yapıda hem initialize hem de loadConversation clearChat çağırıyor, bu sorunlu.
+     // clearChat çağrısı kaldırıldı, çünkü loadConversation çağrılırsa da temizleniyor.
+     // İlk yüklemede, eğer geçmiş yoksa, currentConversation boş olacaktır.
+     // Bu durumda playInitialAnimation'ı çağırmalıyız.
+     // Eğer geçmiş varsa, loadConversation çağrılacak ve animasyon durdurulacak.
 
-    // Düzeltilmiş Mantık:
-    // 1. initializeChatInterface: Sadece displayHistory'yi çağır. Sohbet yükleme veya yeni sohbet başlatma mantığını buraya koyma.
-    // 2. window.load: Splash bittikten sonra initializeChatInterface'i çağır. Ardından otomatik olarak ya en son sohbeti yükle (varsa) ya da yeni bir sohbet başlat.
-    // 3. loadConversation: Sohbeti yükle, ardından stopInitialAnimation ve input focus yap.
-    // 4. handleNewChat: Mevcut sohbeti kaydet, ardından yeni bir sohbet başlat (clearChat çağır, playInitialAnimation çağır, input focus yap).
+    const conversations = loadConversations();
+    if (conversations.length > 0) {
+        console.log("Son sohbet yükleniyor...");
+        // loadConversation içinde clearChat var ve animasyon durduruluyor
+        loadConversation(conversations[0].id);
+        highlightSelectedChat(conversations[0].id);
+    } else {
+        console.log("Hiç sohbet yok, yeni sohbet başlatılıyor...");
+         // clearChat çağrısı burada olmalıydı, ama clearChat zaten playInitialAnimation çağırıyor.
+         // Bu durumda initializeChatInterface sadece playInitialAnimation çağırıp,
+         // welcome mesajının ve boş chatBox'ın yönetimi başka yerde olmalı.
+         // En basit yol: initializeChatInterface'ı basitleştirelim.
+         // clearChat()'i sadece yeni sohbet butonuna bağlayalım.
+         // loadConversation() sadece geçmişi yüklesin.
+         // initializeChatInterface() sadece displayHistory'yi çağırıp,
+         // ilk yüklemede chatBox'a welcome mesajı eklesin VE animasyonu oynatsın.
 
-    // Yeni initializeChatInterface (Düzeltildi)
-    // displayHistory(); // displayHistory hala burada çağırılmalı
-    // console.log("Initialize finished. Attempting to load last chat or start new.");
 
-    // // Splash bittikten sonra otomatik olarak en son sohbeti yükle VEYA yeni sohbet başlat
-    // const conversations = loadConversations();
-    // if (conversations.length > 0) {
-    //      console.log("Son sohbet yükleniyor...");
-    //      loadConversation(conversations[0].id); // En son sohbeti yükle
-    //      highlightSelectedChat(conversations[0].id); // Yüklenen sohbeti vurgula
-    // } else {
-    //      console.log("Hiç sohbet yok, yeni sohbet başlatılıyor...");
-    //      handleNewChat(); // Yeni sohbet başlat (bu clearChat ve playInitialAnimation çağırır)
-    // }
+        // -- Mantığı tekrar düzenleyelim (en temiz yol): --
+        // 1. HTML: ChatBox boş başlasın, welcome mesajı olmasın.
+        // 2. clearChat(): Sadece chatBox'ı temizlesin, currentConversation'ı sıfırlasın.
+        // 3. loadConversation(): ChatBox'ı temizlemesin, mesajları append etsin. currentConversation'ı set etsin.
+        // 4. initializeChatInterface(): displayHistory'yi çağır. ChatBox boşsa welcome mesajını append et, currentConversation'ı başlat, animasyonu oynat.
+        // 5. handleNewChat(): saveCurrentConversation, clearChat, append welcome mesajı, playInitialAnimation.
 
-    // -- Önceki logic'e geri dönelim ve onu düzelteyim. Daha basit olabilir. --
-    // Önceki logic: initializeChatInterface sadece ilk yüklemede animasyonu oynatacak.
-    // Bu durumda clearChat welcome mesajını eklemeye devam etmeli.
+        // --- Bu değişiklikler önceki kodları çok etkileyecek. Şimdilik en basit düzeltmeyi yapalım: ---
+        // clearChat welcome mesajı eklemeye devam etsin.
+        // initializeChatInterface sadece welcome mesajı yoksa (ilk yükleme) animasyonu oynatsın.
+        // loadConversation welcome mesajı yoksa append etsin.
 
-     displayHistory();
+        // Şu anki initialize logic'i:
+        // Eğer chatBox'ta welcome mesajı varsa VE currentConversation'da yoksa veya farklıysa:
+        //   currentConversation'ı welcome ile başlat VE playInitialAnimation çağır.
+        // Bu, ilk yüklemede (eğer geçmiş yüklenmediyse) çalışmalı.
+        // Eğer geçmiş yüklenirse, loadConversation clearChat çağırıyor ve welcome mesajı ekleniyor.
+        // Sonra loadConversation mesajları append ediyor.
+        // Bu durumda initializeChatInterface tekrar çağrılmıyor.
+        // Yani şimdiki initialize logic'i doğru gibi görünüyor, ilk yüklemede çalışır.
 
-     // Eğer currentConversation boşsa (yani ilk yükleme) ve chatBox'ta welcome mesajı varsa animasyonu oynat
-     // Bu kontrol, sayfa yenilemede animasyonun sadece bir kere oynamasını sağlamalı.
-     const initialBotMessageElement = chatBox.querySelector('.bot-message');
-     const hasWelcomeMessageInChatBox = initialBotMessageElement && initialBotMessageElement.textContent.includes('Merhaba! Size nasıl yardımcı olabilirim?');
+        // Sadece sayfa ilk yüklendiğinde hoş geldiniz mesajı eklenmeli, geçmiş yüklenirken veya yeni sohbette tekrar eklenmemeli.
+        // HTML'deki hoş geldiniz mesajını kaldırıp, SADECE initializeChatInterface içinde bir kere eklemek en temiz yoldur.
+        // Veya clearChat içinden welcome mesajını ekleme logic'ini kaldırıp, sadece initialize ve handleNewChat içinde ekleriz.
 
-     // CurrentConversation'ın welcome mesajını içerip içermediğini kontrol et
-     const hasWelcomeMessageInCurrentConv = currentConversation.length > 0 && currentConversation[0].role === 'bot' && currentConversation[0].text.includes('Merhaba! Size nasıl yardımcı olabilirim?');
+        // --- HTML'deki Welcome Mesajını Kaldırıp JS ile Sadece initializeChatInterface içinde Ekleyelim ---
+        // Bu, kodun yönetimini kolaylaştırır.
 
-     // Eğer chatBox'ta welcome mesajı varsa VE currentConversation'da welcome mesajı yoksa veya farklıysa
-     // Bu durum genellikle ilk yüklemede olur.
-     if (hasWelcomeMessageInChatBox && !hasWelcomeMessageInCurrentConv) {
-        // CurrentConversation'ı welcome mesajıyla başlat
-        currentConversation = []; // Tamamen sıfırla
-        currentConversation.push({ sender: 'SibelGPT', text: initialBotMessageElement.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
-        console.log("Hoş geldiniz mesajı currentConversation'a eklendi ve animasyon başlatılıyor.");
-        playInitialAnimation(); // Animasyonu başlat
-     } else {
-        console.log("Hoş geldiniz mesajı zaten currentConversation'da veya chatBox boş, animasyon oynatılmıyor.");
-        // Bu durum, geçmiş yüklendiğinde veya yeni sohbet butonuna basıldığında olabilir.
-        // clearChat() fonksiyonu artık playInitialAnimation'ı çağırıyor, bu doğru yer.
-     }
+        // HTML'den welcome mesajını kaldırın.
+        // chatBox.innerHTML = ''; // initializeChatInterface'ın başında temizlik
 
-     // Sayfa yüklendiğinde inputa odaklan
-     setTimeout(() => {
-         userInput.focus();
-     }, 100);
+        // const initialMessage = document.createElement("div");
+        // initialMessage.className = "message bot-message";
+        // initialMessage.innerHTML = `<strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim?...`;
+        // chatBox.appendChild(initialMessage);
+        // currentConversation = [];
+        // currentConversation.push({ sender: 'SibelGPT', text: initialMessage.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
+
+        // playInitialAnimation(); // Ve animasyonu oynat
+
+
+        // --- Şimdilik Kodları Bu Haliyle Verelim ---
+        // Mevcut kodda welcome mesajı hem HTML'de var, hem clearChat ekliyor, hem initialize kontrol ediyor.
+        // Bu kafa karıştırıcı. En basit düzeltme:
+
+         displayHistory(); // Geçmişi göster
+
+         // Eğer hiç mesaj yoksa (hem HTML'de hem JS currentConversation'da)
+         if(chatBox.children.length === 0 && currentConversation.length === 0) {
+              // Hoş geldiniz mesajını ekle
+             const initialMessage = document.createElement("div");
+             initialMessage.className = "message bot-message";
+             initialMessage.innerHTML = `<strong>SibelGPT:</strong> Merhaba! Size nasıl yardımcı olabilirim?...`;
+             chatBox.appendChild(initialMessage);
+              // currentConversation'ı başlat
+             currentConversation.push({ sender: 'SibelGPT', text: initialMessage.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
+             // Animasyonu oynat
+             playInitialAnimation();
+             console.log("İlk yükleme - Hoş geldiniz mesajı eklendi ve animasyon başlatıldı.");
+
+         } else {
+             // Mesajlar zaten varsa (HTML'den gelen welcome veya geçmişten yüklenen)
+             // currentConversation'ı HTML'deki welcome mesajı varsa başlat
+             const initialBotMessageElement = chatBox.querySelector('.bot-message');
+             if(initialBotMessageElement && initialBotMessageElement.textContent.includes('Merhaba! Size nasıl yardımcı olabilirim?') && currentConversation.length === 0) {
+                  currentConversation.push({ sender: 'SibelGPT', text: initialBotMessageElement.textContent.replace('SibelGPT:', '').trim(), role: 'bot' });
+                  console.log("Yenileme? - HTML'deki welcome mesajı currentConversation'a eklendi.");
+                  // Yenilemede animasyon oynatma
+             } else {
+                 console.log("ChatBox'ta mesajlar var veya currentConversation dolu. Animasyon oynatılmıyor.");
+             }
+         }
+
+         // Inputa odaklan
+         setTimeout(() => {
+              userInput.focus();
+         }, 100);
+
 }
 
 
 // "Yeni Sohbet" butonu tıklama yöneticisi
 function handleNewChat() {
     saveCurrentConversation(); // Mevcut sohbeti kaydet
-    clearChat(); // Chat kutusunu temizle, welcome mesajını ekle ve currentConversation'ı sıfırla+welcome ekle
 
-    // clearChat içinde playInitialAnimation çağrılıyor, buraya tekrar gerek yok.
+    clearChat(); // Chat kutusunu temizle VE welcome mesajını ekle VE currentConversation'ı sıfırla+welcome ekle
+
+    // Animasyonu tekrar oynat (clearChat içinde çağrılıyor)
     // playInitialAnimation();
 
     console.log("Yeni sohbet başlatıldı. Animasyon oynatıldı (clearChat içinde).");
@@ -475,6 +590,8 @@ function handleHistoryClick(event) {
              console.log("Aynı sohbet zaten açık.");
              highlightSelectedChat(chatId);
          } else {
+            // Geçmiş yüklenince chatBox temizlenir, welcome mesajı eklenir ve yüklü mesajlar append edilir.
+            // Animasyon durdurulur.
             loadConversation(chatId); // loadConversation içinde saveCurrentConversation ve stopInitialAnimation var
          }
          userInput.focus();
