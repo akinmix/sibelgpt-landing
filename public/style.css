@@ -141,26 +141,40 @@ body {
 
 /* Sohbet Başlık Alanı */
 .chat-header {
-    display: flex;
-    align-items: center;
+    display: flex; /* Çocukları (logo ve span) yan yana dizer */
+    flex-direction: row; /* Açıkça belirtiyoruz (varsayılan da olsa) */
+    align-items: center; /* Dikeyde ortala */
     gap: 15px; /* Logo ve metin arasına boşluk */
     padding: 15px 20px;
     background-color: rgba(0, 0, 0, 0.7); /* Sidebar ile aynı veya benzer arka plan */
     backdrop-filter: blur(5px); /* Arka planı bulanıklaştır */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Alt kenarlık */
+
+    /* --- DEBUGGING BORDERS --- */
+    /* Temporarily add borders to see the boundaries of header and its children */
+    /* border: 1px dashed red; */ /* Chat Header border */
+    /* --- END DEBUGGING BORDERS --- */
 }
 
 .chat-header .chat-logo {
     height: 40px; /* Logonuzun yüksekliğini ayarlayın */
     width: auto; /* Oranını koru */
-    border-radius: 50%; /* Logonuz daire şeklindeyse */
+    border-radius: 50%; /* Logonuz daire şeklinde değilse bu satırı silebilirsiniz */
     object-fit: cover; /* Resim boyutunu koruyarak sığdır */
+
+     /* --- DEBUGGING BORDERS --- */
+    /* border: 1px dashed yellow; */ /* Logo border */
+    /* --- END DEBUGGING BORDERS --- */
 }
 
 .chat-header span {
     font-size: 20px;
     font-weight: bold;
     color: #fff; /* Beyaz veya tema renginiz */
+
+     /* --- DEBUGGING BORDERS --- */
+    /* border: 1px dashed green; */ /* Span border */
+    /* --- END DEBUGGING BORDERS --- */
 }
 
 
@@ -169,9 +183,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* Üst padding'i chat-header'ın yüksekliğine göre ayarlayın */
-  /* Padding hesaplama: chat-header üst/alt padding (15+15=30) + logo yüksekliği (40) + üstte ek boşluk (örn 10px) */
-  padding: calc(30px + 40px + 10px) 20px 20px 20px; /* Örnek hesaplama, ince ayar gerekebilir */
+  /* Üst padding'i chat-header'ın yüksekliğine yer açın */
+  /* Padding hesaplama: chat-header üst/alt padding (15+15=30) + logo yüksekliği (40) + gap (15) + üstte ek boşluk (örn 10px) */
+  padding: calc(30px + 40px + 15px + 10px) 20px 20px 20px; /* Cömert bir başlangıç */
   max-width: 900px; /* Ortada sabit genişlik */
   margin: 0 auto; /* Yatayda ortala (içerik alanının ortasında) */
   overflow-y: auto; /* İçerik taştığında dikey kaydırma çubuğu */
@@ -305,8 +319,8 @@ body {
 
      .chat-container {
         /* Küçük ekranlarda chat-header yüksekliğine göre üst padding ayarı */
-         /* Hesaplama: chat-header üst/alt padding (10+10=20) + logo yüksekliği (30) + üstte ek boşluk (örn 10px) */
-        padding-top: calc(20px + 30px + 10px); /* Örnek hesaplama */
+         /* Hesaplama: chat-header üst/alt padding (10+10=20) + logo yüksekliği (30) + gap (10) + üstte ek boşluk (örn 10px) */
+        padding-top: calc(20px + 30px + 10px + 10px); /* Örnek hesaplama */
      }
 
     .avatar {
