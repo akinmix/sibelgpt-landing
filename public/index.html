@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SibelGPT</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="chat-container" id="chat-box">
-    <!-- Mesajlar buraya eklenecek -->
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SibelGPT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
 
-  <div class="chat-input">
-    <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-    <input type="text" id="user-input" placeholder="Sorunuzu yazın…" />
-    <button onclick="sendMessage()">Gönder</button>
-  </div>
+    <!-- Açılış Splash Ekranı -->
+    <div id="splash-screen">
+      <img src="public/intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
+    </div>
 
-  <script src="script.js"></script>
+    <div class="chat-container" id="chat-box">
+      <!-- Mesajlar buraya eklenecek -->
+    </div>
 
-</body>
+    <div class="chat-input">
+      <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+      <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+      <button onclick="sendMessage()">Gönder</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
