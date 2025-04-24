@@ -4,12 +4,48 @@ const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 let currentConversation = [];
 let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 
+// ✅ Görsel üretim kontrolü ve işleyici
+async function istekGorselIseYonet(input) {
+  const lower = input.toLowerCase();
+  const anahtarKelimeler = ["çiz", "görsel", "resim", "foto", "fotoğraf", "çizimini yap", "bir görsel oluştur"];
+  const istekGorselMi = anahtarKelimeler.some(kelime => lower.includes(kelime));
+
+  if (!istekGorselMi) return null;
+
+  try {
+    const res = await fetch("https://sibelgpt-backend.onrender.com/image", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: input })
+    });
+
+    const data = await res.json();
+
+    if (data.image_url) {
+      return `<img src="${data.image_url}" alt="Üretilen Görsel" style="max-width: 100%; border-radius: 8px;" />`;
+    } else {
+      return "❗ Görsel üretilemedi, lütfen tekrar deneyin.";
+    }
+  } catch (e) {
+    console.error("Görsel üretim hatası:", e);
+    return "⚠️ Görsel üretim sırasında bir hata oluştu.";
+  }
+}
+
+// ✅ Mesaj gönderme fonksiyonu
 async function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
 
   appendMessage("Sen", message, "user", true);
   userInput.value = "";
+
+  // Görsel üretim isteklerini kontrol et
+  const gorselCevap = await istekGorselIseYonet(message);
+  if (gorselCevap !== null) {
+    appendMessage("SibelGPT", gorselCevap, "bot", true);
+    return;
+  }
 
   try {
     const response = await fetch("https://sibelgpt-backend.onrender.com/chat", {
@@ -184,7 +220,6 @@ window.addEventListener("load", () => {
       mainInterface.style.display = "flex";
       initializeChatInterface();
 
-      // 🎬 Avatar video alanını göster
       const wrapper = document.getElementById("video-wrapper");
       if (wrapper) wrapper.style.display = "flex";
 
@@ -215,7 +250,7 @@ function playIntroVideo() {
   if (video && wrapper) {
     video.muted = false;
     video.currentTime = 0;
-    wrapper.classList.remove("fade-out"); // varsa kaldır
+    wrapper.classList.remove("fade-out");
     wrapper.style.display = "flex";
     video.play().catch(e => console.warn("Video oynatılamadı:", e));
     video.onended = () => {
@@ -223,7 +258,7 @@ function playIntroVideo() {
       setTimeout(() => {
         wrapper.style.display = "none";
         wrapper.classList.remove("fade-out");
-      }, 1500); // animasyon süresi kadar bekle
+      }, 1500);
     };
   }
 }
