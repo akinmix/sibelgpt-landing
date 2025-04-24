@@ -1,8 +1,8 @@
-// Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
 let currentConversation = [];
 let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
+let lastBotMessage = "";
 
 // ✅ Görsel üretim kontrolü ve işleyici (İNDİR BUTONLU)
 async function istekGorselIseYonet(input) {
@@ -43,7 +43,6 @@ async function istekGorselIseYonet(input) {
   }
 }
 
-// ✅ Mesaj gönderme fonksiyonu
 async function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
@@ -53,6 +52,7 @@ async function sendMessage() {
   const gorselCevap = await istekGorselIseYonet(message);
   if (gorselCevap !== null) {
     appendMessage("SibelGPT", gorselCevap, "bot", true);
+    lastBotMessage = "";
     return;
   }
 
@@ -65,13 +65,13 @@ async function sendMessage() {
     const data = await response.json();
     const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
     appendMessage("SibelGPT", reply, "bot", true);
+    lastBotMessage = reply;
   } catch (error) {
     appendMessage("SibelGPT", "❌ Sunucuya ulaşılamıyor.", "bot", true);
     console.error("Mesaj gönderirken hata:", error);
   }
 }
 
-// ✅ Mesajları DOM'a ekle (HTML destekli)
 function appendMessage(sender, text, role, addToHistory = false) {
   const messageElem = document.createElement("div");
   messageElem.className = "message " + role;
@@ -89,7 +89,6 @@ function appendMessage(sender, text, role, addToHistory = false) {
   }, 100);
 }
 
-// ✅ Görseli indir
 function indirGorsel(url) {
   const link = document.createElement('a');
   link.href = url;
@@ -99,7 +98,21 @@ function indirGorsel(url) {
   document.body.removeChild(link);
 }
 
-// Diğer yardımcı fonksiyonlar
+// ✅ Avatar video oynatıcı
+function playAvatar() {
+  const video = document.getElementById("avatar-video");
+  if (video) {
+    video.currentTime = 0;
+    video.style.display = "block";
+    video.play().catch(e => console.warn("Video oynatılamadı:", e));
+  }
+}
+
+// ✅ Dinle butonu tıklanınca avatar başlasın
+function handleDinleButonu() {
+  playAvatar();
+}
+
 function handleInputKeyPress(event) {
   if (event.key === 'Enter') {
     event.preventDefault();
@@ -126,7 +139,6 @@ function saveConversations(conversations) {
 }
 
 function saveCurrentConversation() {
-  if (currentConversation.length <= 1 && currentConversation[0]?.role === 'bot' && currentConversation[0].text.includes('Merhaba!')) return;
   if (currentConversation.length === 0) return;
   const chatId = Date.now();
   const title = generateConversationTitle(currentConversation);
@@ -141,11 +153,6 @@ function generateConversationTitle(conversation) {
   if (firstUserMessage?.text) {
     const text = firstUserMessage.text.trim();
     return text.length > 30 ? text.substring(0, text.lastIndexOf(' ', 30)) + '...' : text;
-  }
-  const firstBotMessage = conversation.find(msg => msg.role === 'bot');
-  if (firstBotMessage?.text) {
-    const text = firstBotMessage.text.replace('SibelGPT:', '').trim();
-    return text.length > 30 ? "Bot: " + text.substring(0, text.lastIndexOf(' ', 30)) + '...' : "Bot: " + text;
   }
   return "Yeni Sohbet";
 }
@@ -188,9 +195,6 @@ function loadConversation(chatId) {
     currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages));
     highlightSelectedChat(chatId);
     userInput.focus();
-  } else {
-    console.error("Yüklenmek istenen sohbet bulunamadı:", chatId);
-    appendMessage("SibelGPT", "❌ Bu sohbet yüklenirken bir hata oluştu.", "bot", false);
   }
 }
 
@@ -216,8 +220,6 @@ window.addEventListener("load", () => {
       splashScreen.style.display = "none";
       mainInterface.style.display = "flex";
       initializeChatInterface();
-      const wrapper = document.getElementById("video-wrapper");
-      if (wrapper) wrapper.style.display = "flex";
     }, 300);
   });
 
@@ -225,13 +227,9 @@ window.addEventListener("load", () => {
   newChatButton.addEventListener("click", handleNewChat);
   historyList.addEventListener("click", handleHistoryClick);
 
-  const initialBotMessageElement = chatBox.querySelector('.bot-message');
-  if (initialBotMessageElement) {
-    currentConversation.push({
-      sender: 'SibelGPT',
-      text: initialBotMessageElement.textContent.replace('SibelGPT:', '').trim(),
-      role: 'bot'
-    });
+  const dinleButon = document.getElementById("dinle-button");
+  if (dinleButon) {
+    dinleButon.addEventListener("click", handleDinleButonu);
   }
 
   setTimeout(() => { userInput.focus(); }, 100);
@@ -251,11 +249,7 @@ function handleHistoryClick(event) {
   const clickedElement = event.target;
   if (clickedElement.tagName === 'LI' && clickedElement.hasAttribute('data-chat-id')) {
     const chatId = clickedElement.getAttribute('data-chat-id');
-    if (currentConversation.length > 0 && currentConversation[0].id == chatId) {
-      highlightSelectedChat(chatId);
-    } else {
-      loadConversation(chatId);
-    }
+    loadConversation(chatId);
     userInput.focus();
   }
 }
