@@ -7,7 +7,11 @@ let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 // ✅ Görsel üretim kontrolü ve işleyici
 async function istekGorselIseYonet(input) {
   const lower = input.toLowerCase();
-  const anahtarKelimeler = ["çiz", "görsel", "resim", "foto", "fotoğraf", "çizimini yap", "bir görsel oluştur"];
+  const anahtarKelimeler = [ "çiz", "çizer misin", "çizimini yap", "bir şey çiz", "bir görsel oluştur", 
+  "görsel", "görselini yap", "görsel üret", "görselini üret",
+  "resim", "resmini yap", "resim üret", "resim çiz", "resmini çizer misin",
+  "foto", "fotoğraf", "fotoğrafını yap", "fotoğraf üret", "bir görüntü oluştur", 
+  "bir sahne yap", "görsel yap", "çiz bana", "şunu çiz", "şunun resmini yap", "şunun görselini oluştur"];
   const istekGorselMi = anahtarKelimeler.some(kelime => lower.includes(kelime));
 
   if (!istekGorselMi) return null;
