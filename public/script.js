@@ -46,6 +46,9 @@ async function sendMessage() {
 
       const data = await response.json();
       const veri = data.veri;
+      console.log("🔥 Gelen API verisi:", data);
+      console.log("📦 veri:", veri);
+
 
       let botResponse = `🏡 <b>${data.ilan_no}</b><br>`;
       if (veri.fiyat) botResponse += `💸 <b>Fiyat:</b> ${veri.fiyat}<br>`;
