@@ -48,11 +48,66 @@ async function sendMessage() {
   appendMessage("Sen", message, "user", true);
   userInput.value = "";
 
+  // 🔍 Önce görsel isteği mi kontrol et
   const gorselHTML = await istekGorselIseYonet(message);
   if (gorselHTML !== null) {
     appendMessage("SibelGPT", gorselHTML, "bot", true);
     return;
   }
+
+  // 🔍 Eğer kullanıcı bir ilan numarası girdiyse → Firecrawl'a gönder
+if (message.startsWith("P") && message.length === 9) {
+
+  try {
+    const response = await fetch("https://sibelgpt-backend.onrender.com/api/ilan-detay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ilan_no: message })
+    });
+
+    const data = await response.json();
+    const veri = data.veri;
+
+    let botResponse = `🏡 <b>${data.ilan_no}</b><br>`;
+    if (veri.fiyat) botResponse += `💸 <b>Fiyat:</b> ${veri.fiyat}<br>`;
+    if (veri.oda) botResponse += `🛏️ <b>Oda:</b> ${veri.oda}<br>`;
+    if (veri.m2) botResponse += `📐 <b>Metrekare:</b> ${veri.m2} m²<br><br>`;
+    if (veri.aciklama) botResponse += `📝 <b>Açıklama:</b><br>${veri.aciklama}<br><br>`;
+
+    if (veri.fotograflar && veri.fotograflar.length > 0) {
+      veri.fotograflar.forEach(foto => {
+        botResponse += `<img src="${foto}" alt="İlan Fotoğrafı" style="max-width:100%; margin-top:10px;"><br>`;
+      });
+    }
+
+    appendMessage("SibelGPT", botResponse, "bot", true);
+  } catch (error) {
+    appendMessage("SibelGPT", "❌ İlan detayları alınamadı. Lütfen tekrar deneyin.", "bot", true);
+  }
+
+  return; // Bu return çok önemli, başka sistemlere geçmesin
+}
+
+
+  // 🔁 Normal ChatGPT mesaj sistemi
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+    appendMessage("SibelGPT", data.reply, "bot", true);
+  } catch (error) {
+    appendMessage("SibelGPT", "❌ Cevap alınamadı. Lütfen daha sonra tekrar deneyin.", "bot", true);
+  }
+}
+
 
   try {
     const response = await fetch("https://sibelgpt-backend.onrender.com/chat", {
