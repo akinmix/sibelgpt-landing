@@ -50,12 +50,17 @@
 
       <div class="chat-input">
         <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-        <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+        
+        <div class="input-wrapper"> 
+          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+          <button id="send-arrow-button" title="Gönder">
+            <i class="fas fa-arrow-up"></i> 
+          </button>
+        </div>
 
         <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
-
-        <button onclick="sendMessage()">Gönder</button>
-      </div>
+        
+        </div>
     </div>
   </div>
 
