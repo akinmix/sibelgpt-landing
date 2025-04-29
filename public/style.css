@@ -1,4 +1,4 @@
-/* style.css - GÜNCELLENMİŞ HALİ (Dinamik Sol Ok İçin) */
+/* style.css - GÜNCELLENMİŞ HALİ (Yükleniyor Animasyonu Eklendi) */
 
 /* Genel ve Arka Plan */
 body {
@@ -249,12 +249,21 @@ body {
   margin-bottom: 12px;
   max-width: 80%;
   font-size: 16px;
+  display: flex; /* İçeriği (strong ve metin) yönetmek için */
+  gap: 8px; /* Başlık ve metin arası boşluk */
+  align-items: flex-start; /* Dikeyde başa hizala */
+}
+
+.message strong { /* Gönderen adı (SibelGPT: , Sen:) */
+    flex-shrink: 0; /* Küçülmesin */
+    font-weight: bold;
 }
 
 .user-message {
   align-self: flex-end;
   background-color: rgba(255, 255, 255, 0.2);
   text-align: right;
+  flex-direction: row-reverse; /* Kullanıcıda başlık sağda */
 }
 
 .bot-message {
@@ -262,7 +271,7 @@ body {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-/* --- CHAT INPUT ALANI DEĞİŞİKLİKLERİ --- */
+/* --- CHAT INPUT ALANI --- */
 .chat-input {
   width: 100%;
   max-width: 900px;
@@ -273,82 +282,79 @@ body {
   padding: 14px;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
-  border-top: 1px solid #888; 
+  border-top: 1px solid #888;
   box-sizing: border-box;
 }
 
 .input-wrapper {
-  flex-grow: 1; /* Input alanının genişlemesini sağlar */
-  position: relative; /* İçindeki oku konumlandırmak için */
-  display: flex; /* İçeriği (input+ok) yönetmek için */
+  flex-grow: 1;
+  position: relative;
+  display: flex;
   align-items: center;
 }
 
-#user-input { /* id ile seçmek daha garanti */
+#user-input {
   flex-grow: 1;
   padding: 14px;
-  padding-left: 45px; /* SOLDAKİ OK İÇİN YER AÇ */
+  padding-left: 45px; /* Soldaki ok için yer */
   font-size: 16px;
   border-radius: 8px;
   border: none;
   outline: none;
   background: white;
   color: black;
-  width: 100%; /* Wrapper içinde tam genişlik kaplaması için */
-  box-sizing: border-box; /* Padding'i genişliğe dahil et */
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* GÖRSEL OLUŞTUR BUTONU (Metinli - Yanda Kalacak) */
 #gorsel-buton {
-  padding: 14px 20px; 
-  font-size: 16px; 
+  padding: 14px 20px;
+  font-size: 16px;
   border-radius: 8px;
   background-color: #8e24aa;
   color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  flex-shrink: 0; /* Butonun sıkışmasını önle */
+  flex-shrink: 0;
 }
 
 #gorsel-buton:hover {
-  background-color: #a739c7; 
+  background-color: #a739c7;
 }
 
-/* YENİ DİNAMİK GÖNDERME OKU (Sol İç Taraf) */
 #send-arrow-button {
-  position: absolute; /* Wrapper'a göre konumlanacak */
-  left: 8px; /* Sol kenardan boşluk */
+  position: absolute;
+  left: 8px;
   top: 50%;
-  transform: translateY(-50%); /* Dikeyde tam ortala */
-  width: 34px;  /* Ok için uygun boyut */
-  height: 34px; /* Ok için uygun boyut */
-  padding: 0; /* İç boşluk olmasın */
-  font-size: 16px; /* İkon boyutu */
-  border-radius: 50%; /* Yuvarlak buton */
-  background-color: rgba(142, 36, 170, 0.9); /* Mor ama biraz belirgin */
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  font-size: 16px;
+  border-radius: 50%;
+  background-color: rgba(142, 36, 170, 0.9);
   color: white;
   border: none;
   cursor: pointer;
-  display: none; /* BAŞLANGIÇTA GİZLİ */
-  align-items: center; /* İkonu ortala */
-  justify-content: center; /* İkonu ortala */
+  display: none; /* Başlangıçta gizli */
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.2s ease, opacity 0.2s ease;
-  opacity: 0; /* Başlangıçta şeffaf */
-  pointer-events: none; /* Başlangıçta tıklanamaz */
+  opacity: 0;
+  pointer-events: none;
 }
 
 #send-arrow-button.visible {
-  display: flex; /* Görünür yap (flex ile ikon ortalansın) */
-  opacity: 1; /* Görünür yap */
-  pointer-events: auto; /* Tıklanabilir yap */
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 #send-arrow-button:hover {
-  background-color: #a739c7; /* Hover rengi */
+  background-color: #a739c7;
 }
-/* --- CHAT INPUT ALANI DEĞİŞİKLİKLERİ SONU --- */
-
+/* --- CHAT INPUT ALANI SONU --- */
 
 .avatar {
   width: 50px;
@@ -370,10 +376,8 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* ... (Mevcut mobil stiller aynı kalabilir, 
-             belki chat-input padding/gap ayarları 
-             yeni butonlarla tekrar gözden geçirilebilir) ... */
-  .chat-input {
+  /* ... Mevcut mobil stiller ... */
+   .chat-input {
     padding: 10px;
     gap: 8px;
   }
@@ -396,7 +400,7 @@ body {
      width: 40px;
      height: 40px;
   }
-  /* Diğer mobil stiller... */
+  /* ... Diğer mobil stiller ... */
 }
 
 /* 🎬 Avatar video alanı ve dinle butonu */
@@ -405,8 +409,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9998; /* Splash'ten düşük, diğerlerinden yüksek */
-  display: none; 
+  z-index: 9998;
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: 10px;
@@ -417,6 +421,7 @@ body {
   max-height: 80vh;
   border-radius: 20px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  /* display: none; /* Başlangıçta videoyu gizle (JS ile kontrol edilecek) */
 }
 
 #play-button {
@@ -461,10 +466,66 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(142, 36, 170, 0.6); 
+  background: rgba(142, 36, 170, 0.6);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 57, 199, 0.8); 
+  background: rgba(167, 57, 199, 0.8);
 }
+
+/* ------ YENİ YÜKLENİYOR ANİMASYONU ------ */
+.message.loading-indicator {
+  /* İsteğe bağlı: Yükleniyor mesajının arkaplanını hafif farklı yapabiliriz */
+   /* background-color: rgba(0, 0, 0, 0.7); */
+   padding-top: 18px; /* Noktaların hizası için biraz ayar */
+   padding-bottom: 18px;
+}
+
+.message.loading-indicator strong { /* "SibelGPT:" yazısını gizle */
+    display: none;
+}
+
+.dots-container {
+    display: inline-flex;
+    align-items: center; /* Dikeyde ortala */
+    justify-content: center; /* Yatayda ortala (eğer tek başına ise) */
+    height: 1em; /* Yazı boyutuyla aynı yükseklik */
+}
+
+.dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #8e24aa; /* Ana tema rengi */
+    margin: 0 3px; /* Noktalar arası boşluk */
+    /* Animasyon */
+    animation: dot-pulse 1.4s infinite ease-in-out;
+    /* Animasyonun dolgu modu: animasyon dışındaki zamanlarda da stil korunsun */
+    animation-fill-mode: both;
+}
+
+/* Farklı noktalara gecikme vererek sıralı efekti oluşturma */
+.dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+/* .dot:nth-child(3) gecikmesiz başlar */
+
+/* Noktaların Büyüyüp Küçülme Animasyonu */
+@keyframes dot-pulse {
+  0%, 80%, 100% {
+    transform: scale(0.4); /* Başlangıç ve bitişte küçük */
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1.0); /* Ortada büyük */
+    opacity: 1;
+  }
+}
+/* ------ YÜKLENİYOR ANİMASYONU SONU ------ */
