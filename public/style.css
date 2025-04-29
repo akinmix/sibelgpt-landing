@@ -1,4 +1,4 @@
-/* style.css - GÜNCELLENMİŞ HALİ */
+/* style.css - GÜNCELLENMİŞ HALİ (Metin Butonu İçin) */
 
 /* Genel ve Arka Plan */
 body {
@@ -36,8 +36,8 @@ body {
 
 @keyframes fadeInOut {
   0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: scale(1); } /* Düzeltme: transform: 1 yerine scale(1) */
-  70% { opacity: 1; transform: scale(1); } /* Düzeltme: transform: 1 yerine scale(1) */
+  30% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.2); }
 }
 
@@ -272,7 +272,7 @@ body {
   padding: 14px;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
-  border-top: 1px solid #888; /* Düzeltme: #888 daha görünür olabilir */
+  border-top: 1px solid #888;
   box-sizing: border-box;
 }
 
@@ -288,7 +288,7 @@ body {
 }
 
 .chat-input button {
-  padding: 14px 20px; /* Gönder butonu için orijinal padding */
+  padding: 14px 20px; /* Gönder butonu için padding */
   font-size: 16px;
   border-radius: 8px;
   background-color: #8e24aa;
@@ -302,15 +302,14 @@ body {
   background-color: #a739c7;
 }
 
-/* --- YENİ EKLENEN STİLLER - GÖRSEL OLUŞTUR BUTONU --- */
+/* --- YENİ/GÜNCELLENMİŞ STİLLER - GÖRSEL OLUŞTUR BUTONU --- */
 #gorsel-buton {
-  padding: 14px 16px; /* Gönder butonundan biraz daha dar */
-  font-size: 16px; /* İkon boyutu için referans */
-  line-height: 1; /* İkonu dikeyde daha iyi ortalamak için */
-  /* Diğer stiller gönder butonuyla büyük ölçüde aynı */
+  padding: 14px 20px; /* Gönder butonuyla aynı padding */
+  font-size: 16px; /* Gönder butonuyla aynı font boyutu */
+  /* İkon için eklenen line-height kaldırıldı */
   border-radius: 8px;
-  background-color: #8e24aa; /* Gönder butonuyla aynı renk */
-  color: white; /* İkon rengi */
+  background-color: #8e24aa;
+  color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -319,7 +318,8 @@ body {
 #gorsel-buton:hover {
   background-color: #a739c7; /* Gönder butonuyla aynı hover efekti */
 }
-/* --- YENİ EKLENEN STİLLER SONU --- */
+/* --- YENİ/GÜNCELLENMİŞ STİLLER SONU --- */
+
 
 .avatar {
   width: 50px;
@@ -347,7 +347,7 @@ body {
   .sidebar {
     width: 100%;
     height: auto;
-    max-height: 150px; /* Düzeltme: auto daha iyi olabilir */
+    max-height: 150px;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 10px;
@@ -392,7 +392,7 @@ body {
     padding: 10px;
   }
   .chat-container {
-    padding-top: 10px; /* Düzeltme: Belki daha fazla boşluk? */
+    padding-top: 10px;
   }
   .avatar {
     width: 40px;
@@ -409,8 +409,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9999; /* Splash screen'den düşük olmalı */
-  display: none; /* Başlangıçta gizli */
+  z-index: 9999;
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: 10px;
@@ -450,7 +450,7 @@ body {
   100% {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.95);
-    pointer-events: none; /* Animasyon bitince tıklanamaz yap */
+    pointer-events: none;
   }
 }
 
