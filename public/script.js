@@ -1,25 +1,25 @@
-// script.js - GÜNCELLENMİŞ HALİ (Yükleniyor Animasyonu Eklendi)
+// script.js - GÜNCELLENMİŞ HALİ (İnternet Arama Butonu Eklendi)
 
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
 let currentConversation = [];
 let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
-let sendArrowButton; 
-let gorselButton; 
-let videoWrapper, introVideo, playButton; 
+let sendArrowButton;
+let gorselButton;
+let searchButton; // *** YENİ BUTON İÇİN DEĞİŞKEN ***
+let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
 
-const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
+const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
 
 // --- Yükleniyor animasyonunu ekleme/kaldırma fonksiyonları ---
 function showLoadingIndicator() {
     if (!chatBox) return;
-    // Önceki yükleniyor mesajı varsa kaldır
-    hideLoadingIndicator(); 
-    
+    hideLoadingIndicator();
+
     loadingMessageElement = document.createElement("div");
-    loadingMessageElement.classList.add("message", "bot-message", "loading-indicator"); // Özel sınıf ekle
+    loadingMessageElement.classList.add("message", "bot-message", "loading-indicator");
     loadingMessageElement.innerHTML = `
         <span class="dots-container">
             <span class="dot"></span>
@@ -28,7 +28,6 @@ function showLoadingIndicator() {
         </span>
     `;
     chatBox.appendChild(loadingMessageElement);
-    // Scroll to bottom
     setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
 }
 
@@ -37,9 +36,8 @@ function hideLoadingIndicator() {
         loadingMessageElement.remove();
         loadingMessageElement = null;
     }
-     // Ekstra kontrol: Bazen eski mesajlar kalabilir, onları da temizleyelim
-     const oldIndicators = chatBox.querySelectorAll('.loading-indicator');
-     oldIndicators.forEach(el => el.remove());
+     const oldIndicators = chatBox?.querySelectorAll('.loading-indicator'); // chatBox null kontrolü
+     oldIndicators?.forEach(el => el.remove()); // chatBox null kontrolü
 }
 // --- Yükleniyor fonksiyonları sonu ---
 
@@ -47,427 +45,76 @@ function hideLoadingIndicator() {
 async function handleGenerateImageClick() {
     const prompt = userInput.value.trim();
     if (!prompt) {
-        alert("Lütfen görsel için bir açıklama yazın."); 
-        return; 
+        alert("Lütfen görsel için bir açıklama yazın.");
+        return;
     }
-    
-    appendMessage("Sen", prompt, "user", true); // Önce kullanıcının promptunu ekle
-    showLoadingIndicator(); // Yükleniyor animasyonunu göster
-    userInput.value = ""; 
+
+    appendMessage("Sen", prompt, "user", true);
+    showLoadingIndicator();
+    userInput.value = "";
     if (sendArrowButton) {
         sendArrowButton.classList.remove('visible');
     }
 
     try {
-        const res = await fetch(`${BACKEND_URL}/image`, { 
+        const res = await fetch(`${BACKEND_URL}/image`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: prompt })
         });
         const data = await res.json();
-        
-        hideLoadingIndicator(); // Cevap gelince animasyonu kaldır
+
+        hideLoadingIndicator();
 
         if (data.image_url) {
             const gorselHTML = `
                 <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                    <img src="${data.image_url}" alt="Üretilen Görsel" style="max-width: 100%; max-height: 400px; object-fit: contain; border-radius: 8px; margin-bottom: 8px;" />
-                    <button onclick="indirGorsel('${data.image_url}')" style="padding: 6px 12px; font-size: 14px; border: none; border-radius: 4px; background-color: #8e24aa; color: white; cursor: pointer;">
+                    <img src="<span class="math-inline">\{data\.image\_url\}" alt\="Üretilen Görsel" style\="max\-width\: 100%; max\-height\: 400px; object\-fit\: contain; border\-radius\: 8px; margin\-bottom\: 8px;" /\>
+<button onclick\="indirGorsel\('</span>{data.image_url}')" style="padding: 6px 12px; font-size: 14px; border: none; border-radius: 4px; background-color: #8e24aa; color: white; cursor: pointer;">
                     📥 İndir
                     </button>
                 </div>
             `;
-            // Prompt zaten eklendi, sadece cevabı ekle
-            appendMessage("SibelGPT", gorselHTML, "bot", true); 
+            appendMessage("SibelGPT", gorselHTML, "bot", true);
         } else {
             appendMessage("SibelGPT", "❗ Görsel üretilemedi: " + (data.error || 'Bilinmeyen bir sunucu hatası oluştu.'), "bot", true);
         }
     } catch (e) {
-        hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
+        hideLoadingIndicator();
         console.error("Görsel buton hatası:", e);
         appendMessage("SibelGPT", "⚠️ Görsel üretme servisine bağlanırken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     }
 }
 
+// *** YENİ İNTERNET ARAMA BUTONU İŞLEVİ (ŞİMDİLİK BOŞ) ***
+async function handleInternetSearchClick() {
+    const prompt = userInput?.value?.trim(); // Girdiyi al (null kontrolü)
+    console.log('İnternet Araması butonu tıklandı!');
+    alert('İnternet arama özelliği yakında eklenecektir.');
+
+    // TODO: Backend'e Serper API isteği gönderecek kod buraya gelecek.
+    // Bu fonksiyon backend entegrasyonu yapıldığında güncellenecek.
+    // Örnek adımlar:
+    // if (!prompt) { alert("Lütfen arama için bir konu yazın."); return; }
+    // appendMessage("Sen", `İnternette şunu ara: ${prompt}`, "user", true);
+    // showLoadingIndicator();
+    // userInput.value = "";
+    // try {
+    //      const res = await fetch(`${BACKEND_URL}/search`, { /* ... */ });
+    //      const data = await res.json();
+    //      hideLoadingIndicator();
+    //      appendMessage("SibelGPT", data.searchResult || "Arama sonucu bulunamadı.", "bot", true);
+    // } catch (e) {
+    //      hideLoadingIndicator();
+    //      appendMessage("SibelGPT", "⚠️ Arama sırasında bir hata oluştu.", "bot", true);
+    // }
+}
+// *** YENİ İNTERNET ARAMA BUTONU İŞLEVİ SONU ***
+
 
 // Ana mesaj gönderme fonksiyonu (Sohbet için)
 async function sendMessage() {
-  const message = userInput.value.trim();
+  const message = userInput?.value?.trim(); // null kontrolü
   if (!message) return;
 
-  appendMessage("Sen", message, "user", true); // Kullanıcı mesajını ekle
-  showLoadingIndicator(); // Animasyonu göster
-  userInput.value = ""; 
-  if (sendArrowButton) { 
-      sendArrowButton.classList.remove('visible');
-  }
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/chat`, { 
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: message }),
-    });
-    
-    hideLoadingIndicator(); // Cevap gelince animasyonu kaldır
-
-    const data = await response.json();
-    const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
-    appendMessage("SibelGPT", reply, "bot", true); 
-
-  } catch (error) {
-     hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
-     appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu veya sunucuya ulaşılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
-    console.error("Mesaj gönderirken hata:", error);
-  }
-}
-
-// Mesajı ekrana ve geçmişe ekler
-function appendMessage(sender, text, role, addToHistory = false) {
-    if (!chatBox) return;
-
-    // Eğer bu bir yükleniyor mesajıysa, özel sınıfı ekle (ama bu fonksiyonu çağırmayacağız)
-    // Yükleniyor mesajını showLoadingIndicator halledecek.
-    
-    const messageElem = document.createElement("div");
-    messageElem.classList.add("message");
-    messageElem.classList.add(role + "-message");
-
-    // Mesaj içeriğini ayarla
-    messageElem.innerHTML = `<strong>${sender}:</strong> `; // Gönderen adı
-
-    if (text.trim().startsWith('<div')) { // Görsel HTML'i ise
-        const contentDiv = document.createElement('div');
-        contentDiv.innerHTML = text; // HTML'i parse etmesi için geçici div
-        // Sadece div içeriğini alıp ekleyelim (div'in kendisini değil)
-         while (contentDiv.firstChild) {
-             messageElem.appendChild(contentDiv.firstChild);
-         }
-    } else {
-         const textNode = document.createTextNode(text); // Normal metin
-         messageElem.appendChild(textNode);
-    }
-
-    chatBox.appendChild(messageElem);
-
-    if (addToHistory && currentConversation) {
-        currentConversation.push({ sender, text, role });
-    }
-
-    setTimeout(() => {
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, 100);
-}
-
-
-// Görsel indirme fonksiyonu
-function indirGorsel(url) {
-  window.open(url, '_blank'); 
-}
-
-// Enter tuşuna basılınca mesaj gönder
-function handleInputKeyPress(event) {
-  if (event.key === 'Enter' && !event.shiftKey) { 
-    event.preventDefault(); 
-    if(userInput && userInput.value.trim() !== '') { 
-       sendMessage();
-    }
-  }
-}
-
-// -------- History, Conversation, Clear vb. Fonksiyonlar (Değişiklik Yok) --------
-// Sohbet geçmişini Local Storage'dan yükle
-function loadConversations() {
-  const conversationsJson = localStorage.getItem(HISTORY_STORAGE_KEY);
-  try {
-    return conversationsJson ? JSON.parse(conversationsJson) : [];
-  } catch (e) {
-    console.error("Sohbet geçmişi yüklenirken hata:", e);
-    localStorage.removeItem(HISTORY_STORAGE_KEY); 
-    return [];
-  }
-}
-// Sohbet geçmişini Local Storage'a kaydet
-function saveConversations(conversations) {
-  try {
-    const MAX_HISTORY = 50;
-    if (conversations.length > MAX_HISTORY) {
-      conversations = conversations.slice(0, MAX_HISTORY);
-    }
-    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(conversations));
-  } catch (e) {
-    console.error("Sohbet geçmişi kaydedilirken hata:", e);
-     if (e.name === 'QuotaExceededError' && conversations.length > 0) {
-         console.warn("Depolama alanı dolu, en eski sohbet siliniyor.");
-         saveConversations(conversations.slice(0, conversations.length - 1));
-     }
-  }
-}
-// Mevcut sohbeti kaydet (eğer anlamlıysa)
-function saveCurrentConversation() {
-  if (!currentConversation || currentConversation.length <= 1) return; 
-  const chatId = Date.now(); 
-  const title = generateConversationTitle(currentConversation);
-  const conversations = loadConversations();
-  conversations.unshift({ id: chatId, title: title, messages: currentConversation }); 
-  saveConversations(conversations);
-}
-// Sohbet için başlık oluştur
-function generateConversationTitle(conversation) {
-  const firstUserMessage = conversation.find(msg => msg.role === 'user');
-  if (firstUserMessage?.text) {
-    const text = firstUserMessage.text.trim();
-    if (text.toLowerCase().includes("görsel") || text.toLowerCase().includes("çiz")) {
-        return "Görsel Sohbeti";
-    }
-    return text.length > 35 ? text.substring(0, text.lastIndexOf(' ', 35) || 35) + '...' : text;
-  }
-  return "Yeni Sohbet Başlığı"; 
-}
-// Sohbeti temizle
-function clearChat() {
-  if(!chatBox) return;
-  chatBox.innerHTML = ''; 
-  const initialBotMessageHTML = `<strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!`;
-  const initialBotMessageElem = document.createElement("div");
-  initialBotMessageElem.classList.add("message", "bot-message");
-  initialBotMessageElem.innerHTML = initialBotMessageHTML;
-  chatBox.appendChild(initialBotMessageElem);
-  currentConversation = [{ 
-      sender: 'SibelGPT',
-      text: initialBotMessageHTML.replace(/<strong>.*?<\/strong>/g, '').trim(), 
-      role: 'bot'
-  }];
-  highlightSelectedChat(null); 
-  if(userInput) userInput.value = ""; 
-  if(sendArrowButton) sendArrowButton.classList.remove('visible'); 
-}
-// Geçmiş sohbetleri kenar çubuğunda göster
-function displayHistory() {
-  if(!historyList) return; 
-  const conversations = loadConversations();
-  historyList.innerHTML = ''; 
-  if (conversations.length === 0) {
-    const placeholder = document.createElement('li');
-    placeholder.textContent = 'Henüz kaydedilmiş sohbet yok.';
-    placeholder.style.cursor = 'default';
-    placeholder.style.opacity = '0.7';
-    historyList.appendChild(placeholder);
-  } else {
-    conversations.forEach(conv => {
-      const listItem = document.createElement('li');
-      listItem.textContent = conv.title || "Adsız Sohbet"; 
-      listItem.setAttribute('data-chat-id', conv.id);
-      const deleteButton = document.createElement('span');
-      deleteButton.textContent = '🗑️';
-      deleteButton.style.float = 'right';
-      deleteButton.style.cursor = 'pointer';
-      deleteButton.style.marginLeft = '10px';
-      deleteButton.style.visibility = 'hidden'; 
-      deleteButton.onclick = (e) => {
-          e.stopPropagation(); 
-          deleteConversation(conv.id);
-      };
-      listItem.onmouseover = () => { deleteButton.style.visibility = 'visible'; };
-      listItem.onmouseout = () => { deleteButton.style.visibility = 'hidden'; };
-      listItem.appendChild(deleteButton);
-      historyList.appendChild(listItem);
-    });
-  }
-}
-// Seçili sohbeti yükle
-function loadConversation(chatId) {
-  saveCurrentConversation(); 
-  const conversations = loadConversations();
-  const conversationToLoad = conversations.find(conv => conv.id == chatId); 
-  if (conversationToLoad) {
-    clearChat(); 
-    currentConversation = [{ 
-        sender: 'SibelGPT',
-        text: chatBox.querySelector('.bot-message').textContent.replace('SibelGPT:', '').trim(),
-        role: 'bot'
-    }];
-    conversationToLoad.messages.forEach((msg, index) => {
-       if (index > 0) { 
-           appendMessage(msg.sender, msg.text, msg.role, false); 
-       }
-    });
-    currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages)); 
-    highlightSelectedChat(chatId); 
-    if(userInput) userInput.focus(); 
-  } else {
-      console.error("Sohbet bulunamadı:", chatId);
-  }
-}
-// Kenar çubuğunda seçili sohbeti vurgula
-function highlightSelectedChat(chatId) {
-    if (!historyList) return;
-    historyList.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
-    if (chatId !== null) {
-        const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
-        if (selectedItem) selectedItem.classList.add('selected');
-    }
-}
-// Geçmiş listesinden bir sohbete tıklandığında
-function handleHistoryClick(event) {
-  const clickedElement = event.target;
-  const listItem = clickedElement.closest('li'); 
-  if (listItem && listItem.hasAttribute('data-chat-id')) {
-       if (event.target.tagName === 'SPAN' && event.target.textContent === '🗑️') {
-           return;
-       }
-       const chatId = listItem.getAttribute('data-chat-id');
-       loadConversation(chatId);
-       if(userInput) userInput.focus();
-  }
-}
-// Bir sohbeti silme fonksiyonu
-function deleteConversation(chatId) {
-    if (!confirm("Bu sohbeti silmek istediğinizden emin misiniz?")) {
-        return;
-    }
-    let conversations = loadConversations();
-    conversations = conversations.filter(conv => conv.id != chatId);
-    saveConversations(conversations);
-    displayHistory(); 
-    const selectedLi = historyList ? historyList.querySelector('.selected') : null;
-     if (!selectedLi || selectedLi.getAttribute('data-chat-id') == chatId) {
-         handleNewChat(); 
-     }
-}
-// Yeni sohbet butonu işlevi
-function handleNewChat() {
-  saveCurrentConversation(); 
-  clearChat(); 
-  displayHistory(); 
-  if(userInput) userInput.focus(); 
-}
-// -------- History, Conversation, Clear vb. Fonksiyonlar Sonu --------
-
-
-// Sayfa yüklendiğinde çalışacak kodlar
-window.addEventListener("load", () => {
-  // Elementleri seç
-  chatBox = document.getElementById("chat-box");
-  userInput = document.getElementById("user-input");
-  newChatButton = document.querySelector(".new-chat-button button");
-  historyList = document.getElementById("history-list");
-  splashScreen = document.getElementById("splash-screen");
-  mainInterface = document.getElementById("main-interface");
-  sendArrowButton = document.getElementById('send-arrow-button'); 
-  gorselButton = document.getElementById('gorsel-buton'); 
-  videoWrapper = document.getElementById('video-wrapper'); 
-  introVideo = document.getElementById('intro-video');     
-  playButton = document.getElementById('play-button');     
-
-  // Splash ekranını yönet
-  if (splashScreen) {
-      splashScreen.addEventListener('animationend', (event) => {
-          if (event.target.classList.contains('splash-logo')) { 
-              splashScreen.style.opacity = 0;
-              setTimeout(() => {
-                  splashScreen.style.display = "none";
-                  if(mainInterface) mainInterface.style.display = "flex";
-                  initializeChatInterface(); 
-                  if (videoWrapper) {
-                      videoWrapper.style.display = "flex"; 
-                  }
-              }, 500); 
-          }
-      });
-  } else {
-       if(mainInterface) mainInterface.style.display = "flex";
-       initializeChatInterface();
-       if (videoWrapper) {
-           videoWrapper.style.display = "flex";
-       }
-  }
-
-  // Olay dinleyicilerini ekle
-  if (userInput) {
-      userInput.addEventListener("keypress", handleInputKeyPress);
-      userInput.addEventListener('input', () => {
-          if (sendArrowButton) { 
-              if (userInput.value.trim() !== '') {
-                  sendArrowButton.classList.add('visible');
-              } else {
-                  sendArrowButton.classList.remove('visible');
-              }
-          }
-      });
-  }
-  if (newChatButton) {
-      newChatButton.addEventListener("click", handleNewChat);
-  }
-  if (historyList) {
-      historyList.addEventListener("click", handleHistoryClick);
-  }
-  if (sendArrowButton) { 
-      sendArrowButton.addEventListener('click', sendMessage);
-  }
-  if (gorselButton) { 
-      gorselButton.addEventListener('click', handleGenerateImageClick);
-  }
-   if (playButton) { 
-       playButton.addEventListener('click', playIntroVideo);
-   }
-
-  // Başlangıç
-  clearChat(); // Ekranı temizle ve başlangıç mesajını/sohbetini ayarla
-  displayHistory(); // Mevcut geçmişi göster
-  setTimeout(() => { if(userInput) userInput.focus(); }, 600); 
-});
-
-// Ana arayüz başlatıldığında çağrılır
-function initializeChatInterface() {
-    // Display history burada çağrılıyor zaten load event'inde.
-    // displayHistory(); 
-}
-
-// Avatar videosunu oynat
-function playIntroVideo() {
-  const video = introVideo || document.getElementById("intro-video");
-  const wrapper = videoWrapper || document.getElementById("video-wrapper");
-  const button = playButton || document.getElementById("play-button");
-
-  if (video && wrapper && button) {
-    wrapper.style.display = "flex"; 
-    wrapper.classList.remove("fade-out"); 
-    
-    // Videoyu görünür yapalım (CSS'de display:none yoksa zaten görünür olabilir)
-    // video.style.display = 'block'; // Eğer CSS'de gizliyse bunu aç
-
-    video.muted = false; 
-    video.currentTime = 0;
-    
-    video.play().then(() => {
-        button.textContent = "🔊 Oynatılıyor..."; 
-        button.disabled = true; 
-    }).catch(e => {
-        console.warn("Video otomatik oynatılamadı:", e);
-        wrapper.style.display = 'none'; 
-    });
-
-    video.onended = () => {
-      wrapper.classList.add("fade-out");
-      button.textContent = "🎤 Dinle"; 
-      button.disabled = false; 
-      
-      setTimeout(() => {
-          if (wrapper.classList.contains('fade-out')) { 
-             wrapper.style.display = "none"; 
-             // video.style.display = 'none'; // Videoyu da gizle
-             wrapper.classList.remove("fade-out"); 
-          }
-      }, 1500); 
-    };
-  } else {
-      console.error("Video veya kontrol elemanları bulunamadı!");
-  }
-}
-
-
-// Sayfa kapanmadan önce mevcut sohbeti kaydet
-window.addEventListener('beforeunload', () => {
-  saveCurrentConversation();
-});
+  appendMessage("Sen
