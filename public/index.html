@@ -9,20 +9,16 @@
 </head>
 <body>
 
-  <!-- Splash ekranı -->
   <div id="splash-screen">
     <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
   </div>
 
-  <!-- Sağ üst köşe butonları -->
   <div class="top-right-buttons">
     <a href="#" class="auth-button register-button">Üye Ol</a>
     <a href="#" class="auth-button login-button">Üye Girişi</a>
   </div>
 
-  <!-- Ana Layout -->
   <div class="main-layout" style="display: none;" id="main-interface">
-    <!-- Sidebar -->
     <div class="sidebar">
       <div class="sidebar-header">
         <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
@@ -44,7 +40,6 @@
       </div>
     </div>
 
-    <!-- İçerik Alanı -->
     <div class="content-area">
       <div class="chat-container" id="chat-box">
         <div class="message bot-message">
@@ -53,21 +48,22 @@
         </div>
       </div>
 
-      <!-- Chat Giriş Kutusu -->
       <div class="chat-input">
         <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
         <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+        
+        <button id="gorsel-buton" title="Görsel Oluştur">
+          <i class="fas fa-image"></i> </button>
+        
         <button onclick="sendMessage()">Gönder</button>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
   </footer>
 
-  <!-- 🎬 Avatar Video ve Buton -->
   <div id="video-wrapper">
     <video id="intro-video">
       <source src="talking-avatar.mp4" type="video/mp4" />
