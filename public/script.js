@@ -7,7 +7,7 @@ let currentConversation = [];
 let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 let sendArrowButton;
 let gorselButton;
-let searchButton; // *** YENİ BUTON İÇİN DEĞİŞKEN ***
+let searchButton; // === YENİ BUTON DEĞİŞKENİ ===
 let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
 
@@ -16,10 +16,11 @@ const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
 // --- Yükleniyor animasyonunu ekleme/kaldırma fonksiyonları ---
 function showLoadingIndicator() {
     if (!chatBox) return;
+    // Önceki yükleniyor mesajı varsa kaldır
     hideLoadingIndicator();
 
     loadingMessageElement = document.createElement("div");
-    loadingMessageElement.classList.add("message", "bot-message", "loading-indicator");
+    loadingMessageElement.classList.add("message", "bot-message", "loading-indicator"); // Özel sınıf ekle
     loadingMessageElement.innerHTML = `
         <span class="dots-container">
             <span class="dot"></span>
@@ -28,6 +29,7 @@ function showLoadingIndicator() {
         </span>
     `;
     chatBox.appendChild(loadingMessageElement);
+    // Scroll to bottom
     setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
 }
 
@@ -36,8 +38,9 @@ function hideLoadingIndicator() {
         loadingMessageElement.remove();
         loadingMessageElement = null;
     }
-     const oldIndicators = chatBox?.querySelectorAll('.loading-indicator'); // chatBox null kontrolü
-     oldIndicators?.forEach(el => el.remove()); // chatBox null kontrolü
+     // Ekstra kontrol: Bazen eski mesajlar kalabilir, onları da temizleyelim
+     const oldIndicators = chatBox.querySelectorAll('.loading-indicator');
+     oldIndicators.forEach(el => el.remove());
 }
 // --- Yükleniyor fonksiyonları sonu ---
 
@@ -49,8 +52,8 @@ async function handleGenerateImageClick() {
         return;
     }
 
-    appendMessage("Sen", prompt, "user", true);
-    showLoadingIndicator();
+    appendMessage("Sen", prompt, "user", true); // Önce kullanıcının promptunu ekle
+    showLoadingIndicator(); // Yükleniyor animasyonunu göster
     userInput.value = "";
     if (sendArrowButton) {
         sendArrowButton.classList.remove('visible');
@@ -64,7 +67,7 @@ async function handleGenerateImageClick() {
         });
         const data = await res.json();
 
-        hideLoadingIndicator();
+        hideLoadingIndicator(); // Cevap gelince animasyonu kaldır
 
         if (data.image_url) {
             const gorselHTML = `
@@ -75,50 +78,36 @@ async function handleGenerateImageClick() {
                     </button>
                 </div>
             `;
+            // Prompt zaten eklendi, sadece cevabı ekle
             appendMessage("SibelGPT", gorselHTML, "bot", true);
         } else {
             appendMessage("SibelGPT", "❗ Görsel üretilemedi: " + (data.error || 'Bilinmeyen bir sunucu hatası oluştu.'), "bot", true);
         }
     } catch (e) {
-        hideLoadingIndicator();
+        hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
         console.error("Görsel buton hatası:", e);
         appendMessage("SibelGPT", "⚠️ Görsel üretme servisine bağlanırken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     }
 }
 
-// *** YENİ İNTERNET ARAMA BUTONU İŞLEVİ (ŞİMDİLİK BOŞ) ***
+// === YENİ İNTERNET ARAMA BUTONU TIKLAMA İŞLEVİ (ŞİMDİLİK BOŞ) ===
 async function handleInternetSearchClick() {
     const prompt = userInput?.value?.trim(); // Girdiyi al (null kontrolü)
     console.log('İnternet Araması butonu tıklandı!');
-    alert('İnternet arama özelliği yakında eklenecektir.');
+    alert('İnternet arama özelliği yakında eklenecektir. Backend bağlantısı bekleniyor.');
 
     // TODO: Backend'e Serper API isteği gönderecek kod buraya gelecek.
     // Bu fonksiyon backend entegrasyonu yapıldığında güncellenecek.
-    // Örnek adımlar:
-    // if (!prompt) { alert("Lütfen arama için bir konu yazın."); return; }
-    // appendMessage("Sen", `İnternette şunu ara: ${prompt}`, "user", true);
-    // showLoadingIndicator();
-    // userInput.value = "";
-    // try {
-    //      const res = await fetch(`${BACKEND_URL}/search`, { /* ... */ });
-    //      const data = await res.json();
-    //      hideLoadingIndicator();
-    //      appendMessage("SibelGPT", data.searchResult || "Arama sonucu bulunamadı.", "bot", true);
-    // } catch (e) {
-    //      hideLoadingIndicator();
-    //      appendMessage("SibelGPT", "⚠️ Arama sırasında bir hata oluştu.", "bot", true);
-    // }
 }
-// *** YENİ İNTERNET ARAMA BUTONU İŞLEVİ SONU ***
-
+// =============================================================
 
 // Ana mesaj gönderme fonksiyonu (Sohbet için)
 async function sendMessage() {
-  const message = userInput?.value?.trim(); // null kontrolü
+  const message = userInput.value.trim();
   if (!message) return;
 
-  appendMessage("Sen", message, "user", true);
-  showLoadingIndicator();
+  appendMessage("Sen", message, "user", true); // Kullanıcı mesajını ekle
+  showLoadingIndicator(); // Animasyonu göster
   userInput.value = "";
   if (sendArrowButton) {
       sendArrowButton.classList.remove('visible');
@@ -131,14 +120,14 @@ async function sendMessage() {
       body: JSON.stringify({ question: message }),
     });
 
-    hideLoadingIndicator();
+    hideLoadingIndicator(); // Cevap gelince animasyonu kaldır
 
     const data = await response.json();
     const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
     appendMessage("SibelGPT", reply, "bot", true);
 
   } catch (error) {
-     hideLoadingIndicator();
+     hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
      appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu veya sunucuya ulaşılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     console.error("Mesaj gönderirken hata:", error);
   }
@@ -160,12 +149,10 @@ function appendMessage(sender, text, role, addToHistory = false) {
          while (contentDiv.firstChild) {
              messageElem.appendChild(contentDiv.firstChild);
          }
-    } else if (typeof text === 'string') { // Sadece string ise metin düğümü oluştur
+    } else if (typeof text === 'string') {
          const textNode = document.createTextNode(text);
          messageElem.appendChild(textNode);
     } else {
-        // Eğer text bir HTML elementi veya başka bir node ise doğrudan ekle
-        // (Bu durum genellikle olmaz ama güvenlik için kontrol)
         try {
              messageElem.appendChild(text);
         } catch (e) {
@@ -175,16 +162,13 @@ function appendMessage(sender, text, role, addToHistory = false) {
         }
     }
 
-
     chatBox.appendChild(messageElem);
 
     if (addToHistory && currentConversation) {
-        // Metin içeriğini alırken HTML'i düz metne çevirmeye çalışalım (isteğe bağlı)
         let historyText = text;
         if (typeof text === 'string' && text.includes('<img')) {
-            historyText = "[Üretilen Görsel]"; // Görseli geçmişte metinle temsil et
+            historyText = "[Üretilen Görsel]";
         } else if (typeof text === 'string' && text.includes('<')) {
-             // Diğer HTML'leri basitçe metne çevir
              const tempDiv = document.createElement('div');
              tempDiv.innerHTML = text;
              historyText = tempDiv.textContent || tempDiv.innerText || "[Karmaşık İçerik]";
@@ -193,7 +177,7 @@ function appendMessage(sender, text, role, addToHistory = false) {
     }
 
     setTimeout(() => {
-        if(chatBox) chatBox.scrollTop = chatBox.scrollHeight; // null kontrolü
+        if(chatBox) chatBox.scrollTop = chatBox.scrollHeight;
     }, 100);
 }
 
@@ -207,13 +191,13 @@ function indirGorsel(url) {
 function handleInputKeyPress(event) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
-    if(userInput && userInput.value.trim() !== '') { // null kontrolü
+    if(userInput && userInput.value.trim() !== '') {
        sendMessage();
     }
   }
 }
 
-// -------- History, Conversation, Clear vb. Fonksiyonlar (Değişiklik Yok) --------
+// -------- History, Conversation, Clear vb. Fonksiyonlar (Değişiklik Yok - önceki script.js'ten alındı) --------
 // Sohbet geçmişini Local Storage'dan yükle
 function loadConversations() {
   const conversationsJson = localStorage.getItem(HISTORY_STORAGE_KEY);
@@ -229,59 +213,84 @@ function loadConversations() {
 function saveConversations(conversations) {
   try {
     const MAX_HISTORY = 50;
+    // En yeni sohbetler başa eklendiği için, sondan değil baştan keselim
     if (conversations.length > MAX_HISTORY) {
-      conversations = conversations.slice(conversations.length - MAX_HISTORY); // En yeni 50'yi tut
+      conversations = conversations.slice(0, MAX_HISTORY);
     }
     localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(conversations));
   } catch (e) {
     console.error("Sohbet geçmişi kaydedilirken hata:", e);
      if (e.name === 'QuotaExceededError' && conversations.length > 0) {
          console.warn("Depolama alanı dolu, en eski sohbet siliniyor.");
-         saveConversations(conversations.slice(1)); // En eskiden 1 tane sil
+         // En sondaki (en eski) sohbeti sil
+         saveConversations(conversations.slice(0, conversations.length - 1));
      }
   }
 }
 // Mevcut sohbeti kaydet (eğer anlamlıysa)
 function saveCurrentConversation() {
-  if (!currentConversation || currentConversation.length <= 1) return; // Başlangıç mesajı hariç mesaj yoksa kaydetme
-  const chatId = currentConversation[0]?.chatId || Date.now(); // Varsa mevcut ID'yi kullan, yoksa yeni oluştur
+  // İlk mesaj (bot mesajı) hariç kullanıcıdan veya bottan mesaj varsa kaydet
+  if (!currentConversation || currentConversation.length <= 1) return;
+
+  // Sohbetin ID'sini ilk mesajdan alalım (varsa)
+  const chatId = currentConversation[0]?.chatId || Date.now(); // Varsa kullan, yoksa yeni oluştur
+
   const title = generateConversationTitle(currentConversation);
   let conversations = loadConversations();
+
+  // Bu ID ile kayıtlı bir sohbet zaten var mı diye kontrol et
   const existingIndex = conversations.findIndex(c => c.id === chatId);
-  const conversationData = { id: chatId, title: title, messages: currentConversation, lastUpdated: Date.now() };
+
+  const conversationData = {
+      id: chatId,
+      title: title,
+      messages: JSON.parse(JSON.stringify(currentConversation)), // Derin kopya alalım
+      lastUpdated: Date.now() // Son güncellenme zamanı
+  };
 
   if (existingIndex > -1) {
-      conversations[existingIndex] = conversationData; // Var olanı güncelle
+      // Varsa, güncelle
+      conversations[existingIndex] = conversationData;
+      console.log("Sohbet güncellendi:", chatId);
   } else {
-      conversations.unshift(conversationData); // Yeni sohbeti başa ekle
+      // Yoksa, yeni olarak başa ekle
+      conversations.unshift(conversationData);
+      console.log("Yeni sohbet kaydedildi:", chatId);
   }
-  // Tarihe göre sırala (en yeni üstte) - İsteğe bağlı
+
+  // Tarihe göre sırala (en yeni üstte)
   conversations.sort((a, b) => (b.lastUpdated || b.id) - (a.lastUpdated || a.id));
 
   saveConversations(conversations);
 }
+
 // Sohbet için başlık oluştur
 function generateConversationTitle(conversation) {
   const firstUserMessage = conversation.find(msg => msg.role === 'user');
   if (firstUserMessage?.text) {
-    const text = String(firstUserMessage.text).trim(); // String'e çevir ve trim yap
+    const text = String(firstUserMessage.text).trim();
     if (text.toLowerCase().includes("görsel") || text.toLowerCase().includes("çiz") || text === "[Üretilen Görsel]") {
-        return "🖼️ Görsel Sohbeti"; // Emoji eklendi
+        return "🖼️ Görsel Sohbeti";
     }
-     // Başlıkta HTML olmamasını sağla
      const tempDiv = document.createElement('div');
      tempDiv.innerHTML = text;
      const cleanText = tempDiv.textContent || tempDiv.innerText || "";
 
     return cleanText.length > 35 ? cleanText.substring(0, cleanText.lastIndexOf(' ', 35) || 35) + '...' : (cleanText || "Yeni Sohbet");
   }
-  return "💬 Yeni Sohbet"; // Emoji eklendi
+  // Eğer kullanıcı mesajı yoksa (sadece başlangıç mesajı varsa) veya text yoksa
+  const firstBotMessage = conversation.find(msg => msg.role === 'bot');
+  if (firstBotMessage?.text?.includes("Merhaba")) {
+      return "💬 Yeni Sohbet";
+  }
+  return "Adsız Sohbet"; // Genel yedek başlık
 }
 // Sohbeti temizle
 function clearChat() {
   if(!chatBox) return;
   chatBox.innerHTML = '';
-  const initialBotMessageHTML = `<strong>SibelGPT:</strong> Merhaba! Ben SibelGPT, dijital asistanınız. Gayrimenkul, numeroloji, finans ve kişisel gelişim konularında size yardımcı olabilirim. Nasıl başlayabiliriz?`;
+  // Orijinal script'teki başlangıç mesajını kullanalım [cite: 1]
+  const initialBotMessageHTML = `<strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!`;
   const initialBotMessageElem = document.createElement("div");
   initialBotMessageElem.classList.add("message", "bot-message");
   initialBotMessageElem.innerHTML = initialBotMessageHTML;
@@ -290,7 +299,7 @@ function clearChat() {
       sender: 'SibelGPT',
       text: initialBotMessageHTML.replace(/<strong>.*?<\/strong>/g, '').trim(),
       role: 'bot',
-      chatId: Date.now() // Yeni sohbet için yeni ID
+      chatId: Date.now() // Yeni sohbet için yeni ID ata
   }];
   highlightSelectedChat(null);
   if(userInput) userInput.value = "";
@@ -299,7 +308,7 @@ function clearChat() {
 // Geçmiş sohbetleri kenar çubuğunda göster
 function displayHistory() {
   if(!historyList) return;
-  const conversations = loadConversations();
+  let conversations = loadConversations();
   // Tarihe göre sırala (en yeni üstte)
   conversations.sort((a, b) => (b.lastUpdated || b.id) - (a.lastUpdated || a.id));
 
@@ -312,95 +321,128 @@ function displayHistory() {
     historyList.appendChild(placeholder);
   } else {
     conversations.forEach(conv => {
+      if (!conv || !conv.id) { // Geçersiz sohbet verisini atla
+          console.warn("Geçersiz sohbet verisi bulundu, atlanıyor:", conv);
+          return;
+      }
       const listItem = document.createElement('li');
       listItem.textContent = conv.title || "Adsız Sohbet";
       listItem.setAttribute('data-chat-id', conv.id);
 
-      // Silme butonu
       const deleteButton = document.createElement('span');
-      deleteButton.innerHTML = '🗑️'; // ikonu doğrudan innerHTML ile
+      deleteButton.textContent = '🗑️';
       deleteButton.title = "Sohbeti Sil";
-      deleteButton.style.cssText = `
-          float: right;
-          cursor: pointer;
-          margin-left: 10px;
-          visibility: hidden;
-          opacity: 0.7;
-          transition: opacity 0.2s ease;
-          font-size: 14px; /* Biraz küçülttük */
-          padding: 0 3px; /* Tıklama alanını hafif genişlet */
-      `;
+      // Orijinal script'teki stilleri kullanalım [cite: 1]
+      deleteButton.style.float = 'right';
+      deleteButton.style.cursor = 'pointer';
+      deleteButton.style.marginLeft = '10px';
+      deleteButton.style.visibility = 'hidden';
+      // Hover için CSS class eklemek daha iyi olurdu ama şimdilik JS ile devam edelim
+      deleteButton.style.opacity = '0.7';
+      deleteButton.style.transition = 'opacity 0.2s ease';
+      deleteButton.style.fontSize = '14px';
+      deleteButton.style.padding = '0 3px';
+
       deleteButton.onclick = (e) => {
           e.stopPropagation();
           deleteConversation(conv.id);
       };
-      deleteButton.onmouseover = () => { deleteButton.style.opacity = '1'; };
-      deleteButton.onmouseout = () => { deleteButton.style.opacity = '0.7'; };
-
+      // Hover stilleri
+       listItem.onmouseover = () => { deleteButton.style.visibility = 'visible'; };
+       listItem.onmouseout = () => { deleteButton.style.visibility = 'hidden'; };
+       deleteButton.onmouseover = () => { deleteButton.style.opacity = '1'; };
+       deleteButton.onmouseout = () => { deleteButton.style.opacity = '0.7'; };
 
       listItem.appendChild(deleteButton);
-      listItem.onmouseover = () => { deleteButton.style.visibility = 'visible'; };
-      listItem.onmouseout = () => { deleteButton.style.visibility = 'hidden'; };
-
       historyList.appendChild(listItem);
     });
   }
 }
 // Seçili sohbeti yükle
 function loadConversation(chatId) {
-  saveCurrentConversation(); // Önce mevcut sohbeti kaydet
+  // Sohbet ID'si geçerli mi diye kontrol et
+  if (chatId === undefined || chatId === null || chatId === "undefined" || chatId === "null") {
+      console.error("Geçersiz sohbet ID'si ile yükleme denendi:", chatId);
+      handleNewChat(); // Hatalı durumda yeni sohbet başlat
+      return;
+  }
+
+  saveCurrentConversation(); // Mevcut sohbeti kaydetmeyi dene (varsa)
+
   const conversations = loadConversations();
-  const conversationToLoad = conversations.find(conv => conv.id == chatId);
+  const conversationToLoad = conversations.find(conv => conv && conv.id == chatId); // conv null kontrolü
+
   if (conversationToLoad) {
-    clearChat(); // Ekranı temizle
-    currentConversation = [{ // Başlangıç mesajını ayarla (ama yeni ID ile değil, yüklenen ID ile)
+    clearChat(); // Ekranı temizle, yeni ID ile başlangıç mesajı ekler
+
+    // clearChat yeni bir ID ürettiği için, yüklenen sohbetin ID'sini ve mesajlarını tekrar ayarlamalıyız
+    currentConversation = [{ // Başlangıç mesajını tekrar oluştur ama doğru ID ile
         sender: 'SibelGPT',
-        text: chatBox.querySelector('.bot-message')?.textContent?.replace('SibelGPT:', '').trim() || "Merhaba!", // null kontrolü
+        // chatBox'taki ilk mesajdan almak yerine sabit metni kullanalım, daha güvenli
+        text: "Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!",
         role: 'bot',
         chatId: conversationToLoad.id // Yüklenen sohbetin ID'sini kullan
     }];
+    // chatBox'taki ilk mesajı da doğru ID'li olana göre güncelleyebiliriz (opsiyonel)
+    // chatBox.children[0].setAttribute('data-message-id', conversationToLoad.id + '-0');
 
+    // Yüklenen mesajları ekle (başlangıç mesajı hariç)
     conversationToLoad.messages.forEach((msg, index) => {
-       // İlk mesajı (botun başlangıç mesajı) tekrar ekleme, zaten clearChat ekledi
-       if (index > 0) {
+       if (index > 0) { // İlk (bot) mesajı atla
            appendMessage(msg.sender, msg.text, msg.role, false); // Geçmişe ekleme (false)
        }
     });
-    // currentConversation'ı yüklenen mesajlarla güncelle
+
+    // currentConversation'ı yüklenen mesajlarla güncelle (derin kopya)
     currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages));
-    // Yüklenen sohbetin ID'sini ilk mesaja da ekleyelim (tutarlılık için)
+    // Yüklenen sohbetin ID'sini ilk mesaja tekrar ekleyelim (tutarlılık)
     if(currentConversation[0]) {
         currentConversation[0].chatId = conversationToLoad.id;
     }
 
     highlightSelectedChat(chatId);
-    if(userInput) userInput.focus(); // null kontrolü
+    if(userInput) userInput.focus();
   } else {
       console.error("Sohbet bulunamadı:", chatId);
-      handleNewChat(); // Sohbet bulunamazsa yeni sohbet başlat
+      handleNewChat(); // Bulamazsa yeni sohbet başlat
   }
 }
 // Kenar çubuğunda seçili sohbeti vurgula
 function highlightSelectedChat(chatId) {
     if (!historyList) return;
     historyList.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
-    if (chatId !== null) {
-        const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
-        if (selectedItem) selectedItem.classList.add('selected');
+    if (chatId !== null && chatId !== undefined) { // null ve undefined kontrolü
+        try {
+            // ID'ler sayısal olduğu için seçiciyi attribute=value şeklinde kullanmak daha güvenli
+            const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            } else {
+                 // Eğer listede eleman yoksa (silinmiş olabilir), vurgu yapma
+                 console.warn("Vurgulanacak sohbet öğesi bulunamadı:", chatId);
+            }
+        } catch (e) {
+            console.error("Seçili sohbet vurgulanırken hata (geçersiz ID olabilir):", chatId, e);
+        }
     }
 }
 // Geçmiş listesinden bir sohbete tıklandığında
 function handleHistoryClick(event) {
   const clickedElement = event.target;
-  // Doğrudan silme ikonuna tıklanmadıysa devam et
-  if (clickedElement.innerHTML === '🗑️') {
-      return;
-  }
-  const listItem = clickedElement.closest('li');
-  if (listItem && listItem.hasAttribute('data-chat-id')) {
+  const listItem = clickedElement.closest('li[data-chat-id]'); // Sadece ID'si olan li'leri hedefle
+
+  if (listItem) {
+       // Doğrudan silme ikonuna mı tıklandı?
+       if (clickedElement.tagName === 'SPAN' && clickedElement.textContent === '🗑️') {
+           return; // Silme fonksiyonu zaten tetiklendi
+       }
        const chatId = listItem.getAttribute('data-chat-id');
-       loadConversation(chatId);
-       if(userInput) userInput.focus(); // null kontrolü
+       if (chatId) { // ID'nin varlığını kontrol et
+           loadConversation(chatId);
+           if(userInput) userInput.focus();
+       } else {
+           console.warn("Tıklanan öğede sohbet ID'si bulunamadı.");
+       }
   }
 }
 // Bir sohbeti silme fonksiyonu
@@ -410,27 +452,36 @@ function deleteConversation(chatId) {
     }
     let conversations = loadConversations();
     const initialLength = conversations.length;
-    conversations = conversations.filter(conv => conv.id != chatId);
+    conversations = conversations.filter(conv => conv && conv.id != chatId); // conv null kontrolü
 
-    if (conversations.length < initialLength) { // Silme başarılı olduysa
+    if (conversations.length < initialLength) {
         saveConversations(conversations);
-        displayHistory(); // Listeyi yenile
+        displayHistory();
 
-        const selectedLi = historyList ? historyList.querySelector('.selected') : null; // null kontrolü
-         // Silinen sohbet seçili olan mıydı? Veya hiç sohbet kalmadı mı?
-         if (conversations.length === 0 || (selectedLi && selectedLi.getAttribute('data-chat-id') == chatId)) {
-             handleNewChat(); // Yeni boş sohbet başlat
-         }
+        // Silinen sohbet şu an ekranda açık olan mıydı?
+        const currentChatId = currentConversation[0]?.chatId;
+        if (currentChatId == chatId || conversations.length === 0) {
+             handleNewChat(); // Evet ise veya hiç sohbet kalmadıysa yeni sohbet başlat
+        } else {
+             // Hayır ise, listedeki ilk sohbeti seçili yapabiliriz (isteğe bağlı)
+             // veya hiçbirini seçili yapmayabiliriz. Şimdilik bir şey yapmayalım.
+             highlightSelectedChat(null); // Vurguyu kaldır
+        }
+
     } else {
         console.warn("Silinecek sohbet bulunamadı:", chatId);
     }
 }
 // Yeni sohbet butonu işlevi
 function handleNewChat() {
-  saveCurrentConversation(); // Varsa mevcut sohbeti kaydet
-  clearChat(); // Ekranı temizle ve yeni ID ile başlangıç mesajını ayarla
-  displayHistory(); // Kenar çubuğunu yenile (yeni sohbet başa gelmeli)
-  if(userInput) userInput.focus(); // null kontrolü
+  saveCurrentConversation();
+  clearChat();
+  // displayHistory(); // clearChat zaten history'yi yenilemeli? Tekrar çağırmaya gerek yok gibi.
+                     // Ama clearChat ID ataması yaptığı için save/load döngüsünü
+                     // bozabilir. displayHistory'yi burada çağırmak daha güvenli.
+  displayHistory();
+  highlightSelectedChat(null); // Yeni sohbette seçili öğe olmamalı
+  if(userInput) userInput.focus();
 }
 // -------- History, Conversation, Clear vb. Fonksiyonlar Sonu --------
 
@@ -446,7 +497,7 @@ window.addEventListener("load", () => {
   mainInterface = document.getElementById("main-interface");
   sendArrowButton = document.getElementById('send-arrow-button');
   gorselButton = document.getElementById('gorsel-buton');
-  searchButton = document.getElementById('search-button'); // *** YENİ BUTON SEÇİMİ ***
+  searchButton = document.getElementById('search-button'); // === YENİ BUTON ===
   videoWrapper = document.getElementById('video-wrapper');
   introVideo = document.getElementById('intro-video');
   playButton = document.getElementById('play-button');
@@ -455,44 +506,47 @@ window.addEventListener("load", () => {
   if (splashScreen) {
       splashScreen.addEventListener('animationend', (event) => {
           // Sadece logo animasyonu bittiğinde tetikle
-          if (event.animationName === 'fadeInOut' && event.target === splashScreen.querySelector('.splash-logo')) {
+          if (event.animationName === 'fadeInOut' && event.target.classList.contains('splash-logo')) {
               splashScreen.style.opacity = 0;
               setTimeout(() => {
                   splashScreen.style.display = "none";
                   if(mainInterface) mainInterface.style.display = "flex"; // Ana arayüzü göster
-                  initializeChatInterface(); // Sohbet arayüzünü başlat
-                  if (videoWrapper && !localStorage.getItem('introPlayed')) { // Daha önce oynatılmadıysa göster
+                  // initializeChatInterface(); // Bu fonksiyon artık çok bir şey yapmıyor
+                  if (videoWrapper && !localStorage.getItem('introPlayed')) {
                       videoWrapper.style.display = "flex";
-                      // localStorage.setItem('introPlayed', 'true'); // Tekrar göstermemek için işaretle
                   }
+                   // Başlangıçta odaklanma burada daha mantıklı olabilir
+                   setTimeout(() => { if(userInput) userInput.focus(); }, 100);
               }, 500); // Opacity geçişi için bekle
           }
       });
-      // Güvenlik önlemi: Eğer animasyon bir şekilde tetiklenmezse belirli bir süre sonra yine de kaldır
+       // Güvenlik önlemi: 5 sn sonra zorla kaldır (animasyon takılırsa diye)
        setTimeout(() => {
-            if (splashScreen.style.display !== 'none') {
+            if (splashScreen && splashScreen.style.display !== 'none') {
+                 console.warn("Splash animasyonu takıldı, zorla kapatılıyor.");
                  splashScreen.style.opacity = 0;
                  setTimeout(() => {
-                     splashScreen.style.display = "none";
+                     if(splashScreen) splashScreen.style.display = "none";
                       if(mainInterface) mainInterface.style.display = "flex";
-                      initializeChatInterface();
-                       if (videoWrapper && !localStorage.getItem('introPlayed')) {
-                           videoWrapper.style.display = "flex";
+                      if (videoWrapper && !localStorage.getItem('introPlayed')) {
+                          videoWrapper.style.display = "flex";
                       }
+                      setTimeout(() => { if(userInput) userInput.focus(); }, 100);
                  }, 500);
             }
-       }, 5000); // 5 saniye sonra
+       }, 5000);
 
   } else {
        // Splash ekranı yoksa doğrudan başlat
        if(mainInterface) mainInterface.style.display = "flex";
-       initializeChatInterface();
-        if (videoWrapper && !localStorage.getItem('introPlayed')) {
-            videoWrapper.style.display = "flex";
-        }
+       // initializeChatInterface();
+       if (videoWrapper && !localStorage.getItem('introPlayed')) {
+           videoWrapper.style.display = "flex";
+       }
+       setTimeout(() => { if(userInput) userInput.focus(); }, 100);
   }
 
-  // Olay dinleyicilerini ekle
+  // Olay dinleyicilerini ekle (null kontrolü ile)
   if (userInput) {
       userInput.addEventListener("keypress", handleInputKeyPress);
       userInput.addEventListener('input', () => {
@@ -504,78 +558,75 @@ window.addEventListener("load", () => {
               }
           }
       });
-  }
+  } else { console.error("User input elementi bulunamadı!"); }
+
   if (newChatButton) {
       newChatButton.addEventListener("click", handleNewChat);
-  }
+  } else { console.error("Yeni sohbet butonu bulunamadı!"); }
+
   if (historyList) {
       historyList.addEventListener("click", handleHistoryClick);
-  }
+  } else { console.error("Geçmiş listesi elementi bulunamadı!"); }
+
   if (sendArrowButton) {
       sendArrowButton.addEventListener('click', sendMessage);
-  }
+  } // Gönder oku butonu isteğe bağlı olabilir, hata vermeyelim
+
   if (gorselButton) {
       gorselButton.addEventListener('click', handleGenerateImageClick);
-  }
-  // *** YENİ BUTON İÇİN OLAY DİNLEYİCİSİ ***
+  } else { console.error("Görsel butonu bulunamadı!"); }
+
+  // === YENİ BUTON OLAY DİNLEYİCİSİ ===
   if (searchButton) {
       searchButton.addEventListener('click', handleInternetSearchClick);
-  }
-  // *** -------------------------------- ***
+  } else { console.error("Arama butonu bulunamadı!"); }
+  // =================================
+
    if (playButton) {
        playButton.addEventListener('click', playIntroVideo);
-   }
+   } // Video butonu isteğe bağlı olabilir
 
-   // Başlangıçta ekranı temizle ve geçmişi yükle (Initialize içinde değil, burada)
-   initializeChatInterface(); // Bu fonksiyon şimdi daha çok başlangıç ayarları yapacak
-
-   // Kullanıcı arayüzü göründükten sonra input'a odaklan
-   setTimeout(() => { if(userInput) userInput.focus(); }, 600); // Biraz gecikme
+   // Başlangıçta sohbeti ve geçmişi ayarla
+   clearChat();
+   displayHistory();
 });
 
-// Ana arayüz başlatıldığında çağrılır (Artık sadece başlangıç ayarları)
-function initializeChatInterface() {
-    clearChat(); // Ekranı temizle ve başlangıç mesajını ayarla
-    displayHistory(); // Mevcut geçmişi göster
-}
-
+// Ana arayüz başlatıldığında çağrılır (Artık pek kullanılmıyor)
+// function initializeChatInterface() { }
 
 // Avatar videosunu oynat
 function playIntroVideo() {
-  const video = introVideo || document.getElementById("intro-video");
-  const wrapper = videoWrapper || document.getElementById("video-wrapper");
-  const button = playButton || document.getElementById("play-button");
+  const video = introVideo; // Global değişkeni kullan
+  const wrapper = videoWrapper;
+  const button = playButton;
 
   if (video && wrapper && button) {
-    wrapper.style.display = "flex"; // Görünür yap
-    wrapper.classList.remove("fade-out"); // Solma animasyonunu kaldır (varsa)
+    wrapper.style.display = "flex";
+    wrapper.classList.remove("fade-out");
 
-    video.muted = false; // Sesi aç
-    video.currentTime = 0; // Başa sar
+    video.muted = false;
+    video.currentTime = 0;
 
     video.play().then(() => {
         button.textContent = "🔊 Oynatılıyor...";
-        button.disabled = true; // Oynarken butonu pasif yap
+        button.disabled = true;
     }).catch(e => {
         console.warn("Video otomatik oynatılamadı, kullanıcı etkileşimi gerekebilir:", e);
-        // Otomatik oynatma engellendiyse, belki sadece butonu aktif bırakıp wrapper'ı gizlemeyebiliriz?
-        // Veya hata mesajı gösterebiliriz. Şimdilik gizleyelim.
+        // Hata durumunda wrapper'ı gizle
         wrapper.style.display = 'none';
         button.textContent = "🎤 Dinle"; // Buton metnini geri al
         button.disabled = false;       // Butonu tekrar aktif yap
     });
 
     video.onended = () => {
-      wrapper.classList.add("fade-out"); // Video bitince solma efekti ekle
+      wrapper.classList.add("fade-out");
       button.textContent = "🎤 Dinle";
       button.disabled = false;
 
-      // Solma animasyonu bitince display:none yap
       setTimeout(() => {
-          // Hâlâ fade-out sınıfı varsa gizle (başka bir işlem araya girmemişse)
           if (wrapper.classList.contains('fade-out')) {
              wrapper.style.display = "none";
-             wrapper.classList.remove("fade-out"); // Bir sonraki gösterim için sınıfı temizle
+             wrapper.classList.remove("fade-out");
           }
       }, 1500); // CSS'deki animasyon süresiyle uyumlu olmalı
     };
