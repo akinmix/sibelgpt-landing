@@ -270,3 +270,29 @@ body {
   align-self: flex-start;
   background-color: rgba(0, 0, 0, 0.6);
 }
+/* === İnternet Arama Butonu Stilleri (Eklendi) === */
+#search-button {
+  padding: 14px 20px; /* Görsel butonu ile aynı */
+  font-size: 16px; /* Görsel butonu ile aynı */
+  border-radius: 8px; /* Görsel butonu ile aynı */
+  background-color: #8e24aa; /* Görsel butonu ile aynı */
+  color: white; /* Görsel butonu ile aynı */
+  border: none; /* Görsel butonu ile aynı */
+  cursor: pointer; /* Görsel butonu ile aynı */
+  transition: background-color 0.2s ease; /* Görsel butonu ile aynı */
+  flex-shrink: 0; /* Görsel butonu ile aynı */
+  white-space: nowrap; /* Metin sığmazsa alt satıra inmesin */
+}
+
+#search-button:hover {
+  background-color: #a739c7; /* Görsel butonu ile aynı */
+}
+
+/* Mobil cihazlar için ek stil (isteğe bağlı ama önerilir) */
+@media (max-width: 768px) {
+  #search-button {
+    padding: 12px 15px; /* Görsel mobil butonu ile aynı */
+    font-size: 15px; /* Görsel mobil butonu ile aynı */
+  }
+}
+/* =============================================== */
