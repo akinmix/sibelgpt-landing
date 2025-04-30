@@ -143,9 +143,12 @@ function appendMessage(sender, text, role, addToHistory = false) {
          while (contentDiv.firstChild) {
              messageElem.appendChild(contentDiv.firstChild);
          }
-    } else {
-         const textNode = document.createTextNode(text); // Normal metin
-         messageElem.appendChild(textNode);
+    } else 
+         
+     const contentDiv = document.createElement('div');
+     contentDiv.innerHTML = text; // HTML gibi parse et
+     messageElem.appendChild(contentDiv);
+
     }
 
     chatBox.appendChild(messageElem);
