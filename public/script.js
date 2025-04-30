@@ -143,7 +143,7 @@ function appendMessage(sender, text, role, addToHistory = false) {
          while (contentDiv.firstChild) {
              messageElem.appendChild(contentDiv.firstChild);
          }
-    } else 
+    } else {
          
      const contentDiv = document.createElement('div');
      contentDiv.innerHTML = text; // HTML gibi parse et
