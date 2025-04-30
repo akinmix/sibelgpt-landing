@@ -126,30 +126,15 @@ async function sendMessage() {
 function appendMessage(sender, text, role, addToHistory = false) {
     if (!chatBox) return;
 
-    // Eğer bu bir yükleniyor mesajıysa, özel sınıfı ekle (ama bu fonksiyonu çağırmayacağız)
-    // Yükleniyor mesajını showLoadingIndicator halledecek.
-    
     const messageElem = document.createElement("div");
     messageElem.classList.add("message");
     messageElem.classList.add(role + "-message");
 
-    // Mesaj içeriğini ayarla
-    messageElem.innerHTML = `<strong>${sender}:</strong> `; // Gönderen adı
+    messageElem.innerHTML = `<strong>${sender}:</strong><br>`;
 
-    if (text.trim().startsWith('<div')) { // Görsel HTML'i ise
-        const contentDiv = document.createElement('div');
-        contentDiv.innerHTML = text; // HTML'i parse etmesi için geçici div
-        // Sadece div içeriğini alıp ekleyelim (div'in kendisini değil)
-         while (contentDiv.firstChild) {
-             messageElem.appendChild(contentDiv.firstChild);
-         }
-    } else {
-         
-     const contentDiv = document.createElement('div');
-     contentDiv.innerHTML = text; // HTML gibi parse et
-     messageElem.appendChild(contentDiv);
-
-    }
+    const contentDiv = document.createElement('div');
+    contentDiv.innerHTML = text;
+    messageElem.appendChild(contentDiv);
 
     chatBox.appendChild(messageElem);
 
@@ -161,7 +146,6 @@ function appendMessage(sender, text, role, addToHistory = false) {
         chatBox.scrollTop = chatBox.scrollHeight;
     }, 100);
 }
-
 
 // Görsel indirme fonksiyonu
 function indirGorsel(url) {
