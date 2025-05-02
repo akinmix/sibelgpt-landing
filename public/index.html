@@ -8,39 +8,56 @@
 </head>
 <body>
   <div class="container">
-    <!-- Açılış mesajı -->
-    <div class="welcome-message">
-      <strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!
-    </div>
-
-    <!-- Avatar ve Dinle -->
-    <div class="avatar-section">
-      <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" class="avatar-img" />
-      <button id="play-button" class="dinle-btn">▶️ Dinle</button>
-    </div>
-
-    <!-- Modül Seçici Butonlar -->
-    <div class="modul-buttons">
-      <button class="modul-btn">🏠 Gayrimenkul GPT</button>
-      <button class="modul-btn">🧠 Zihin Koçu GPT</button>
-      <button class="modul-btn">💰 Finans GPT</button>
-    </div>
-
-    <!-- Chat Alanı -->
-    <div class="chat-container">
-      <div class="chat-box" id="chat-box"></div>
-      <div class="input-row">
-        <img src="avatar-sibelgpt.png" class="input-avatar" />
-        <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-        <button id="send-button">Gönder</button>
-        <button id="image-button">Görsel Oluştur</button>
+    <aside class="sidebar">
+      <h1>SibelGPT</h1>
+      <button class="new-chat">+ Yeni Sohbet</button>
+      <div class="chat-history">
+        <div class="chat-item">merhaba</div>
+        <div class="chat-item">negatif düşüncelerle başa çıkmak...</div>
+        <div class="chat-item">merhaba</div>
       </div>
-    </div>
+      <div class="sidebar-footer">
+        <a href="mailto:sibel@sibelizim.com">📧 sibel@sibelizim.com</a>
+        <a href="https://sibelizim.com">🌐 sibelizim.com</a>
+        <a href="#">📄 sahibinden.com ilanlarım</a>
+        <a href="#">📄 remaxsonuç.com ilanlarım</a>
+      </div>
+    </aside>
 
-    <!-- Footer -->
-    <footer>
-      <p>Powered by <strong>OpenAI & Sibel Intelligence</strong></p>
-    </footer>
+    <main class="main">
+      <div class="intro">
+        <p><strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!</p>
+      </div>
+
+      <div class="avatar-container">
+        <img src="avatar-sibelgpt.png" alt="SibelGPT Avatarı" class="avatar-img" />
+        <button id="play-button">▶️ Dinle</button>
+
+        <div class="mode-buttons">
+          <button class="mode-button">🏠 Gayrimenkul GPT</button>
+          <button class="mode-button">🧠 Zihin Koçu GPT</button>
+          <button class="mode-button">💰 Finans GPT</button>
+        </div>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-container">
+          <img src="avatar-sibelgpt.png" alt="Küçük Avatar" class="small-avatar" />
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Sorunuzu yazın..."
+          />
+          <button id="send-button">Gönder</button>
+          <button id="image-button">🎨 Görsel Oluştur</button>
+        </div>
+      </div>
+
+      <footer>
+        <p>Powered by <strong>OpenAI & Sibel Intelligence</strong></p>
+      </footer>
+    </main>
   </div>
 
   <script src="script.js"></script>
