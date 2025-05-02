@@ -43,9 +43,18 @@
       justify-content: center;
       flex-wrap: nowrap;
       gap: 15px;
+      margin-bottom: 20px;
+    }
+    #intro-video {
+      width: 75%; /* 25% küçültme */
+      height: auto;
     }
     #play-button {
       margin-top: 0;
+    }
+    .content-flow {
+      display: flex;
+      flex-direction: column;
     }
     @media (max-width: 768px) {
       .gpt-modes {
@@ -98,25 +107,30 @@
     </div>
 
     <div class="content-area">
-      <div id="video-wrapper">
-        <video id="intro-video">
-          <source src="talking-avatar.mp4" type="video/mp4" />
-        </video>
-        <button id="play-button">🎤 Dinle</button>
+      <div class="content-flow">
+        <!-- Video wrapper ile dinle butonu yan yana -->
+        <div id="video-wrapper">
+          <video id="intro-video">
+            <source src="talking-avatar.mp4" type="video/mp4" />
+          </video>
+          <button id="play-button">🎤 Dinle</button>
+        </div>
+        
+        <!-- GPT modları konuşan avatarın altında -->
+        <div class="gpt-modes">
+          <button id="gayrimenkul-gpt" class="gpt-mode-button active">
+            <i class="fas fa-home"></i> GayrimenkulGPT
+          </button>
+          <button id="zihin-kocu-gpt" class="gpt-mode-button">
+            <i class="fas fa-brain"></i> Zihin Koçu GPT
+          </button>
+          <button id="finans-gpt" class="gpt-mode-button">
+            <i class="fas fa-coins"></i> Finans GPT
+          </button>
+        </div>
       </div>
       
-      <div class="gpt-modes">
-        <button id="gayrimenkul-gpt" class="gpt-mode-button active">
-          <i class="fas fa-home"></i> GayrimenkulGPT
-        </button>
-        <button id="zihin-kocu-gpt" class="gpt-mode-button">
-          <i class="fas fa-brain"></i> Zihin Koçu GPT
-        </button>
-        <button id="finans-gpt" class="gpt-mode-button">
-          <i class="fas fa-coins"></i> Finans GPT
-        </button>
-      </div>
-      
+      <!-- Sohbet kutusu hemen GPT modlarının altında -->
       <div class="chat-container" id="chat-box">
       </div>
 
