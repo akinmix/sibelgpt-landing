@@ -48,25 +48,16 @@
     <div class="content-area">
       <div class="chat-container" id="chat-box"></div>
 
-    <!-- ✅ Avatar ve Dinle butonu ortalanmış ve sade -->
-<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 16px;">
-  <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" style="width: 90px; border-radius: 10px;" />
-  <button id="play-button"
-    style="
-      padding: 6px 10px;
-      background-color: #8e44ad;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;">
-    🎤 Dinle
-  </button>
-</div>
+      <!-- ✅ Avatar + Dinle butonu ortalanmış ve görünür -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
+        <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" style="width: 90px; height: auto; border-radius: 10px;" />
+        <button id="play-button"
+          style="padding: 6px 10px; background-color: #8e44ad; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+          🎤 Dinle
+        </button>
+      </div>
 
-
-      <!-- ✅ Modül butonları -->
+      <!-- ✅ Modül Seçici Butonlar -->
       <div id="modul-secici" style="display: flex; justify-content: center; gap: 12px; margin: 14px 0; flex-wrap: wrap;">
         <button class="modul-btn" data-modul="emlak" style="padding: 10px 16px; border-radius: 10px; border: 1px solid #ccc; background-color: #ffffff10; color: white; font-weight: bold; cursor: pointer;">
           🏠 Gayrimenkul GPT
@@ -79,7 +70,7 @@
         </button>
       </div>
 
-      <!-- ✅ Chat kutusu -->
+      <!-- ✅ Chat input -->
       <div class="chat-input">
         <div class="input-wrapper">
           <button id="send-arrow-button" title="Gönder">
@@ -96,14 +87,13 @@
     <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
   </footer>
 
-  <!-- ✅ Video kısmı (yerinde kaldı) -->
+  <!-- ✅ Video Alanı -->
   <div id="video-wrapper" style="display: none;">
     <video id="intro-video">
       <source src="talking-avatar.mp4" type="video/mp4" />
     </video>
   </div>
 
-  <!-- ✅ Modül JS kodu -->
   <script>
     let aktifModul = "zihin"; // varsayılan
 
@@ -113,7 +103,6 @@
         document.querySelectorAll(".modul-btn").forEach(b => b.style.backgroundColor = "#ffffff10");
         btn.style.backgroundColor = "#ffffff40";
         console.log("Seçilen modül:", aktifModul);
-        // Buradan API'ye aktifModul gönderilebilir
       });
     });
   </script>
