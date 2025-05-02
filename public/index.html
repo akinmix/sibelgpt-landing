@@ -6,74 +6,6 @@
   <title>SibelGPT</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <style>
-    .gpt-modes {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 15px auto;
-      flex-wrap: wrap;
-      max-width: 600px;
-      /* Artık GPT kutularını direkt burada konumlandırıyoruz */
-      order: 2; /* Sırası: 1-avatar, 2-GPT kutular, 3-chat box */
-    }
-    .gpt-mode-button {
-      background-color: rgba(128, 0, 128, 0.8);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 15px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .gpt-mode-button:hover {
-      background-color: rgba(128, 0, 128, 1);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .gpt-mode-button.active {
-      background-color: #8e44ad;
-      box-shadow: 0 0 12px rgba(142, 68, 173, 0.6);
-    }
-    #video-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: nowrap;
-      gap: 15px;
-      margin-bottom: 20px;
-      order: 1; /* Sırası: 1-avatar, 2-GPT kutular, 3-chat box */
-    }
-    #intro-video {
-      width: 75%; /* 25% küçültme */
-      height: auto;
-    }
-    #play-button {
-      margin-top: 0;
-    }
-    /* Chat kutusunun yerini belirlemek için */
-    .chat-container {
-      order: 3; /* Sırası: 1-avatar, 2-GPT kutular, 3-chat box */
-    }
-    /* İçerik akışını dikey olarak ayarlıyoruz */
-    .content-area {
-      display: flex;
-      flex-direction: column;
-    }
-    @media (max-width: 768px) {
-      .gpt-modes {
-        flex-direction: column;
-        align-items: center;
-      }
-      #video-wrapper {
-        flex-direction: column;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -82,11 +14,12 @@
   </div>
 
   <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-    <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
-    <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
-    <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
-    <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
-  </div>
+  <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
+  <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
+
+  <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
+  <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
+</div>
 
   <div class="main-layout" style="display: none;" id="main-interface">
     <div class="sidebar">
@@ -112,53 +45,23 @@
         <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
         <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
       </div>
-    </div>
+      </div>
 
     <div class="content-area">
-      <!-- SibelGPT Tanıtım Mesajı -->
-      <div class="bot-introduction">
-        <strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir
-        dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal
-        kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen
-        kararlar alın!
-      </div>
-
-      <!-- Video wrapper ile dinle butonu yan yana -->
-      <div id="video-wrapper">
-        <video id="intro-video">
-          <source src="talking-avatar.mp4" type="video/mp4" />
-        </video>
-        <button id="play-button">🎤 Dinle</button>
-      </div>
-      
-      <!-- GPT modları konuşan avatarın altında -->
-      <div class="gpt-modes">
-        <button id="gayrimenkul-gpt" class="gpt-mode-button active">
-          <i class="fas fa-home"></i> GayrimenkulGPT
-        </button>
-        <button id="zihin-kocu-gpt" class="gpt-mode-button">
-          <i class="fas fa-brain"></i> Zihin Koçu GPT
-        </button>
-        <button id="finans-gpt" class="gpt-mode-button">
-          <i class="fas fa-coins"></i> Finans GPT
-        </button>
-      </div>
-      
-      <!-- Sohbet kutusu hemen GPT modlarının altında -->
       <div class="chat-container" id="chat-box">
-      </div>
+        </div>
 
       <div class="chat-input">
         <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
 
         <div class="input-wrapper">
           <button id="send-arrow-button" title="Gönder">
-            <i class="fas fa-arrow-up"></i>
-          </button>
+            <i class="fas fa-arrow-up"></i> </button>
           <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
         </div>
 
         <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
+
       </div>
     </div>
   </div>
@@ -167,55 +70,12 @@
     <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
   </footer>
 
+  <div id="video-wrapper">
+    <video id="intro-video">
+      <source src="talking-avatar.mp4" type="video/mp4" />
+    </video>
+    <button id="play-button">🎤 Dinle</button> </div>
+
   <script type="module" src="script.js"></script>
-  <script>
-    // GPT Mod Seçimi için gerekli kod
-    document.addEventListener('DOMContentLoaded', function() {
-      const modeButtons = document.querySelectorAll('.gpt-mode-button');
-      let currentMode = 'gayrimenkul-gpt'; // Varsayılan mod
-      
-      modeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          // Önceki aktif düğmeyi kaldır
-          modeButtons.forEach(btn => btn.classList.remove('active'));
-          
-          // Tıklanan düğmeyi aktif et
-          this.classList.add('active');
-          
-          // Mod değişikliğini kaydet
-          currentMode = this.id;
-          
-          // Kullanıcıya mod değişikliğini bildir
-          const chatBox = document.getElementById('chat-box');
-          const modeMessage = document.createElement('div');
-          modeMessage.classList.add('bot-message');
-          
-          let modeName = '';
-          let welcomeMessage = '';
-          
-          switch(currentMode) {
-            case 'gayrimenkul-gpt':
-              modeName = 'GayrimenkulGPT';
-              welcomeMessage = 'Gayrimenkul danışmanınız olarak size nasıl yardımcı olabilirim?';
-              break;
-            case 'zihin-kocu-gpt':
-              modeName = 'Zihin Koçu GPT';
-              welcomeMessage = 'Zihin koçunuz olarak size nasıl destek olabilirim?';
-              break;
-            case 'finans-gpt':
-              modeName = 'Finans GPT';
-              welcomeMessage = 'Finansal danışmanınız olarak size nasıl yardımcı olabilirim?';
-              break;
-          }
-          
-          modeMessage.innerHTML = `<div style="background-color: #f0f0f0; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; color: #666;">Mod değiştirildi: <strong>${modeName}</strong></div><p>${welcomeMessage}</p>`;
-          chatBox.appendChild(modeMessage);
-          
-          // Otomatik olarak en alta kaydır
-          chatBox.scrollTop = chatBox.scrollHeight;
-        });
-      });
-    });
-  </script>
 </body>
 </html>
