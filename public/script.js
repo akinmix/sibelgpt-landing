@@ -512,7 +512,7 @@ document.getElementById("google-login")?.addEventListener("click", async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
   });
-    
+
   if (error) {
     alert("Google ile girişte hata oluştu: " + error.message);
   }
