@@ -49,13 +49,25 @@
       <div class="chat-container" id="chat-box">
       </div>
 
-      <!-- ✅ Avatar + Dinle butonu hizalaması -->
-      <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 12px;">
-        <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" style="width: 100px; border-radius: 10px;" />
-        <button id="play-button" style="padding: 10px 16px; background-color: #8e44ad; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-          🎤 Dinle
-        </button>
-      </div>
+      <!-- ✅ Avatar ve Dinle butonu yatay hizalı ve görünür -->
+<div style="display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px;">
+  <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" style="width: 100px; border-radius: 10px;" />
+  <button id="play-button"
+    style="
+      padding: 6px 12px;
+      background-color: #8e44ad;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 10;
+      position: relative;">
+    🎤 Dinle
+  </button>
+</div>
+
 
       <!-- ✅ Modül butonları -->
       <div id="modul-secici" style="display: flex; justify-content: center; gap: 12px; margin: 14px 0; flex-wrap: wrap;">
