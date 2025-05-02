@@ -6,6 +6,43 @@
   <title>SibelGPT</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .gpt-modes {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .gpt-mode-button {
+      background-color: rgba(128, 0, 128, 0.8);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gpt-mode-button:hover {
+      background-color: rgba(128, 0, 128, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .gpt-mode-button.active {
+      background-color: #8e44ad;
+      box-shadow: 0 0 12px rgba(142, 68, 173, 0.6);
+    }
+    @media (max-width: 768px) {
+      .gpt-modes {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -48,6 +85,18 @@
       </div>
 
     <div class="content-area">
+      <div class="gpt-modes">
+        <button id="gayrimenkul-gpt" class="gpt-mode-button">
+          <i class="fas fa-home"></i> GayrimenkulGPT
+        </button>
+        <button id="zihin-kocu-gpt" class="gpt-mode-button">
+          <i class="fas fa-brain"></i> Zihin Koçu GPT
+        </button>
+        <button id="finans-gpt" class="gpt-mode-button">
+          <i class="fas fa-coins"></i> Finans GPT
+        </button>
+      </div>
+      
       <div class="chat-container" id="chat-box">
         </div>
 
@@ -77,5 +126,57 @@
     <button id="play-button">🎤 Dinle</button> </div>
 
   <script type="module" src="script.js"></script>
+  <script>
+    // GPT Mod Seçimi için gerekli kod
+    document.addEventListener('DOMContentLoaded', function() {
+      const modeButtons = document.querySelectorAll('.gpt-mode-button');
+      let currentMode = 'gayrimenkul-gpt'; // Varsayılan mod
+      
+      // İlk açılışta GayrimenkulGPT'yi aktif et
+      document.getElementById('gayrimenkul-gpt').classList.add('active');
+      
+      modeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Önceki aktif düğmeyi kaldır
+          modeButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Tıklanan düğmeyi aktif et
+          this.classList.add('active');
+          
+          // Mod değişikliğini kaydet
+          currentMode = this.id;
+          
+          // Kullanıcıya mod değişikliğini bildir
+          const chatBox = document.getElementById('chat-box');
+          const modeMessage = document.createElement('div');
+          modeMessage.classList.add('bot-message');
+          
+          let modeName = '';
+          let welcomeMessage = '';
+          
+          switch(currentMode) {
+            case 'gayrimenkul-gpt':
+              modeName = 'GayrimenkulGPT';
+              welcomeMessage = 'Gayrimenkul danışmanınız olarak size nasıl yardımcı olabilirim?';
+              break;
+            case 'zihin-kocu-gpt':
+              modeName = 'Zihin Koçu GPT';
+              welcomeMessage = 'Zihin koçunuz olarak size nasıl destek olabilirim?';
+              break;
+            case 'finans-gpt':
+              modeName = 'Finans GPT';
+              welcomeMessage = 'Finansal danışmanınız olarak size nasıl yardımcı olabilirim?';
+              break;
+          }
+          
+          modeMessage.innerHTML = `<div style="background-color: #f0f0f0; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; color: #666;">Mod değiştirildi: <strong>${modeName}</strong></div><p>${welcomeMessage}</p>`;
+          chatBox.appendChild(modeMessage);
+          
+          // Otomatik olarak en alta kaydır
+          chatBox.scrollTop = chatBox.scrollHeight;
+        });
+      });
+    });
+  </script>
 </body>
 </html>
