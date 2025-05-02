@@ -2,111 +2,134 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SibelGPT</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="logo.png" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: black url("arka_plan.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .intro-text {
+      margin-top: 20px;
+      max-width: 800px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .avatar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .avatar-container img {
+      width: 180px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    #play-button {
+      margin-top: 12px;
+      padding: 6px 12px;
+      background-color: #8e44ad;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .module-buttons {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .module-buttons button {
+      background-color: #1e1e1e;
+      border: 2px solid #888;
+      border-radius: 10px;
+      padding: 8px 14px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chat-input {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+
+    .chat-input input {
+      width: 500px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      margin-right: 8px;
+    }
+
+    .chat-input button {
+      background-color: #8e44ad;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 600px) {
+      .chat-input {
+        flex-direction: column;
+      }
+
+      .chat-input input {
+        width: 90%;
+        margin-bottom: 8px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-  <div id="splash-screen">
-    <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
+  <div class="intro-text">
+    <strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!
   </div>
 
-  <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-    <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
-    <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
-    <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
-    <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
+  <div class="avatar-container">
+    <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" />
+    <button id="play-button">🎤 Dinle</button>
   </div>
 
-  <div class="main-layout" style="display: none;" id="main-interface">
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
-        <span>SibelGPT</span>
-      </div>
-      <div class="new-chat-button">
-        <button><i class="fas fa-plus"></i> Yeni Sohbet</button>
-      </div>
-      <div class="history">
-        <h2>Geçmiş</h2>
-        <ul id="history-list">
-          <li>Henüz kaydedilmiş sohbet yok.</li>
-        </ul>
-      </div>
-      <div class="sidebar-links-group">
-        <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder">
-          <i class="fas fa-envelope"></i> sibel@sibelizim.com
-        </a>
-        <a href="https://www.sibelizim.com" target="_blank"><i class="fas fa-external-link-alt"></i> sibelizim.com</a>
-        <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
-        <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
-      </div>
-    </div>
-
-    <div class="content-area">
-      <div class="chat-container" id="chat-box"></div>
-
-      <!-- ✅ Avatar + Dinle butonu ortalanmış ve görünür -->
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
-        <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" style="width: 80px; height: auto; border-radius: 10px;" />
-        <button id="play-button"
-          style="padding: 6px 10px; background-color: #8e44ad; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
-          🎤 Dinle
-        </button>
-      </div>
-
-      <!-- ✅ Modül Seçici Butonlar -->
-      <div id="modul-secici" style="display: flex; justify-content: center; gap: 12px; margin: 14px 0; flex-wrap: wrap;">
-        <button class="modul-btn" data-modul="emlak" style="padding: 10px 16px; border-radius: 10px; border: 1px solid #ccc; background-color: #ffffff10; color: white; font-weight: bold; cursor: pointer;">
-          🏠 Gayrimenkul GPT
-        </button>
-        <button class="modul-btn" data-modul="zihin" style="padding: 10px 16px; border-radius: 10px; border: 1px solid #ccc; background-color: #ffffff10; color: white; font-weight: bold; cursor: pointer;">
-          🧠 Zihin Koçu GPT
-        </button>
-        <button class="modul-btn" data-modul="finans" style="padding: 10px 16px; border-radius: 10px; border: 1px solid #ccc; background-color: #ffffff10; color: white; font-weight: bold; cursor: pointer;">
-          💰 Finans GPT
-        </button>
-      </div>
-
-      <!-- ✅ Chat input -->
-      <div class="chat-input">
-        <div class="input-wrapper">
-          <button id="send-arrow-button" title="Gönder">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-        </div>
-        <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
-      </div>
-    </div>
+  <div class="module-buttons">
+    <button>🏡 Gayrimenkul GPT</button>
+    <button>🧠 Zihin Koçu GPT</button>
+    <button>💰 Finans GPT</button>
   </div>
 
-  <footer class="footer">
-    <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
-  </footer>
-
-  <!-- ✅ Video Alanı -->
-  <div id="video-wrapper" style="display: none;">
-    <video id="intro-video">
-      <source src="talking-avatar.mp4" type="video/mp4" />
-    </video>
+  <div class="chat-input">
+    <input type="text" placeholder="Sorunuzu yazın..." />
+    <button>Görsel Oluştur</button>
   </div>
-
-  <script>
-    let aktifModul = "zihin"; // varsayılan
-
-    document.querySelectorAll(".modul-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        aktifModul = btn.dataset.modul;
-        document.querySelectorAll(".modul-btn").forEach(b => b.style.backgroundColor = "#ffffff10");
-        btn.style.backgroundColor = "#ffffff40";
-        console.log("Seçilen modül:", aktifModul);
-      });
-    });
-  </script>
-
-  <script type="module" src="script.js"></script>
 </body>
 </html>
