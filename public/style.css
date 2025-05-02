@@ -531,3 +531,12 @@ body {
   }
 }
 /* ------ YÜKLENİYOR ANİMASYONU SONU ------ */
+
+/* Splash ekran gizlendiğinde */
+#splash-screen.gizli {
+  opacity: 0;
+  display: none;
+  z-index: -1;
+  pointer-events: none;
+}
+
