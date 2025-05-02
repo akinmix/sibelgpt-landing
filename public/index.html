@@ -11,9 +11,11 @@
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin: 10px auto 20px auto;
+      margin: 15px auto;
       flex-wrap: wrap;
       max-width: 600px;
+      /* Artık GPT kutularını direkt burada konumlandırıyoruz */
+      order: 2; /* Sırası: 1-avatar, 2-GPT kutular, 3-chat box */
     }
     .gpt-mode-button {
       background-color: rgba(128, 0, 128, 0.8);
@@ -44,6 +46,7 @@
       flex-wrap: nowrap;
       gap: 15px;
       margin-bottom: 20px;
+      order: 1; /* Sırası: 1-avatar, 2-GPT kutular, 3-chat box */
     }
     #intro-video {
       width: 75%; /* 25% küçültme */
@@ -52,7 +55,12 @@
     #play-button {
       margin-top: 0;
     }
-    .content-flow {
+    /* Chat kutusunun yerini belirlemek için */
+    .chat-container {
+      order: 3; /* Sırası: 1-avatar, 2-GPT kutular, 3-chat box */
+    }
+    /* İçerik akışını dikey olarak ayarlıyoruz */
+    .content-area {
       display: flex;
       flex-direction: column;
     }
@@ -107,27 +115,33 @@
     </div>
 
     <div class="content-area">
-      <div class="content-flow">
-        <!-- Video wrapper ile dinle butonu yan yana -->
-        <div id="video-wrapper">
-          <video id="intro-video">
-            <source src="talking-avatar.mp4" type="video/mp4" />
-          </video>
-          <button id="play-button">🎤 Dinle</button>
-        </div>
-        
-        <!-- GPT modları konuşan avatarın altında -->
-        <div class="gpt-modes">
-          <button id="gayrimenkul-gpt" class="gpt-mode-button active">
-            <i class="fas fa-home"></i> GayrimenkulGPT
-          </button>
-          <button id="zihin-kocu-gpt" class="gpt-mode-button">
-            <i class="fas fa-brain"></i> Zihin Koçu GPT
-          </button>
-          <button id="finans-gpt" class="gpt-mode-button">
-            <i class="fas fa-coins"></i> Finans GPT
-          </button>
-        </div>
+      <!-- SibelGPT Tanıtım Mesajı -->
+      <div class="bot-introduction">
+        <strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir
+        dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal
+        kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen
+        kararlar alın!
+      </div>
+
+      <!-- Video wrapper ile dinle butonu yan yana -->
+      <div id="video-wrapper">
+        <video id="intro-video">
+          <source src="talking-avatar.mp4" type="video/mp4" />
+        </video>
+        <button id="play-button">🎤 Dinle</button>
+      </div>
+      
+      <!-- GPT modları konuşan avatarın altında -->
+      <div class="gpt-modes">
+        <button id="gayrimenkul-gpt" class="gpt-mode-button active">
+          <i class="fas fa-home"></i> GayrimenkulGPT
+        </button>
+        <button id="zihin-kocu-gpt" class="gpt-mode-button">
+          <i class="fas fa-brain"></i> Zihin Koçu GPT
+        </button>
+        <button id="finans-gpt" class="gpt-mode-button">
+          <i class="fas fa-coins"></i> Finans GPT
+        </button>
       </div>
       
       <!-- Sohbet kutusu hemen GPT modlarının altında -->
