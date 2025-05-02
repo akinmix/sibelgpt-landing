@@ -355,7 +355,7 @@ window.addEventListener("load", () => {
           if (event.target.classList.contains('splash-logo')) { 
               splashScreen.style.opacity = 0;
               setTimeout(() => {
-                  splashScreen.style.display = "none";
+                  splashScreen.classList.add("gizli");
                   if(mainInterface) mainInterface.style.display = "flex";
                   initializeChatInterface(); 
                   if (videoWrapper) {
