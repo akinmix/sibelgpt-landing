@@ -508,13 +508,30 @@ document.getElementById('logout-button')?.addEventListener('click', async () => 
   location.reload(); // Sayfa yenilenir, oturum sıfırlanır
 });
 // Google ile Giriş Yap butonuna tıklanınca
-document.getElementById("google-login")?.addEventListener("click", async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-  });
+window.addEventListener("load", () => {
+  // Google ile Giriş
+  const googleBtn = document.getElementById("google-login");
+  if (googleBtn) {
+    googleBtn.addEventListener("click", async () => {
+      console.log("Google GİRİŞ tıklandı");
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      if (error) {
+        alert("Google ile girişte hata oluştu: " + error.message);
+      }
+    });
+  }
 
-  if (error) {
-    alert("Google ile girişte hata oluştu: " + error.message);
+  // Çıkış butonu (isteğe bağlı burada dursun)
+  const logoutBtn = document.getElementById("logout-button");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      alert("Çıkış yapıldı.");
+      location.reload();
+    });
   }
 });
+
 
