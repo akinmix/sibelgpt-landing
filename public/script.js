@@ -336,6 +336,55 @@ function handleNewChat() {
 
 // Sayfa yüklendiğinde çalışacak kodlar
 window.addEventListener("load", () => {
+  // ✅ Üye Ol / Giriş (E-Posta OTP) Butonları
+  const emailButtons = document.querySelectorAll('.register-button, .login-button');
+  emailButtons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const email = prompt("Lütfen e-posta adresinizi girin:");
+      if (!email) return;
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      if (error) {
+        alert("Hata: " + error.message);
+      } else {
+        alert("E-posta adresinize giriş bağlantısı gönderildi.");
+      }
+    });
+  });
+
+  // ✅ Google ile Giriş Butonu
+  const googleBtn = document.getElementById("google-login");
+  if (googleBtn) {
+    googleBtn.addEventListener("click", async () => {
+      console.log("Google GİRİŞ tıklandı");
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      if (error) {
+        alert("Google ile girişte hata oluştu: " + error.message);
+      }
+    });
+  }
+
+  // ✅ Çıkış Butonu
+  const logoutBtn = document.getElementById("logout-button");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      alert("Çıkış yapıldı.");
+      location.reload();
+    });
+  }
+
+  // ✅ Kullanıcı Giriş Yaptıysa Maili Göster
+  supabase.auth.getUser().then(({ data: { user } }) => {
+    if (user) {
+      const mailAlani = document.getElementById('kullanici-maili-alani');
+      if (mailAlani) {
+        mailAlani.innerHTML = `<div style="margin-top: 8px; font-size: 13px; color: #ccc;"><i class="fas fa-user"></i> ${user.email}</div>`;
+      }
+    }
+  });
+
   // Elementleri seç
   chatBox = document.getElementById("chat-box");
   userInput = document.getElementById("user-input");
@@ -507,30 +556,14 @@ document.getElementById('logout-button')?.addEventListener('click', async () => 
   alert("Çıkış yapıldı.");
   location.reload(); // Sayfa yenilenir, oturum sıfırlanır
 });
-// Google ile Giriş Yap butonuna tıklanınca
-window.addEventListener("load", () => {
-  // Google ile Giriş
-  const googleBtn = document.getElementById("google-login");
-  if (googleBtn) {
-    googleBtn.addEventListener("click", async () => {
-      console.log("Google GİRİŞ tıklandı");
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-      });
+
       if (error) {
         alert("Google ile girişte hata oluştu: " + error.message);
       }
     });
   }
 
-  // Çıkış butonu (isteğe bağlı burada dursun)
-  const logoutBtn = document.getElementById("logout-button");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      alert("Çıkış yapıldı.");
-      location.reload();
-    });
+  
   }
 });
 
