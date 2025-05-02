@@ -477,13 +477,30 @@ document.querySelector('.login-button').addEventListener('click', async () => {
   }
 });
 
-// Oturum kontrolü
+// Üye Ol ve Giriş butonları aynı fonksiyona bağlanıyor
+document.querySelector('.register-button').addEventListener('click', handleLoginOrSignup);
+document.querySelector('.login-button').addEventListener('click', handleLoginOrSignup);
+
+// Supabase OTP login işlemi
+async function handleLoginOrSignup() {
+  const email = prompt("Lütfen e-posta adresinizi girin:");
+  if (!email) return;
+  const { error } = await supabase.auth.signInWithOtp({ email });
+  if (error) {
+    alert("Hata: " + error.message);
+  } else {
+    alert("E-posta adresinize giriş bağlantısı gönderildi.");
+  }
+}
+
+// Kullanıcı giriş yaptıysa, mailini butonların altına göster
 supabase.auth.getUser().then(({ data: { user } }) => {
   if (user) {
-    const sidebar = document.querySelector('.sidebar-header');
-    const welcome = document.createElement('div');
-    welcome.innerHTML = `<br><strong>👤 ${user.email}</strong>`;
-    sidebar.appendChild(welcome);
+    const mailAlani = document.getElementById('kullanici-maili-alani');
+    if (mailAlani) {
+      mailAlani.innerHTML = `<div style="margin-top: 8px; font-size: 13px; color: #ccc;"><i class="fas fa-user"></i> ${user.email}</div>`;
+    }
   }
 });
+
 
