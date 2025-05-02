@@ -502,5 +502,9 @@ supabase.auth.getUser().then(({ data: { user } }) => {
     }
   }
 });
-
+document.getElementById('logout-button')?.addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  alert("Çıkış yapıldı.");
+  location.reload(); // Sayfa yenilenir, oturum sıfırlanır
+});
 
