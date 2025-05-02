@@ -458,3 +458,31 @@ function playIntroVideo() {
 window.addEventListener('beforeunload', () => {
   saveCurrentConversation();
 });
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co;
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Giriş butonu
+document.querySelector('.login-button').addEventListener('click', async () => {
+  const email = prompt("E-posta adresinizi girin:");
+  if (!email) return;
+  const { error } = await supabase.auth.signInWithOtp({ email });
+  if (error) {
+    alert("Hata: " + error.message);
+  } else {
+    alert("E-posta adresinize giriş bağlantısı gönderildi.");
+  }
+});
+
+// Oturum kontrolü
+supabase.auth.getUser().then(({ data: { user } }) => {
+  if (user) {
+    const sidebar = document.querySelector('.sidebar-header');
+    const welcome = document.createElement('div');
+    welcome.innerHTML = `<br><strong>👤 ${user.email}</strong>`;
+    sidebar.appendChild(welcome);
+  }
+});
+"
