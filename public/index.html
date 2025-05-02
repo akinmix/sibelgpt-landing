@@ -9,54 +9,80 @@
 </head>
 <body>
 
-  <!-- … splash-screen, top-right-buttons, sidebar aynen korundu … -->
-  <aside class="sidebar">
-    <!-- (kısmen kısalttım) -->
-    <div class="sidebar-header">
-      <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
-      <span>SibelGPT</span>
-    </div>
-    <!-- … Yeni Sohbet, Geçmiş, Linkler … -->
-  </aside>
+  <!-- Splash ekran -->
+  <div id="splash-screen">
+    <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
+  </div>
 
-  <section class="content-area">
-    <!-- ★ Chat Wrapper: Modül Kutucukları + Mesaj Alanı ★ -->
-    <div class="chat-wrapper" style="position: relative;">
-      <!-- 1) Modül Kutucukları: chat-box’un tam üstünde -->
+  <!-- Sağ üst kimlik butonları -->
+  <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+    <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
+    <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
+    <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
+    <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
+  </div>
+
+  <!-- Ana düzen: sidebar + içerik -->
+  <div class="main-layout" style="display: none;" id="main-interface">
+
+    <!-- Yan menü -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo" />
+        <span>SibelGPT</span>
+      </div>
+      <div class="new-chat-button">
+        <button><i class="fas fa-plus"></i> Yeni Sohbet</button>
+      </div>
+      <div class="history">
+        <h2>Geçmiş</h2>
+        <ul id="history-list">
+          <li>Henüz kaydedilmiş sohbet yok.</li>
+        </ul>
+      </div>
+      <div class="sidebar-links-group">
+        <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder"><i class="fas fa-envelope"></i> sibel@sibelizim.com</a>
+        <a href="https://www.sibelizim.com" target="_blank"><i class="fas fa-external-link-alt"></i> sibelizim.com</a>
+        <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2..." target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
+        <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
+      </div>
+    </div>
+
+    <!-- İçerik alanı -->
+    <div class="content-area">
+
+      <!-- Modül Seçici Kutucuklar -->
       <div class="module-selector">
         <button class="module-button active" data-module="gayrimenkul">GayrimenkulGPT</button>
-        <button class="module-button"    data-module="zihin-kocu">Zihin Koçu GPT</button>
-        <button class="module-button"    data-module="finans">Finans GPT</button>
+        <button class="module-button" data-module="zihin-kocu">Zihin Koçu GPT</button>
+        <button class="module-button" data-module="finans">Finans GPT</button>
       </div>
 
-      <!-- 2) Gerçek Sohbet Mesajları -->
+      <!-- Sohbet balonlarının gösterildiği alan -->
       <div class="chat-container" id="chat-box">
-        <!-- Mesaj balonları buraya eklenecek -->
-      </div>
-    </div>
-
-    <!-- ★ Mesaj Gönderme ve Dinleme Alanı ★ -->
-    <div class="chat-input">
-      <!-- Avatar ve Dinle Butonu yanyana -->
-      <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-      <button id="play-button" class="listen-button">🎤 Dinle</button>
-
-      <!-- Kullanıcı Girişi -->
-      <div class="input-wrapper">
-        <button id="send-arrow-button" title="Gönder"><i class="fas fa-arrow-up"></i></button>
-        <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
       </div>
 
-      <!-- Görsel Oluştur -->
-      <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
+      <!-- Mesaj ve Dinle/Görsel Oluştur alanı -->
+      <div class="chat-input">
+        <!-- Avatar -->
+        <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+        <!-- Dinle Butonu ve Gizli Video -->
+        <button id="play-button" class="listen-button" title="Dinle">🎤 Dinle</button>
+        <video id="intro-video" style="display:none;">
+          <source src="talking-avatar.mp4" type="video/mp4" />
+        </video>
 
-      <!-- Gizli Video Elementi -->
-      <video id="intro-video" style="display:none;">
-        <source src="talking-avatar.mp4" type="video/mp4" />
-      </video>
+        <div class="input-wrapper">
+          <button id="send-arrow-button" title="Gönder"><i class="fas fa-arrow-up"></i></button>
+          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+        </div>
+        <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
+      </div>
+
     </div>
-  </section>
+  </div>
 
+  <!-- Alt bilgi -->
   <footer class="footer">
     <p>Powered by <strong>OpenAI</strong> &amp; <strong>Sibel Intelligence</strong></p>
   </footer>
