@@ -557,14 +557,4 @@ document.getElementById('logout-button')?.addEventListener('click', async () => 
   location.reload(); // Sayfa yenilenir, oturum sıfırlanır
 });
 
-      if (error) {
-        alert("Google ile girişte hata oluştu: " + error.message);
-      }
-    });
-  }
-
-  
-  }
-});
-
 
