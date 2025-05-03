@@ -1,14 +1,62 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import { createClient 
 
-// script.js - GÜNCELLENMİŞ HALİ (Tema Renkleri Eklendi)
+// indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
+window.indirGorsel = indirGorsel;
+
+// Sayfa kapanmadan önce mevcut sohbeti kaydet
+window.addEventListener('beforeunload', () => {
+  saveCurrentConversation();
+});
+
+const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Supabase OTP login işlemi
+async function handleLoginOrSignup() {
+  const email = prompt("Lütfen e-posta adresinizi girin:");
+  if (!email) return;
+  const { error } = await supabase.auth.signInWithOtp({ email });
+  if (error) {
+    alert("Hata: " + error.message);
+  } else {
+    alert("E-posta adresinize giriş bağlantısı gönderildi.");
+  }
+}
+
+// DOM yüklendikten sonra olay dinleyicilerini ekle
+document.addEventListener('DOMContentLoaded', () => {
+  // Üye Ol ve Giriş butonları
+  document.querySelectorAll('.register-button, .login-button').forEach(button => {
+    button.addEventListener('click', handleLoginOrSignup);
+  });
+  
+  // Çıkış butonu
+  const logoutButton = document.getElementById('logout-button');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      alert("Çıkış yapıldı.");
+      location.reload();
+    });
+  }
+}); from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+// script.js - GÜNCELLENMİŞ HALİ (Web Araması Eklendi)
 
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
+// Google API Yapılandırması
+const GOOGLE_API_KEY = 'AIzaSyDwV3Rw3HAV4OVBiJLu5DE-ca9VmQsV1q8'; // API anahtarınızı buraya ekleyin
+const GOOGLE_CSE_ID = 'cx=d352129b3656e4b4f';
+const GOOGLE_SEARCH_URL = 'https://www.googleapis.com/customsearch/v1';
+
 let currentConversation = [];
 let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 let sendArrowButton; 
-let gorselButton; 
+let gorselButton;
+let webSearchButton; 
 let videoWrapper, introVideo, playButton; 
 let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
 let currentGptMode = 'real-estate'; // Varsayılan mod
@@ -85,7 +133,71 @@ function hideLoadingIndicator() {
 }
 // --- Yükleniyor fonksiyonları sonu ---
 
-// ✅ Sadece görsel butonuna tıklandığında çağrılacak görsel üretim işlevi
+// ✅ Web araması işlevi - YENİ EKLENDİ
+async function performWebSearch() {
+    const prompt = userInput.value.trim();
+    if (!prompt) {
+        alert("Lütfen arama için bir soru veya anahtar kelime yazın.");
+        return;
+    }
+    
+    appendMessage("Sen", prompt, "user", true); // Kullanıcının sorusunu ekle
+    showLoadingIndicator(); // Yükleniyor animasyonunu göster
+    userInput.value = "";
+    if (sendArrowButton) {
+        sendArrowButton.classList.remove('visible');
+    }
+    
+    try {
+        // Google Custom Search API'sini çağır
+        const searchUrl = `${GOOGLE_SEARCH_URL}?key=${GOOGLE_API_KEY}&${GOOGLE_CSE_ID}&q=${encodeURIComponent(prompt)}`;
+        const searchResponse = await fetch(searchUrl);
+        const searchData = await searchResponse.json();
+        
+        if (searchData.error) {
+            hideLoadingIndicator();
+            appendMessage("SibelGPT", `❌ Arama yapılırken bir hata oluştu: ${searchData.error.message || 'Bilinmeyen hata'}`, "bot", true);
+            return;
+        }
+        
+        // Arama sonuçlarını formatla
+        let searchResults = "";
+        if (searchData.items && searchData.items.length > 0) {
+            searchResults = "### İnternet Arama Sonuçları\n\n";
+            searchData.items.slice(0, 5).forEach((item, index) => {
+                searchResults += `${index + 1}. [${item.title}](${item.link})\n`;
+                searchResults += `   ${item.snippet}\n\n`;
+            });
+        } else {
+            searchResults = "Aramanız için sonuç bulunamadı.";
+        }
+        
+        // Arama sonuçları ile birlikte OpenAI API'ye gönder
+        const enhancedPrompt = `Kullanıcı sorusu: "${prompt}"\n\nArama sonuçları:\n${searchResults}\n\nYukarıdaki arama sonuçlarını kullanarak soruya kapsamlı bir yanıt ver.`;
+        
+        const res = await fetch(`${BACKEND_URL}/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                question: enhancedPrompt,
+                mode: currentGptMode
+            }),
+        });
+        
+        hideLoadingIndicator(); // Yükleniyor animasyonunu kaldır
+        
+        const data = await res.json();
+        const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
+        appendMessage("SibelGPT", reply, "bot", true);
+        
+    } catch (error) {
+        hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
+        console.error("Web arama hatası:", error);
+        appendMessage("SibelGPT", "⚠️ Web araması sırasında bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
+    }
+}
+
+// ✅ Görsel butonuna tıklandığında çağrılacak görsel üretim işlevi
 async function handleGenerateImageClick() {
     const prompt = userInput.value.trim();
     if (!prompt) {
@@ -257,6 +369,9 @@ function generateConversationTitle(conversation) {
     const text = firstUserMessage.text.trim();
     if (text.toLowerCase().includes("görsel") || text.toLowerCase().includes("çiz")) {
         return "Görsel Sohbeti";
+    }
+    if (text.toLowerCase().includes("web") || text.toLowerCase().includes("ara")) {
+        return "Web Araması";
     }
     return text.length > 35 ? text.substring(0, text.lastIndexOf(' ', 35) || 35) + '...' : text;
   }
@@ -473,6 +588,7 @@ window.addEventListener("load", () => {
   mainInterface = document.getElementById("main-interface");
   sendArrowButton = document.getElementById('send-arrow-button'); 
   gorselButton = document.getElementById('gorsel-buton'); 
+  webSearchButton = document.getElementById('web-search-button'); // YENİ: Web Araması butonunu seç
   videoWrapper = document.getElementById('video-wrapper'); 
   introVideo = document.getElementById('intro-video');     
   playButton = document.getElementById('play-button');     
@@ -544,6 +660,10 @@ window.addEventListener("load", () => {
   if (gorselButton) { 
       gorselButton.addEventListener('click', handleGenerateImageClick);
   }
+  // YENİ: Web araması butonu için olay dinleyici
+  if (webSearchButton) {
+      webSearchButton.addEventListener('click', performWebSearch);
+  }
    if (playButton) { 
        playButton.addEventListener('click', playIntroVideo);
    }
@@ -601,45 +721,3 @@ function playIntroVideo() {
       console.error("Video veya kontrol elemanları bulunamadı!");
   }
 }
-
-// indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
-window.indirGorsel = indirGorsel;
-
-// Sayfa kapanmadan önce mevcut sohbeti kaydet
-window.addEventListener('beforeunload', () => {
-  saveCurrentConversation();
-});
-
-const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Supabase OTP login işlemi
-async function handleLoginOrSignup() {
-  const email = prompt("Lütfen e-posta adresinizi girin:");
-  if (!email) return;
-  const { error } = await supabase.auth.signInWithOtp({ email });
-  if (error) {
-    alert("Hata: " + error.message);
-  } else {
-    alert("E-posta adresinize giriş bağlantısı gönderildi.");
-  }
-}
-
-// DOM yüklendikten sonra olay dinleyicilerini ekle
-document.addEventListener('DOMContentLoaded', () => {
-  // Üye Ol ve Giriş butonları
-  document.querySelectorAll('.register-button, .login-button').forEach(button => {
-    button.addEventListener('click', handleLoginOrSignup);
-  });
-  
-  // Çıkış butonu
-  const logoutButton = document.getElementById('logout-button');
-  if (logoutButton) {
-    logoutButton.addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      alert("Çıkış yapıldı.");
-      location.reload();
-    });
-  }
-});
