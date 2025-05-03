@@ -6,6 +6,75 @@
   <title>SibelGPT</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Add this style block for basic layout demonstration or add to your style.css -->
+  <style>
+    /* Basic styles to help position the new elements - Adjust as needed in style.css */
+    #video-wrapper {
+      display: flex; /* Enable Flexbox */
+      align-items: center; /* Vertically align video and button */
+      justify-content: center; /* Center the items horizontally */
+      margin-bottom: 15px; /* Add space below the video/button area */
+      position: relative; /* Needed if elements inside were absolutely positioned */
+      /* Add other necessary positioning styles from your original CSS */
+    }
+
+    #intro-video {
+      /* Adjust width/height as needed */
+      max-width: 400px; /* Example max width */
+      height: auto;
+    }
+
+    #play-button {
+      margin-left: 15px; /* Add space between video and button */
+      /* Remove absolute positioning if it existed */
+      position: static; /* Override absolute if needed */
+      /* Ensure button styling is appropriate */
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .mode-selection-container {
+      display: flex;
+      justify-content: center; /* Or space-around / space-between */
+      gap: 15px; /* Space between boxes */
+      margin-bottom: 20px; /* Space below the boxes, before the input */
+      padding: 0 20px; /* Add padding if needed */
+    }
+
+    .mode-box {
+      padding: 12px 20px;
+      border: 1px solid #555; /* Example border */
+      background-color: rgba(255, 255, 255, 0.1); /* Example background */
+      color: #eee;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .mode-box:hover {
+      background-color: rgba(255, 255, 255, 0.2); /* Example hover effect */
+    }
+
+    .chat-input {
+       /* Ensure chat input is below the mode selection */
+       margin-top: 0; /* Remove any top margin if it conflicts */
+    }
+
+    /* Add styles for your static avatar if it's different from the video */
+    .static-avatar-placeholder { /* Example if you have a static image before video plays */
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .static-avatar-placeholder img {
+        max-width: 400px; /* Match video size */
+        height: auto;
+        border-radius: 50%; /* Or your desired style */
+    }
+
+
+  </style>
 </head>
 <body>
 
@@ -14,12 +83,11 @@
   </div>
 
   <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-  <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
-  <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
-
-  <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
-  <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
-</div>
+    <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
+    <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
+    <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
+    <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
+  </div>
 
   <div class="main-layout" style="display: none;" id="main-interface">
     <div class="sidebar">
@@ -33,10 +101,11 @@
       <div class="history">
         <h2>Geçmiş</h2>
         <ul id="history-list">
+          <!-- History items will be loaded here -->
           <li>Henüz kaydedilmiş sohbet yok.</li>
         </ul>
       </div>
-      
+
       <div class="sidebar-links-group">
         <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder">
           <i class="fas fa-envelope"></i> sibel@sibelizim.com
@@ -45,23 +114,53 @@
         <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
         <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
       </div>
-      </div>
+    </div>
 
     <div class="content-area">
-      <div class="chat-container" id="chat-box">
-        </div>
+      <!-- Optional: Static placeholder for avatar if needed before video interaction -->
+      <!-- <div class="static-avatar-placeholder" id="static-avatar-area">
+          <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar">
+      </div> -->
 
+      <!-- Video Wrapper - Contains video and moved play button -->
+      <div id="video-wrapper">
+        <video id="intro-video">
+          <source src="talking-avatar.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button id="play-button">🎤 Dinle</button>
+      </div>
+
+       <!-- Chat history container -->
+      <div class="chat-container" id="chat-box">
+        <!-- Chat messages will appear here -->
+        <!-- Initial welcome message could be here or added via JS -->
+         <div class="message bot-message"> <!-- Example Welcome Message -->
+            <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar">
+            <p>Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!</p>
+        </div>
+      </div>
+
+      <!-- NEW: Mode Selection Boxes -->
+      <div class="mode-selection-container">
+        <div class="mode-box" id="mode-gayrimenkul">GayrimenkulGPT</div>
+        <div class="mode-box" id="mode-zihin">Zihin Koçu GPT</div>
+        <div class="mode-box" id="mode-finans">Finans GPT</div>
+      </div>
+
+      <!-- Chat Input Area -->
       <div class="chat-input">
-        <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+         <!-- Removed the static avatar from here as it's likely represented above -->
+         <!-- <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" /> -->
 
         <div class="input-wrapper">
-          <button id="send-arrow-button" title="Gönder">
-            <i class="fas fa-arrow-up"></i> </button>
-          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+            <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+            <button id="send-arrow-button" title="Gönder">
+                <i class="fas fa-arrow-up"></i>
+            </button>
         </div>
 
         <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
-
       </div>
     </div>
   </div>
@@ -70,11 +169,8 @@
     <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
   </footer>
 
-  <div id="video-wrapper">
-    <video id="intro-video">
-      <source src="talking-avatar.mp4" type="video/mp4" />
-    </video>
-    <button id="play-button">🎤 Dinle</button> </div>
+  <!-- Note: Video wrapper is now inside content-area for better structure -->
+  <!-- The script will handle showing/hiding video/button as needed -->
 
   <script type="module" src="script.js"></script>
 </body>
