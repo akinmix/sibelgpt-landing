@@ -444,7 +444,7 @@ body.theme-finance #user-input:focus {
   border-color: var(--finance-primary);
 }
 
-#gorsel-buton {
+#gorsel-buton, #web-search-button {
   padding: 14px 20px;
   font-size: 16px;
   border-radius: 8px;
@@ -454,10 +454,17 @@ body.theme-finance #user-input:focus {
   cursor: pointer;
   transition: background-color 0.2s ease;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-#gorsel-buton:hover {
+#gorsel-buton:hover, #web-search-button:hover {
   background-color: var(--theme-secondary);
+}
+
+#web-search-button {
+  margin-right: 8px;
 }
 
 #send-arrow-button {
@@ -539,9 +546,9 @@ body.theme-finance .avatar {
     padding-left: 40px; /* Mobil için sol boşluk */
     font-size: 15px;
   }
-  #gorsel-buton {
+  #gorsel-buton, #web-search-button {
     padding: 12px 15px;
-    font-size: 15px;
+    font-size: 14px;
   }
   #send-arrow-button {
      width: 30px;
@@ -728,12 +735,4 @@ body.theme-finance .dot {
     opacity: 1;
   }
 }
-/* ------ YÜKLENİYOR ANİMASYONU SONU ------ */
-
-/* Splash ekran gizlendiğinde */
-#splash-screen.gizli {
-  opacity: 0;
-  display: none;
-  z-index: -1;
-  pointer-events: none;
-}
+/* ------ YÜK
