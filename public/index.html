@@ -6,127 +6,201 @@
   <title>SibelGPT</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Örnek stiller - style.css dosyanıza taşıyın ve düzenleyin -->
+  <!-- Örnek stiller - Bunları style.css dosyanıza taşıyıp GÜNCELLEMENİZ ÖNEMLİ -->
   <style>
+    /* --- Genel Layout --- */
+    body {
+        /* Arka plan vb. stilleriniz style.css'de olmalı */
+        margin: 0;
+        font-family: sans-serif; /* Örnek font */
+    }
+    .main-layout {
+        display: flex;
+        height: 100vh; /* Veya içeriğe göre ayarlanmalı */
+    }
+    .sidebar {
+        width: 250px; /* Sabit genişlik veya yüzdelik */
+        background-color: #1a1a1a; /* Örnek */
+        padding: 15px;
+        color: #ccc;
+        display: flex;
+        flex-direction: column;
+    }
+    .content-area {
+        flex-grow: 1; /* Kalan alanı kapla */
+        padding: 20px;
+        display: flex;
+        flex-direction: column; /* İçerik dikey sıralansın */
+        align-items: center; /* İçeriği yatayda ortala */
+        overflow-y: auto; /* Dikeyde taşarsa scroll çıksın */
+        position: relative; /* Gerekirse alt elemanları konumlandırmak için */
+    }
+
+    /* --- İçerik Alanı Elemanları --- */
+
+    /* 1. Hoş Geldiniz Mesajı (EN ÜSTTE) */
+    .welcome-message-area {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #eee;
+        padding: 15px 25px;
+        margin-bottom: 25px; /* Altındaki elemanla arasına boşluk */
+        border-radius: 8px;
+        max-width: 700px; /* Genişlik sınırı */
+        width: 90%; /* Genişliğe göre ayarlanabilir */
+        text-align: center;
+        font-size: 0.95em;
+        line-height: 1.5;
+        order: 1; /* Flexbox sıralaması */
+    }
+    .welcome-message-area strong {
+        color: #a855f7;
+    }
+
+    /* 2. Avatar/Video Alanı */
     #video-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 15px;
-      position: relative;
-      /* Gerekli diğer konumlandırma stilleri */
+        display: flex; /* Video ve butonu yan yana koymak için */
+        justify-content: center; /* İçeriği ortala */
+        align-items: center; /* Dikeyde ortala */
+        margin-bottom: 20px;
+        width: 100%; /* Genişliği kapla */
+        order: 2; /* Flexbox sıralaması */
+        min-height: 350px; /* Örnek: Avatar/Video için bir alan ayır */
+        position: relative; /* İçindeki absolute konumlandırma için (Gerekirse) */
     }
-
+    #static-avatar {
+        display: block; /* Başlangıçta görünür */
+        max-width: 300px; /* Boyutu ayarlayın */
+        height: auto;
+        border-radius: 15px; /* Kenar yuvarlatma */
+        /* margin: 0 auto 10px auto;  Flex ile ortalandığı için margin auto gereksiz */
+    }
     #intro-video {
-      max-width: 400px; /* Örnek */
-      height: auto;
-      display: block; /* Varsa inline davranışını engellemek için */
-      margin: 0 auto; /* Yatayda ortalamak için */
-      border-radius: 15px; /* Kenar yuvarlatma ekleyebilirsiniz */
+        display: none; /* Başlangıçta gizli */
+        max-width: 300px; /* Boyutu ayarlayın */
+        height: auto;
+        border-radius: 15px;
+        /* margin: 0 auto 10px auto; */
     }
-
     #play-button {
-      margin-left: 15px;
-      padding: 10px 15px;
-      cursor: pointer;
-       /* Flexbox ile hizalandığı için mutlak konumlandırma genellikle gereksiz */
+        padding: 10px 15px;
+        cursor: pointer;
+        background-color: #a855f7; /* Mor renk */
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-left: 20px; /* Avatar/Video ile arasına boşluk */
+        /* Flex ile dikey hizalama yapıldığı için dikey konumlandırma gereksiz */
     }
+    #play-button:hover {
+         background-color: #9333ea;
+     }
 
+    /* 3. Mod Seçim Kutuları */
     .mode-selection-container {
       display: flex;
       justify-content: center;
       gap: 15px;
       margin-bottom: 20px;
-      padding: 0 20px;
+      width: 100%; /* Genişliği kapla */
+      max-width: 600px; /* Maksimum genişlik */
+      order: 3; /* Flexbox sıralaması */
     }
-
     .mode-box {
-      padding: 10px 18px; /* Biraz küçülttüm */
+      padding: 10px 18px;
       border: 1px solid #555;
-      background-color: rgba(30, 30, 30, 0.7); /* Daha koyu bir arka plan */
+      background-color: rgba(30, 30, 30, 0.7);
       color: #eee;
       border-radius: 8px;
       cursor: pointer;
       text-align: center;
       transition: background-color 0.3s ease;
       font-size: 0.9em;
+      flex: 1; /* Kutular eşit genişlesin (isteğe bağlı) */
+      white-space: nowrap; /* Yazıların alt satıra kaymasını engelle */
     }
-
     .mode-box:hover {
       background-color: rgba(50, 50, 50, 0.8);
     }
 
-    /* Hoş Geldiniz Mesajı Alanı */
-    .welcome-message-area {
-        background-color: rgba(0, 0, 0, 0.6); /* Yarı saydam siyah arka plan */
-        color: #eee;
-        padding: 15px;
-        margin: 10px auto 20px auto; /* Üst, otomatik (yanlar), alt */
-        border-radius: 8px;
-        max-width: 600px; /* Genişliği sınırlama */
-        text-align: center; /* Metni ortala */
-        font-size: 0.95em;
-        line-height: 1.5;
-    }
-    .welcome-message-area strong { /* "SibelGPT:" kısmını vurgulamak için */
-        color: #a855f7; /* Mor renk veya istediğiniz başka bir renk */
-    }
-
-    /* Sohbet kutusu ve girdi alanı için temel stiller */
-     .chat-container {
-        height: 40vh; /* Veya ihtiyacınıza göre bir yükseklik */
+    /* 4. Sohbet Geçmişi */
+    .chat-container {
+        width: 100%;
+        max-width: 700px; /* Genişlik sınırı */
+        height: 35vh; /* Yüksekliği ayarla */
         overflow-y: auto;
-        padding: 10px;
-        margin-bottom: 15px; /* Girdi alanından önce boşluk */
-        border: 1px solid #444; /* Sınırları görmek için */
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #444;
         border-radius: 8px;
-         background-color: rgba(0, 0, 0, 0.3); /* Hafif arkaplan */
+        background-color: rgba(0, 0, 0, 0.3);
+        order: 4; /* Flexbox sıralaması */
+        color: #eee; /* Mesaj renkleri için */
     }
+     /* Sohbet mesajlarının stilleri (örnek) */
+    .message { margin-bottom: 10px; display: flex; }
+    .user-message p { background-color: #444; padding: 8px 12px; border-radius: 10px; margin-left: auto; max-width: 70%;}
+    .bot-message p { background-color: #555; padding: 8px 12px; border-radius: 10px; margin-right: auto; max-width: 70%;}
+    .message .avatar { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
 
+    /* 5. Giriş Alanı */
     .chat-input {
        display: flex;
        align-items: center;
        padding: 10px;
-       background-color: rgba(0, 0, 0, 0.2); /* Girdi alanı arka planı */
+       background-color: rgba(10, 10, 10, 0.5); /* Hafif arka plan */
        border-radius: 8px;
+       width: 100%;
+       max-width: 700px; /* Genişlik sınırı */
+       order: 5; /* Flexbox sıralaması */
+       margin-top: auto; /* Mümkünse en alta iter (flex container'da) */
     }
     .input-wrapper {
-        flex-grow: 1; /* Esnek büyüme */
-        position: relative; /* Ok butonu için */
+        flex-grow: 1;
+        position: relative;
         margin-right: 10px;
     }
     #user-input {
         width: 100%;
-        padding: 10px 40px 10px 15px; /* Sağda ok butonu için boşluk */
+        padding: 12px 45px 12px 15px; /* İç boşluklar */
         border: 1px solid #555;
         background-color: #333;
         color: #eee;
-        border-radius: 20px; /* Yuvarlak kenarlar */
+        border-radius: 25px;
         font-size: 1em;
+        box-sizing: border-box; /* Padding ve border genişliği etkilemesin */
     }
      #send-arrow-button {
         position: absolute;
-        right: 10px;
+        right: 12px;
         top: 50%;
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: #a855f7; /* Mor renk */
-        font-size: 1.2em;
+        color: #a855f7;
+        font-size: 1.3em;
         cursor: pointer;
+        padding: 5px;
     }
      #gorsel-buton {
-        padding: 10px 15px;
-        background-color: #a855f7; /* Mor renk */
+        padding: 10px 18px; /* Boyutu input ile hizalı */
+        background-color: #a855f7;
         color: white;
         border: none;
-        border-radius: 20px;
+        border-radius: 25px;
         cursor: pointer;
         font-weight: bold;
+        white-space: nowrap;
      }
      #gorsel-buton:hover {
          background-color: #9333ea;
      }
+
+    /* Splash Screen & Auth Buttons stilleri style.css'de olmalı */
+    #splash-screen { /* ... */ }
+    .top-right-buttons { /* ... */ }
+    .auth-button { /* ... */ }
+    .footer { /* ... */ }
 
   </style>
 </head>
@@ -136,14 +210,17 @@
     <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
   </div>
 
-  <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+  <!-- Sağ Üst Butonlar -->
+  <div class="top-right-buttons" style="position: absolute; top: 15px; right: 15px; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
     <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
     <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
-    <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
-    <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
+    <div id="kullanici-maili-alani" style="font-size: 13px; color: #ccc;"></div>
+    <button id="logout-button" class="auth-button" style="display: none;">Çıkış Yap</button> <!-- Başlangıçta gizli -->
   </div>
 
+  <!-- Ana Arayüz -->
   <div class="main-layout" style="display: none;" id="main-interface">
+    <!-- Kenar Çubuğu (Sidebar) -->
     <div class="sidebar">
       <div class="sidebar-header">
         <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
@@ -158,50 +235,45 @@
           <li>Henüz kaydedilmiş sohbet yok.</li>
         </ul>
       </div>
-
       <div class="sidebar-links-group">
-        <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder">
-          <i class="fas fa-envelope"></i> sibel@sibelizim.com
-        </a>
+        <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder"><i class="fas fa-envelope"></i> sibel@sibelizim.com</a>
         <a href="https://www.sibelizim.com" target="_blank"><i class="fas fa-external-link-alt"></i> sibelizim.com</a>
         <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
         <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
       </div>
     </div>
 
+    <!-- İçerik Alanı -->
     <div class="content-area">
 
-      <!-- *** YENİ KONUM: Hoş Geldiniz Mesajı Alanı *** -->
+      <!-- 1. Hoş Geldiniz Mesajı -->
       <div class="welcome-message-area">
-         <p><strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır. Gayrimenkul yatırımlarınız, numerolojik analizleriniz ve finansal kararlarınızda size rehberlik eder. SibelGPT ile hem aklınızı hem ruhunuzu besleyen kararlar alın!</p>
+         <p><strong>SibelGPT:</strong> Merhaba! SibelGPT, Sibel Kazan Midilli tarafından geliştirilen yapay zeka destekli bir dijital danışmandır...</p>
       </div>
 
-      <!-- Video Wrapper - Video ve Dinle butonu -->
+      <!-- 2. Video/Avatar Alanı -->
       <div id="video-wrapper">
-          <!-- Eğer videodan önce statik bir avatar göstermek isterseniz: -->
-          <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" id="static-avatar" style="max-width: 400px; height: auto; border-radius: 15px; display: block; margin: 0 auto;">
-          <!-- Video başlangıçta gizli olabilir, JS ile gösterilir -->
-          <video id="intro-video" style="display: none; max-width: 400px; height: auto; border-radius: 15px; margin: 0 auto;">
+          <img src="avatar-sibelgpt.png" alt="SibelGPT Avatar" id="static-avatar">
+          <video id="intro-video">
               <source src="talking-avatar.mp4" type="video/mp4" />
               Tarayıcınız video etiketini desteklemiyor.
           </video>
-          <button id="play-button" style="margin-left: 15px;">🎤 Dinle</button>
+          <button id="play-button">🎤 Dinle</button>
       </div>
 
-       <!-- Sohbet Geçmişi Konteyneri -->
-      <div class="chat-container" id="chat-box">
-        <!-- Sohbet mesajları buraya eklenecek (JS ile) -->
-        <!-- İlk mesaj yukarı taşındığı için burası başlangıçta boş olabilir -->
-      </div>
-
-      <!-- Mod Seçim Kutuları -->
+       <!-- 3. Mod Seçim Kutuları -->
       <div class="mode-selection-container">
         <div class="mode-box" id="mode-gayrimenkul">GayrimenkulGPT</div>
         <div class="mode-box" id="mode-zihin">Zihin Koçu GPT</div>
         <div class="mode-box" id="mode-finans">Finans GPT</div>
       </div>
 
-      <!-- Sohbet Giriş Alanı -->
+      <!-- 4. Sohbet Geçmişi Konteyneri -->
+      <div class="chat-container" id="chat-box">
+        <!-- Sohbet mesajları JS ile buraya eklenecek -->
+      </div>
+
+      <!-- 5. Sohbet Giriş Alanı -->
       <div class="chat-input">
         <div class="input-wrapper">
             <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
@@ -211,56 +283,72 @@
         </div>
         <button id="gorsel-buton" title="Görsel Oluştur">Görsel Oluştur</button>
       </div>
-    </div>
-  </div>
+    </div> <!-- .content-area sonu -->
+  </div> <!-- .main-layout sonu -->
 
   <footer class="footer">
     <p>Powered by <strong>OpenAI</strong> & <strong>Sibel Intelligence</strong></p>
   </footer>
 
   <script type="module" src="script.js"></script>
-  <!-- Örnek JS: Statik avatarı gizleyip videoyu gösterme -->
+  <!-- Örnek JS: Statik avatarı gizleyip videoyu gösterme (script.js'e taşınmalı) -->
   <script>
-      // Bu kısmı script.js dosyanıza taşımanız daha iyi olur
-      const playButton = document.getElementById('play-button');
-      const staticAvatar = document.getElementById('static-avatar');
-      const introVideo = document.getElementById('intro-video');
+      document.addEventListener('DOMContentLoaded', () => { // Sayfa yüklendiğinde çalıştır
+          const playButton = document.getElementById('play-button');
+          const staticAvatar = document.getElementById('static-avatar');
+          const introVideo = document.getElementById('intro-video');
 
-      if (playButton && staticAvatar && introVideo) {
-          playButton.addEventListener('click', () => {
-              // Eğer video zaten görünürse bir şey yapma veya başka bir işlev ekle
-              if (introVideo.style.display === 'none') {
-                  staticAvatar.style.display = 'none'; // Statik avatarı gizle
-                  introVideo.style.display = 'block'; // Videoyu göster
-                  introVideo.play(); // Videoyu oynat
-              } else {
-                  // İsteğe bağlı: Tekrar tıklanınca videoyu durdur/başa sar vs.
-                  if (introVideo.paused) {
-                      introVideo.play();
+          // Başlangıç durumu: video gizli, avatar görünür (CSS ile ayarlandı)
+
+          if (playButton && staticAvatar && introVideo) {
+              playButton.addEventListener('click', () => {
+                  if (introVideo.style.display === 'none' || introVideo.style.display === '') {
+                      staticAvatar.style.display = 'none';
+                      introVideo.style.display = 'block';
+                      introVideo.play().catch(error => {
+                          console.error("Video oynatma hatası:", error);
+                          // Oynatma hatası olursa belki kullanıcıya bilgi verilebilir
+                          introVideo.style.display = 'none'; // Hata olursa videoyu tekrar gizle
+                          staticAvatar.style.display = 'block'; // Avatarı göster
+                      });
                   } else {
+                      // Video zaten görünürse, tekrar tıklayınca ne yapsın?
+                      // Örnek: Durdur ve başa sar, sonra avatarı göster
                       introVideo.pause();
+                      introVideo.currentTime = 0;
+                      introVideo.style.display = 'none';
+                      staticAvatar.style.display = 'block';
                   }
-              }
-          });
+              });
 
-           // Video bitince statik avatara geri dönmek isterseniz:
-           introVideo.addEventListener('ended', () => {
-               introVideo.style.display = 'none'; // Videoyu gizle
-               staticAvatar.style.display = 'block'; // Statik avatarı göster
-           });
-      }
+              introVideo.addEventListener('ended', () => {
+                  // Video bittiğinde avatarı tekrar göster
+                  introVideo.style.display = 'none';
+                  staticAvatar.style.display = 'block';
+              });
 
-      // Ana arayüzü gösterme mantığı (splash screen sonrası)
-      // Bu muhtemelen script.js içindedir, burada sadece referans amaçlıdır
-      window.addEventListener('load', () => {
-          setTimeout(() => {
-              const splash = document.getElementById('splash-screen');
-              const mainInterface = document.getElementById('main-interface');
-              if(splash) splash.style.display = 'none';
-              if(mainInterface) mainInterface.style.display = 'flex'; // Ana layout flex ise
-          }, 2000); // 2 saniye bekleme (örnek)
-      });
+              // Video yüklenirken hata olursa
+              introVideo.addEventListener('error', () => {
+                   console.error("Video yüklenemedi.");
+                   introVideo.style.display = 'none'; // Videoyu gizle
+                   staticAvatar.style.display = 'block'; // Avatarı göster (fallback)
+              });
+          }
 
+         // --- Splash Screen ve Arayüz Gösterme Mantığı ---
+         // Bu kısmı kendi script.js dosyanızdaki mantıkla birleştirin
+         const splash = document.getElementById('splash-screen');
+         const mainInterface = document.getElementById('main-interface');
+
+         // Örnek: 2 saniye sonra splash'ı gizle, ana arayüzü göster
+         setTimeout(() => {
+             if (splash) splash.style.display = 'none';
+             if (mainInterface) mainInterface.style.display = 'flex'; // Ana layout flex olduğu için
+         }, 2000); // Süreyi ayarlayabilirsiniz
+
+         // --- Diğer JS kodlarınız (Giriş yapma, sohbet vs.) script.js içinde olmalı ---
+
+      }); // DOMContentLoaded sonu
   </script>
 </body>
 </html>
