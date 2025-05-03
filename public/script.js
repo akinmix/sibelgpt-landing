@@ -1,46 +1,4 @@
-import { createClient 
-
-// indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
-window.indirGorsel = indirGorsel;
-
-// Sayfa kapanmadan önce mevcut sohbeti kaydet
-window.addEventListener('beforeunload', () => {
-  saveCurrentConversation();
-});
-
-const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Supabase OTP login işlemi
-async function handleLoginOrSignup() {
-  const email = prompt("Lütfen e-posta adresinizi girin:");
-  if (!email) return;
-  const { error } = await supabase.auth.signInWithOtp({ email });
-  if (error) {
-    alert("Hata: " + error.message);
-  } else {
-    alert("E-posta adresinize giriş bağlantısı gönderildi.");
-  }
-}
-
-// DOM yüklendikten sonra olay dinleyicilerini ekle
-document.addEventListener('DOMContentLoaded', () => {
-  // Üye Ol ve Giriş butonları
-  document.querySelectorAll('.register-button, .login-button').forEach(button => {
-    button.addEventListener('click', handleLoginOrSignup);
-  });
-  
-  // Çıkış butonu
-  const logoutButton = document.getElementById('logout-button');
-  if (logoutButton) {
-    logoutButton.addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      alert("Çıkış yapıldı.");
-      location.reload();
-    });
-  }
-}); from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 // script.js - GÜNCELLENMİŞ HALİ (Web Araması Eklendi)
 
@@ -612,27 +570,36 @@ window.addEventListener("load", () => {
   // Başlangıçta varsayılan mod için body sınıfını ayarla
   document.body.className = 'theme-real-estate';
 
-  // Splash ekranını yönet
+  // Splash ekranını yönet - DÜZELTİLDİ
   if (splashScreen) {
       splashScreen.addEventListener('animationend', (event) => {
           if (event.target.classList.contains('splash-logo')) { 
+              // Doğrudan gösterilmesi için düzeltme yapıyoruz
               splashScreen.style.opacity = 0;
-              setTimeout(() => {
-                  splashScreen.classList.add("gizli");
-                  if(mainInterface) mainInterface.style.display = "flex";
-                  initializeChatInterface(); 
-                  if (videoWrapper) {
-                      videoWrapper.style.display = "flex"; 
-                  }
-              }, 500); 
+              splashScreen.style.display = "none"; // Tamamen gizle
+              
+              if(mainInterface) {
+                  mainInterface.style.display = "flex";
+                  mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
+              }
+              
+              initializeChatInterface();
+              
+              if (videoWrapper) {
+                  videoWrapper.style.display = "flex"; 
+              }
           }
       });
   } else {
-       if(mainInterface) mainInterface.style.display = "flex";
-       initializeChatInterface();
-       if (videoWrapper) {
-           videoWrapper.style.display = "flex";
-       }
+      // Splash screen yoksa hemen göster
+      if(mainInterface) {
+          mainInterface.style.display = "flex";
+          mainInterface.style.opacity = 1;
+      }
+      initializeChatInterface();
+      if (videoWrapper) {
+          videoWrapper.style.display = "flex";
+      }
   }
 
   // Olay dinleyicilerini ekle
@@ -721,3 +688,45 @@ function playIntroVideo() {
       console.error("Video veya kontrol elemanları bulunamadı!");
   }
 }
+
+// indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
+window.indirGorsel = indirGorsel;
+
+// Sayfa kapanmadan önce mevcut sohbeti kaydet
+window.addEventListener('beforeunload', () => {
+  saveCurrentConversation();
+});
+
+const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Supabase OTP login işlemi
+async function handleLoginOrSignup() {
+  const email = prompt("Lütfen e-posta adresinizi girin:");
+  if (!email) return;
+  const { error } = await supabase.auth.signInWithOtp({ email });
+  if (error) {
+    alert("Hata: " + error.message);
+  } else {
+    alert("E-posta adresinize giriş bağlantısı gönderildi.");
+  }
+}
+
+// DOM yüklendikten sonra olay dinleyicilerini ekle
+document.addEventListener('DOMContentLoaded', () => {
+  // Üye Ol ve Giriş butonları
+  document.querySelectorAll('.register-button, .login-button').forEach(button => {
+    button.addEventListener('click', handleLoginOrSignup);
+  });
+  
+  // Çıkış butonu
+  const logoutButton = document.getElementById('logout-button');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      alert("Çıkış yapıldı.");
+      location.reload();
+    });
+  }
+});
