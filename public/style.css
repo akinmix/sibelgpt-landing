@@ -231,6 +231,42 @@ body {
   position: relative;
 }
 
+/* GPT Seçenekleri Butonları */
+.gpt-options {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+
+.gpt-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gpt-button.active {
+  background-color: #8e24aa;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.gpt-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: rgba(142, 36, 170, 0.6);
+  color: white;
+}
+
 .chat-container {
   display: flex;
   flex-direction: column;
@@ -402,6 +438,18 @@ body {
      width: 40px;
      height: 40px;
   }
+  
+  /* GPT Butonları için mobil stil */
+  .gpt-options {
+    gap: 8px;
+    margin: 10px 0;
+    padding: 8px;
+  }
+  
+  .gpt-button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
   /* ... Diğer mobil stiller ... */
 }
 
@@ -539,4 +587,3 @@ body {
   z-index: -1;
   pointer-events: none;
 }
-
