@@ -1,4 +1,53 @@
-/* style.css - GÜNCELLENMİŞ HALİ (Yükleniyor Animasyonu Eklendi) */
+/* style.css - GÜNCELLENMİŞ HALİ (Tema Renkleri Eklendi) */
+
+/* GPT Tema Renkleri */
+:root {
+  /* Gayrimenkul GPT - Mavi/Yeşil */
+  --real-estate-primary: #1976d2;
+  --real-estate-secondary: #26a69a;
+  --real-estate-gradient: linear-gradient(135deg, #1976d2, #26a69a);
+  --real-estate-light: rgba(25, 118, 210, 0.1);
+  --real-estate-medium: rgba(25, 118, 210, 0.5);
+  
+  /* Zihin Koçu GPT - Mor/Pembe */
+  --mind-coach-primary: #8e24aa;
+  --mind-coach-secondary: #ec407a;
+  --mind-coach-gradient: linear-gradient(135deg, #8e24aa, #ec407a);
+  --mind-coach-light: rgba(142, 36, 170, 0.1);
+  --mind-coach-medium: rgba(142, 36, 170, 0.5);
+  
+  /* Finans GPT - Yeşil/Altın */
+  --finance-primary: #2e7d32;
+  --finance-secondary: #ffc107;
+  --finance-gradient: linear-gradient(135deg, #2e7d32, #ffc107);
+  --finance-light: rgba(46, 125, 50, 0.1);
+  --finance-medium: rgba(46, 125, 50, 0.5);
+}
+
+/* Aktif Tema Renkleri */
+body.theme-real-estate {
+  --theme-primary: var(--real-estate-primary);
+  --theme-secondary: var(--real-estate-secondary);
+  --theme-gradient: var(--real-estate-gradient);
+  --theme-light: var(--real-estate-light);
+  --theme-medium: var(--real-estate-medium);
+}
+
+body.theme-mind-coach {
+  --theme-primary: var(--mind-coach-primary);
+  --theme-secondary: var(--mind-coach-secondary);
+  --theme-gradient: var(--mind-coach-gradient);
+  --theme-light: var(--mind-coach-light);
+  --theme-medium: var(--mind-coach-medium);
+}
+
+body.theme-finance {
+  --theme-primary: var(--finance-primary);
+  --theme-secondary: var(--finance-secondary);
+  --theme-gradient: var(--finance-gradient);
+  --theme-light: var(--finance-light);
+  --theme-medium: var(--finance-medium);
+}
 
 /* Genel ve Arka Plan */
 body {
@@ -69,9 +118,9 @@ body {
 }
 
 .auth-button:hover {
-  border-color: #a739c7;
+  border-color: var(--theme-primary);
   color: #fff;
-  background-color: rgba(139, 36, 170, 0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .main-layout {
@@ -129,7 +178,7 @@ body {
   padding: 12px 15px;
   font-size: 16px;
   border-radius: 8px;
-  background-color: #8e24aa;
+  background-color: var(--theme-primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -141,7 +190,7 @@ body {
 }
 
 .new-chat-button button:hover {
-  background-color: #a739c7;
+  background-color: var(--theme-secondary);
 }
 
 .history {
@@ -186,9 +235,9 @@ body {
 }
 
 .history li.selected {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--theme-medium);
   font-weight: bold;
-  border-left: 4px solid #8e24aa;
+  border-left: 4px solid var(--theme-primary);
   padding-left: 6px;
 }
 
@@ -253,17 +302,34 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.gpt-button.active {
-  background-color: #8e24aa;
+/* Gayrimenkul GPT Butonu */
+#real-estate-gpt.active {
+  background: var(--real-estate-gradient);
   color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Zihin Koçu GPT Butonu */
+#mind-coach-gpt.active {
+  background: var(--mind-coach-gradient);
+  color: white;
+  box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Finans GPT Butonu */
+#finance-gpt.active {
+  background: var(--finance-gradient);
+  color: white;
+  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
   transform: translateY(-2px);
 }
 
 .gpt-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: rgba(142, 36, 170, 0.6);
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
@@ -306,7 +372,25 @@ body {
 
 .bot-message {
   align-self: flex-start;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--theme-light);
+  border-left: 3px solid var(--theme-primary);
+  position: relative;
+}
+
+/* Tema Göre Bot Mesajları */
+body.theme-real-estate .bot-message {
+  background-color: var(--real-estate-light);
+  border-left: 3px solid var(--real-estate-primary);
+}
+
+body.theme-mind-coach .bot-message {
+  background-color: var(--mind-coach-light);
+  border-left: 3px solid var(--mind-coach-primary);
+}
+
+body.theme-finance .bot-message {
+  background-color: var(--finance-light);
+  border-left: 3px solid var(--finance-primary);
 }
 
 /* --- CHAT INPUT ALANI --- */
@@ -343,13 +427,28 @@ body {
   color: black;
   width: 100%;
   box-sizing: border-box;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+/* Tema Göre Input Odaklandığında Border Rengi */
+body.theme-real-estate #user-input:focus {
+  border-color: var(--real-estate-primary);
+}
+
+body.theme-mind-coach #user-input:focus {
+  border-color: var(--mind-coach-primary);
+}
+
+body.theme-finance #user-input:focus {
+  border-color: var(--finance-primary);
 }
 
 #gorsel-buton {
   padding: 14px 20px;
   font-size: 16px;
   border-radius: 8px;
-  background-color: #8e24aa;
+  background-color: var(--theme-primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -358,7 +457,7 @@ body {
 }
 
 #gorsel-buton:hover {
-  background-color: #a739c7;
+  background-color: var(--theme-secondary);
 }
 
 #send-arrow-button {
@@ -371,7 +470,7 @@ body {
   padding: 0;
   font-size: 16px;
   border-radius: 50%;
-  background-color: rgba(142, 36, 170, 0.9);
+  background-color: var(--theme-primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -390,7 +489,7 @@ body {
 }
 
 #send-arrow-button:hover {
-  background-color: #a739c7;
+  background-color: var(--theme-secondary);
 }
 /* --- CHAT INPUT ALANI SONU --- */
 
@@ -399,6 +498,22 @@ body {
   height: 50px;
   border-radius: 50%;
   flex-shrink: 0;
+  border: 2px solid var(--theme-primary);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.5s ease;
+}
+
+/* Avatar Border Rengi Temalara Göre */
+body.theme-real-estate .avatar {
+  border-color: var(--real-estate-primary);
+}
+
+body.theme-mind-coach .avatar {
+  border-color: var(--mind-coach-primary);
+}
+
+body.theme-finance .avatar {
+  border-color: var(--finance-primary);
 }
 
 .footer {
@@ -480,14 +595,14 @@ body {
   font-size: 16px;
   border: none;
   border-radius: 8px;
-  background-color: #8e24aa;
+  background-color: var(--theme-primary);
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 #play-button:hover {
-  background-color: #a739c7;
+  background-color: var(--theme-secondary);
 }
 #video-wrapper.fade-out {
   animation: fadeOut 1.5s forwards;
@@ -505,6 +620,15 @@ body {
   }
 }
 
+/* Tema Değişimi Animasyonu */
+body {
+  transition: background 0.5s ease;
+}
+
+body * {
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.3s ease;
+}
+
 /* Scrollbar Stilleri */
 ::-webkit-scrollbar {
   width: 8px;
@@ -516,12 +640,25 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(142, 36, 170, 0.6);
+  background: var(--theme-medium);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 57, 199, 0.8);
+  background: var(--theme-primary);
+}
+
+/* Tema Göre Scrollbar Stili */
+body.theme-real-estate::-webkit-scrollbar-thumb {
+  background: var(--real-estate-medium);
+}
+
+body.theme-mind-coach::-webkit-scrollbar-thumb {
+  background: var(--mind-coach-medium);
+}
+
+body.theme-finance::-webkit-scrollbar-thumb {
+  background: var(--finance-medium);
 }
 
 /* ------ YENİ YÜKLENİYOR ANİMASYONU ------ */
@@ -548,12 +685,25 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #8e24aa; /* Ana tema rengi */
+    background-color: var(--theme-primary); /* Tema rengini kullanalım */
     margin: 0 3px; /* Noktalar arası boşluk */
     /* Animasyon */
     animation: dot-pulse 1.4s infinite ease-in-out;
     /* Animasyonun dolgu modu: animasyon dışındaki zamanlarda da stil korunsun */
     animation-fill-mode: both;
+}
+
+/* Tema Göre Yükleniyor Noktaları */
+body.theme-real-estate .dot {
+  background-color: var(--real-estate-primary);
+}
+
+body.theme-mind-coach .dot {
+  background-color: var(--mind-coach-primary);
+}
+
+body.theme-finance .dot {
+  background-color: var(--finance-primary);
 }
 
 /* Farklı noktalara gecikme vererek sıralı efekti oluşturma */
