@@ -5,11 +5,6 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
-// Google API Yapılandırması
-const GOOGLE_API_KEY = 'AIzaSyDwV3Rw3HAV4OVBiJLu5DE-ca9VmQsV1q8'; // API anahtarınızı buraya ekleyin
-const GOOGLE_CSE_ID = 'cx=d352129b3656e4b4f';
-const GOOGLE_SEARCH_URL = 'https://www.googleapis.com/customsearch/v1';
-
 let currentConversation = [];
 let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 let sendArrowButton; 
@@ -120,43 +115,6 @@ async function performWebSearch() {
         hideLoadingIndicator(); // Yükleniyor animasyonunu kaldır
         
         const data = await response.json();
-        const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
-        appendMessage("SibelGPT", reply, "bot", true);
-        
-    } catch (error) {
-        hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
-        console.error("Web arama hatası:", error);
-        appendMessage("SibelGPT", "⚠️ Web araması sırasında bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
-    }
-}
-        
-        // Arama sonuçlarını formatla
-        let searchResults = "";
-        if (searchData.items && searchData.items.length > 0) {
-            searchResults = "### İnternet Arama Sonuçları\n\n";
-            searchData.items.slice(0, 5).forEach((item, index) => {
-                searchResults += `${index + 1}. [${item.title}](${item.link})\n`;
-                searchResults += `   ${item.snippet}\n\n`;
-            });
-        } else {
-            searchResults = "Aramanız için sonuç bulunamadı.";
-        }
-        
-        // Arama sonuçları ile birlikte OpenAI API'ye gönder
-        const enhancedPrompt = `Kullanıcı sorusu: "${prompt}"\n\nArama sonuçları:\n${searchResults}\n\nYukarıdaki arama sonuçlarını kullanarak soruya kapsamlı bir yanıt ver.`;
-        
-        const res = await fetch(`${BACKEND_URL}/chat`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                question: enhancedPrompt,
-                mode: currentGptMode
-            }),
-        });
-        
-        hideLoadingIndicator(); // Yükleniyor animasyonunu kaldır
-        
-        const data = await res.json();
         const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
         appendMessage("SibelGPT", reply, "bot", true);
         
