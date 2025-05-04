@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// script.js - GÜNCELLENMİŞ HALİ (Web Araması Eklendi)
+// script.js - GÜNCELLENMİŞ HALİ (Web Araması Düzeltildi)
 
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
@@ -86,40 +86,60 @@ function hideLoadingIndicator() {
 }
 // --- Yükleniyor fonksiyonları sonu ---
 
-// ✅ Web araması işlevi - Güncellenmiş Hali (Backend API ile entegre)
+// ✅ Web araması işlevi - DÜZELTİLDİ
 async function performWebSearch() {
+    // Kullanıcıdan prompt ile sormak yerine doğrudan input alanından okuyoruz
     const prompt = userInput.value.trim();
+    
+    // Eğer input alanı boşsa, bir uyarı gösteriyoruz
     if (!prompt) {
         alert("Lütfen arama için bir soru veya anahtar kelime yazın.");
         return;
     }
     
-    appendMessage("Sen", prompt, "user", true); // Kullanıcının sorusunu ekle
-    showLoadingIndicator(); // Yükleniyor animasyonunu göster
+    // Kullanıcı mesajını sohbete ekliyoruz
+    appendMessage("Sen", prompt, "user", true);
+    
+    // Yükleniyor animasyonunu gösteriyoruz
+    showLoadingIndicator();
+    
+    // Input alanını temizliyoruz
     userInput.value = "";
     if (sendArrowButton) {
         sendArrowButton.classList.remove('visible');
     }
     
     try {
-        // Backend API'nin web-search endpoint'ine istek gönder
+        console.log("Web araması için backend'e istek gönderiliyor: ", prompt);
+        
+        // Backend API'nin web-search endpoint'ine istek gönderiyoruz
         const response = await fetch(`${BACKEND_URL}/web-search`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 question: prompt,
-                mode: currentGptMode // Seçilen modu gönder
+                mode: currentGptMode
             }),
         });
         
-        hideLoadingIndicator(); // Yükleniyor animasyonunu kaldır
+        console.log("Web araması yanıtı alındı, durum kodu:", response.status);
+        
+        // Yükleniyor animasyonunu kaldırıyoruz
+        hideLoadingIndicator();
+        
+        if (!response.ok) {
+            throw new Error(`HTTP hata! Durum: ${response.status}`);
+        }
         
         const data = await response.json();
+        console.log("Web araması yanıt verisi:", data);
+        
         const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
         appendMessage("SibelGPT", reply, "bot", true);
         
     } catch (error) {
-        hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
+        // Hata durumunda yükleniyor animasyonunu kaldırıyoruz
+        hideLoadingIndicator();
         console.error("Web arama hatası:", error);
         appendMessage("SibelGPT", "⚠️ Web araması sırasında bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     }
@@ -516,7 +536,7 @@ window.addEventListener("load", () => {
   mainInterface = document.getElementById("main-interface");
   sendArrowButton = document.getElementById('send-arrow-button'); 
   gorselButton = document.getElementById('gorsel-buton'); 
-  webSearchButton = document.getElementById('web-search-button'); // YENİ: Web Araması butonunu seç
+  webSearchButton = document.getElementById('web-search-button');
   videoWrapper = document.getElementById('video-wrapper'); 
   introVideo = document.getElementById('intro-video');     
   playButton = document.getElementById('play-button');     
@@ -597,13 +617,24 @@ window.addEventListener("load", () => {
   if (gorselButton) { 
       gorselButton.addEventListener('click', handleGenerateImageClick);
   }
-  // YENİ: Web araması butonu için olay dinleyici
+  
+  // ✅ Web araması butonu için event listener - DÜZELTİLDİ
   if (webSearchButton) {
-      webSearchButton.addEventListener('click', performWebSearch);
+      console.log("Web arama butonu bulundu, dinleyici ekleniyor");
+      // Eski event listener'ı kaldır
+      webSearchButton.removeEventListener('click', performWebSearch);
+      // Yeni event listener ekle
+      webSearchButton.addEventListener('click', function() {
+          console.log("Web arama butonuna tıklandı!");
+          performWebSearch();
+      });
+  } else {
+      console.log("Web arama butonu bulunamadı!");
   }
-   if (playButton) { 
-       playButton.addEventListener('click', playIntroVideo);
-   }
+
+  if (playButton) { 
+      playButton.addEventListener('click', playIntroVideo);
+  }
 
   // Başlangıç
   clearChat(currentGptMode); // Ekranı temizle ve başlangıç mesajını/sohbetini ayarla
