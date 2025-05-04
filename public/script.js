@@ -91,7 +91,7 @@ function hideLoadingIndicator() {
 }
 // --- Yükleniyor fonksiyonları sonu ---
 
-// ✅ Web araması işlevi - YENİ EKLENDİ
+// ✅ Web araması işlevi - Güncellenmiş Hali (Backend API ile entegre)
 async function performWebSearch() {
     const prompt = userInput.value.trim();
     if (!prompt) {
@@ -107,16 +107,28 @@ async function performWebSearch() {
     }
     
     try {
-        // Google Custom Search API'sini çağır
-        const searchUrl = `${GOOGLE_SEARCH_URL}?key=${GOOGLE_API_KEY}&${GOOGLE_CSE_ID}&q=${encodeURIComponent(prompt)}`;
-        const searchResponse = await fetch(searchUrl);
-        const searchData = await searchResponse.json();
+        // Backend API'nin web-search endpoint'ine istek gönder
+        const response = await fetch(`${BACKEND_URL}/web-search`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                question: prompt,
+                mode: currentGptMode // Seçilen modu gönder
+            }),
+        });
         
-        if (searchData.error) {
-            hideLoadingIndicator();
-            appendMessage("SibelGPT", `❌ Arama yapılırken bir hata oluştu: ${searchData.error.message || 'Bilinmeyen hata'}`, "bot", true);
-            return;
-        }
+        hideLoadingIndicator(); // Yükleniyor animasyonunu kaldır
+        
+        const data = await response.json();
+        const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
+        appendMessage("SibelGPT", reply, "bot", true);
+        
+    } catch (error) {
+        hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
+        console.error("Web arama hatası:", error);
+        appendMessage("SibelGPT", "⚠️ Web araması sırasında bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
+    }
+}
         
         // Arama sonuçlarını formatla
         let searchResults = "";
