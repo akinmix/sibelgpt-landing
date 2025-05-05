@@ -516,39 +516,58 @@ function playIntroVideo() {
 }
 
 // Sayfa yüklendiğinde çalışacak kodlar
+// Sayfa yüklendiğinde çalışacak kodlar
 window.addEventListener("load", () => {
   // Elementleri seç
-  chatBox = document.getElementById("chat-box");
-  userInput = document.getElementById("user-input");
-  newChatButton = document.querySelector(".new-chat-button button");
-  historyList = document.getElementById("history-list");
-  splashScreen = document.getElementById("splash-screen");
-  mainInterface = document.getElementById("main-interface");
-  sendArrowButton = document.getElementById('send-arrow-button'); 
-  gorselButton = document.getElementById('gorsel-buton'); 
-  webSearchButton = document.getElementById('web-search-button');
-  videoWrapper = document.getElementById('video-wrapper'); 
-  introVideo = document.getElementById('intro-video');     
-  playButton = document.getElementById('play-button');     
-
+  // ... diğer element seçimleri
+  
   // GPT Mod Butonları
   const realEstateBtn = document.getElementById('real-estate-gpt');
   const mindCoachBtn = document.getElementById('mind-coach-gpt');
   const financeBtn = document.getElementById('finance-gpt');
   
-  // GPT Mod butonu olaylarını ekle
+  // GPT Mod butonu olaylarını tamamen yeniden tanımla
   if (realEstateBtn) {
-    realEstateBtn.addEventListener('click', () => setGptMode('real-estate'));
+    // Eski event listener'ı kaldır (ihtiyaç duyulursa)
+    realEstateBtn.removeEventListener('click', () => setGptMode('real-estate'));
+    
+    // Yeni event listener'ı ekle
+    realEstateBtn.onclick = function() {
+      console.log("🏠 Gayrimenkul GPT'ye tıklandı");
+      window.currentGptMode = 'real-estate';
+      setGptMode('real-estate');
+    };
   }
+  
   if (mindCoachBtn) {
-    mindCoachBtn.addEventListener('click', () => setGptMode('mind-coach'));
+    // Eski event listener'ı kaldır (ihtiyaç duyulursa)
+    mindCoachBtn.removeEventListener('click', () => setGptMode('mind-coach'));
+    
+    // Yeni event listener'ı ekle
+    mindCoachBtn.onclick = function() {
+      console.log("🧠 Zihin Koçu GPT'ye tıklandı");
+      window.currentGptMode = 'mind-coach';
+      setGptMode('mind-coach');
+    };
   }
+  
   if (financeBtn) {
-    financeBtn.addEventListener('click', () => setGptMode('finance'));
+    // Eski event listener'ı kaldır (ihtiyaç duyulursa)
+    financeBtn.removeEventListener('click', () => setGptMode('finance'));
+    
+    // Yeni event listener'ı ekle
+    financeBtn.onclick = function() {
+      console.log("💰 Finans GPT'ye tıklandı");
+      window.currentGptMode = 'finance';
+      setGptMode('finance');
+    };
   }
-
+  
   // Başlangıçta varsayılan mod için body sınıfını ayarla
   document.body.className = 'theme-real-estate';
+  
+  // ... diğer kodlar
+ 
 
   // Splash ekranını yönet
   if (splashScreen) {
