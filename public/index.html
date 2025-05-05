@@ -21,49 +21,73 @@
   </div>
 
   <div class="main-layout" style="display: none;" id="main-interface">
-    <!-- Merkezi chat-container bölümü -->
-    <div class="center-container">
-      <!-- Üstteki logo ve başlık alanı -->
-      <div class="center-header">
+    <div class="sidebar">
+      <div class="sidebar-header">
         <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
         <span>SibelGPT</span>
       </div>
-      
-      <!-- Alt kısımdaki GPT Seçenekleri Butonları -->
-      <div class="gpt-options">
-        <button id="real-estate-gpt" class="gpt-button active">🏠 Gayrimenkul GPT</button>
-        <button id="mind-coach-gpt" class="gpt-button">🧠 Zihin Koçu GPT</button>
-        <button id="finance-gpt" class="gpt-button">💰 Finans GPT</button>
+      <div class="new-chat-button">
+        <button><i class="fas fa-plus"></i> Yeni Sohbet</button>
+      </div>
+      <div class="history">
+        <h2>Geçmiş</h2>
+        <ul id="history-list">
+          <li>Henüz kaydedilmiş sohbet yok.</li>
+        </ul>
       </div>
       
-      <!-- Mesajlaşma alanı -->
-      <div class="chat-container" id="chat-box">
-        <!-- Mesajlar buraya eklenecek -->
+      <div class="sidebar-links-group">
+        <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder">
+          <i class="fas fa-envelope"></i> sibel@sibelizim.com
+        </a>
+        <a href="https://www.sibelizim.com" target="_blank"><i class="fas fa-external-link-alt"></i> sibelizim.com</a>
+        <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank"><i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım</a>
+        <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank"><i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım</a>
       </div>
+    </div>
 
-      <!-- Giriş alanı -->
-      <div class="chat-input">
-        <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-
-        <div class="input-wrapper">
-          <button id="send-arrow-button" title="Gönder">
-            <i class="fas fa-arrow-up"></i> 
-          </button>
-          <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+    <div class="content-area">
+      <!-- Ortadaki Chat Container -->
+      <div class="center-chat-container">
+        <!-- Üst kısım: SibelGPT logosu -->
+        <div class="center-header">
+          <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
+          <span>SibelGPT</span>
+        </div>
+        
+        <!-- Chat mesajlaşma alanı -->
+        <div class="chat-container" id="chat-box">
+          <!-- Mesajlar dinamik olarak buraya eklenecek -->
         </div>
 
-        <!-- İşlem butonları -->
-        <div class="action-buttons">
-          <button id="web-search-button" title="Web Araması"><i class="fas fa-search"></i> Web Araması</button>
-          <button id="gorsel-buton" title="Görsel Oluştur"><i class="fas fa-image"></i> Görsel Oluştur</button>
-        </div>
-      </div>
+        <!-- Alt kısım: Input ve butonlar -->
+        <div class="chat-input-container">
+          <!-- Sohbet girişi -->
+          <div class="chat-input">
+            <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
 
-      <!-- Yeni chat butonunu footer'a ekleyelim -->
-      <div class="center-footer">
-        <button id="new-chat-button" class="new-chat-button">
-          <i class="fas fa-plus"></i> Yeni Sohbet
-        </button>
+            <div class="input-wrapper">
+              <button id="send-arrow-button" title="Gönder">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+              <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+            </div>
+          </div>
+          
+          <!-- Butonlar -->
+          <div class="action-buttons">
+            <button id="web-search-button" title="Web Araması"><i class="fas fa-search"></i> Web Araması</button>
+            <button id="gorsel-buton" title="Görsel Oluştur"><i class="fas fa-image"></i> Görsel Oluştur</button>
+            <button id="more-actions-button" title="Daha Fazla"><i class="fas fa-ellipsis-h"></i></button>
+          </div>
+          
+          <!-- GPT Seçenekleri Butonları -->
+          <div class="gpt-options">
+            <button id="real-estate-gpt" class="gpt-button active">🏠 Gayrimenkul GPT</button>
+            <button id="mind-coach-gpt" class="gpt-button">🧠 Zihin Koçu GPT</button>
+            <button id="finance-gpt" class="gpt-button">💰 Finans GPT</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
