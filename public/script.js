@@ -1,12 +1,12 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// script.js - YENİDEN DÜZENLENMİŞ HALİ
+// script.js - Güncellenmiş Versiyon
 
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
 let currentConversation = [];
-let chatBox, userInput, newChatButton, splashScreen, mainInterface;
+let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
 let sendArrowButton; 
 let gorselButton;
 let webSearchButton; 
@@ -352,10 +352,121 @@ function clearChat(mode) {
   if(sendArrowButton) sendArrowButton.classList.remove('visible'); 
 }
 
+// Sidebar geçmiş listesini göster
+function displayHistory() {
+  if(!historyList) return; 
+  const conversations = loadConversations();
+  historyList.innerHTML = ''; 
+  if (conversations.length === 0) {
+    const placeholder = document.createElement('li');
+    placeholder.textContent = 'Henüz kaydedilmiş sohbet yok.';
+    placeholder.style.cursor = 'default';
+    placeholder.style.opacity = '0.7';
+    historyList.appendChild(placeholder);
+  } else {
+    conversations.forEach(conv => {
+      const listItem = document.createElement('li');
+      
+      // Sohbet başlığını mod ikonu ile göster
+      let modeIcon = '🏠'; // Varsayılan
+      if (conv.mode === 'mind-coach') modeIcon = '🧠';
+      else if (conv.mode === 'finance') modeIcon = '💰';
+      
+      listItem.textContent = `${modeIcon} ${conv.title || "Adsız Sohbet"}`; 
+      listItem.setAttribute('data-chat-id', conv.id);
+      listItem.setAttribute('data-chat-mode', conv.mode || 'real-estate');
+      
+      const deleteButton = document.createElement('span');
+      deleteButton.textContent = '🗑️';
+      deleteButton.style.float = 'right';
+      deleteButton.style.cursor = 'pointer';
+      deleteButton.style.marginLeft = '10px';
+      deleteButton.style.visibility = 'hidden'; 
+      deleteButton.onclick = (e) => {
+          e.stopPropagation(); 
+          deleteConversation(conv.id);
+      };
+      listItem.onmouseover = () => { deleteButton.style.visibility = 'visible'; };
+      listItem.onmouseout = () => { deleteButton.style.visibility = 'hidden'; };
+      listItem.appendChild(deleteButton);
+      historyList.appendChild(listItem);
+    });
+  }
+}
+
+// Seçili sohbeti yükle
+function loadConversation(chatId) {
+  saveCurrentConversation(); 
+  const conversations = loadConversations();
+  const conversationToLoad = conversations.find(conv => conv.id == chatId); 
+  if (conversationToLoad) {
+    // Önce modu ayarla
+    const mode = conversationToLoad.mode || 'real-estate';
+    setGptMode(mode);
+    
+    clearChat(mode); 
+    currentConversation = [{ 
+        sender: 'SibelGPT',
+        text: chatBox.querySelector('.bot-message').textContent.replace('SibelGPT:', '').trim(),
+        role: 'bot'
+    }];
+    conversationToLoad.messages.forEach((msg, index) => {
+       if (index > 0) { 
+           appendMessage(msg.sender, msg.text, msg.role, false); 
+       }
+    });
+    currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages)); 
+    highlightSelectedChat(chatId); 
+    if(userInput) userInput.focus(); 
+  } else {
+      console.error("Sohbet bulunamadı:", chatId);
+  }
+}
+
+// Kenar çubuğunda seçili sohbeti vurgula
+function highlightSelectedChat(chatId) {
+    if (!historyList) return;
+    historyList.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
+    if (chatId !== null) {
+        const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
+        if (selectedItem) selectedItem.classList.add('selected');
+    }
+}
+
+// Geçmiş listesinden bir sohbete tıklandığında
+function handleHistoryClick(event) {
+  const clickedElement = event.target;
+  const listItem = clickedElement.closest('li'); 
+  if (listItem && listItem.hasAttribute('data-chat-id')) {
+       if (event.target.tagName === 'SPAN' && event.target.textContent === '🗑️') {
+           return;
+       }
+       const chatId = listItem.getAttribute('data-chat-id');
+       loadConversation(chatId);
+       if(userInput) userInput.focus();
+  }
+}
+
+// Bir sohbeti silme fonksiyonu
+function deleteConversation(chatId) {
+    if (!confirm("Bu sohbeti silmek istediğinizden emin misiniz?")) {
+        return;
+    }
+    let conversations = loadConversations();
+    conversations = conversations.filter(conv => conv.id != chatId);
+    saveConversations(conversations);
+    displayHistory(); 
+    const selectedLi = historyList ? historyList.querySelector('.selected') : null;
+     if (!selectedLi || selectedLi.getAttribute('data-chat-id') == chatId) {
+         handleNewChat(); 
+     }
+}
+
 // Yeni sohbet butonu işlevi
 function handleNewChat() {
   saveCurrentConversation(); 
   clearChat(currentGptMode); 
+  displayHistory(); 
   if(userInput) userInput.focus(); 
 }
 
@@ -402,7 +513,8 @@ window.addEventListener("load", () => {
   // Elementleri seç
   chatBox = document.getElementById("chat-box");
   userInput = document.getElementById("user-input");
-  newChatButton = document.getElementById("new-chat-button");
+  newChatButton = document.querySelector(".new-chat-button button");
+  historyList = document.getElementById("history-list");
   splashScreen = document.getElementById("splash-screen");
   mainInterface = document.getElementById("main-interface");
   sendArrowButton = document.getElementById('send-arrow-button'); 
@@ -433,74 +545,77 @@ window.addEventListener("load", () => {
 
   // Splash ekranını yönet
   if (splashScreen) {
-    splashScreen.addEventListener('animationend', (event) => {
-      if (event.target.classList.contains('splash-logo')) { 
-        // Doğrudan gösterilmesi için düzeltme yapıyoruz
-        splashScreen.style.opacity = 0;
-        splashScreen.style.display = "none"; // Tamamen gizle
-        
-        if(mainInterface) {
-          mainInterface.style.display = "flex";
-          mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
-        }
-        
-        initializeChatInterface();
-        
-        if (videoWrapper) {
-          videoWrapper.style.display = "flex"; 
-        }
-      }
-    });
+      splashScreen.addEventListener('animationend', (event) => {
+          if (event.target.classList.contains('splash-logo')) { 
+              // Doğrudan gösterilmesi için düzeltme yapıyoruz
+              splashScreen.style.opacity = 0;
+              splashScreen.style.display = "none"; // Tamamen gizle
+              
+              if(mainInterface) {
+                  mainInterface.style.display = "flex";
+                  mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
+              }
+              
+              initializeChatInterface();
+              
+              if (videoWrapper) {
+                  videoWrapper.style.display = "flex"; 
+              }
+          }
+      });
   } else {
-    // Splash screen yoksa hemen göster
-    if(mainInterface) {
-      mainInterface.style.display = "flex";
-      mainInterface.style.opacity = 1;
-    }
-    initializeChatInterface();
-    if (videoWrapper) {
-      videoWrapper.style.display = "flex";
-    }
+      // Splash screen yoksa hemen göster
+      if(mainInterface) {
+          mainInterface.style.display = "flex";
+          mainInterface.style.opacity = 1;
+      }
+      initializeChatInterface();
+      if (videoWrapper) {
+          videoWrapper.style.display = "flex";
+      }
   }
 
   // Olay dinleyicilerini ekle
   if (userInput) {
-    userInput.addEventListener("keypress", handleInputKeyPress);
-    userInput.addEventListener('input', () => {
-      if (sendArrowButton) { 
-        if (userInput.value.trim() !== '') {
-          sendArrowButton.classList.add('visible');
-        } else {
-          sendArrowButton.classList.remove('visible');
-        }
-      }
-    });
+      userInput.addEventListener("keypress", handleInputKeyPress);
+      userInput.addEventListener('input', () => {
+          if (sendArrowButton) { 
+              if (userInput.value.trim() !== '') {
+                  sendArrowButton.classList.add('visible');
+              } else {
+                  sendArrowButton.classList.remove('visible');
+              }
+          }
+      });
   }
-  
   if (newChatButton) {
-    newChatButton.addEventListener("click", handleNewChat);
+      newChatButton.addEventListener("click", handleNewChat);
   }
-  
+  if (historyList) {
+      historyList.addEventListener("click", handleHistoryClick);
+  }
   if (sendArrowButton) { 
-    sendArrowButton.addEventListener('click', sendMessage);
+      sendArrowButton.addEventListener('click', sendMessage);
   }
-  
   if (gorselButton) { 
-    gorselButton.addEventListener('click', handleGenerateImageClick);
+      gorselButton.addEventListener('click', handleGenerateImageClick);
   }
   
   if (webSearchButton) {
-    console.log("Web arama butonu bulundu, dinleyici ekleniyor");
-    webSearchButton.addEventListener('click', function() {
-      console.log("Web arama butonuna tıklandı!");
-      performWebSearch();
-    });
+      console.log("Web arama butonu bulundu, dinleyici ekleniyor");
+      // Eski event listener'ı kaldır
+      webSearchButton.removeEventListener('click', performWebSearch);
+      // Yeni event listener ekle
+      webSearchButton.addEventListener('click', function() {
+          console.log("Web arama butonuna tıklandı!");
+          performWebSearch();
+      });
   } else {
-    console.log("Web arama butonu bulunamadı!");
+      console.log("Web arama butonu bulunamadı!");
   }
 
   if (playButton) { 
-    playButton.addEventListener('click', playIntroVideo);
+      playButton.addEventListener('click', playIntroVideo);
   }
 
   // ✅ Üye Ol / Giriş (E-Posta OTP) Butonları
@@ -554,13 +669,14 @@ window.addEventListener("load", () => {
 
   // Başlangıç
   clearChat(currentGptMode); // Ekranı temizle ve başlangıç mesajını/sohbetini ayarla
+  displayHistory(); // Mevcut geçmişi göster
   setTimeout(() => { if(userInput) userInput.focus(); }, 600); 
 });
 
 // Ana arayüz başlatıldığında çağrılır
 function initializeChatInterface() {
-  // Sohbeti hemen başlat
-  clearChat(currentGptMode);
+  // Display history burada çağrılıyor
+  displayHistory(); 
 }
 
 // indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
