@@ -17,8 +17,15 @@ let currentGptMode = 'real-estate'; // Varsayılan mod
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
 
 // GPT modu değiştirme fonksiyonu
+// GPT modu değiştirme fonksiyonu
 function setGptMode(mode) {
+    // Eski mod: BUNU EKLE
+    var oldMode = currentGptMode;
+    
+    // Modu güncelle ve log tut
+    window.currentGptMode = mode; // window ekleyin
     currentGptMode = mode;
+    console.log("Mod değişti: " + oldMode + " -> " + window.currentGptMode);
     
     // Aktif buton stilini güncelle
     const buttons = document.querySelectorAll('.gpt-button');
