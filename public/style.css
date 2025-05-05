@@ -1,4 +1,4 @@
-/* style.css - YENİDEN TASARLANMIŞ HALİ */
+/* style.css - Güncellenmiş Versiyon */
 
 /* GPT Tema Renkleri */
 :root {
@@ -123,26 +123,178 @@ body {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-/* YENİ MERKEZ ALAN TASARIMI */
 .main-layout {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
   flex-grow: 1;
   overflow: hidden;
 }
 
-.center-container {
+/* Sidebar Stilleri (Olduğu gibi korunuyor) */
+.sidebar {
+  width: 280px;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  padding: 20px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-header .app-logo {
+  height: 35px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar-header span {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.new-chat-button {
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.new-chat-button button {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: var(--theme-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.new-chat-button button:hover {
+  background-color: var(--theme-secondary);
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.history h2 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  flex-shrink: 0;
+}
+
+.history ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.history li {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.history li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.history li.selected {
+  background-color: var(--theme-medium);
+  font-weight: bold;
+  border-left: 4px solid var(--theme-primary);
+  padding-left: 6px;
+}
+
+.sidebar-links-group {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-links-group a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.sidebar-links-group a:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-links-group a i {
+  font-size: 16px;
+}
+
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+/* YENİ: Ortadaki Chat Container Stili */
+.center-chat-container {
   width: 100%;
   max-width: 800px;
-  height: 90vh;
-  margin: 0 auto;
-  background-color: rgba(0, 0, 0, 0.7);
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   border-radius: 12px;
   overflow: hidden;
+  margin: 0 auto;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -151,77 +303,23 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 15px 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .center-header .app-logo {
-  height: 35px;
+  height: 30px;
   width: auto;
-  object-fit: contain;
 }
 
 .center-header span {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: #fff;
 }
 
-/* GPT Seçenekleri Butonları */
-.gpt-options {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  padding: 15px 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  flex-wrap: wrap;
-}
-
-.gpt-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Gayrimenkul GPT Butonu */
-#real-estate-gpt.active {
-  background: var(--real-estate-gradient);
-  color: white;
-  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Zihin Koçu GPT Butonu */
-#mind-coach-gpt.active {
-  background: var(--mind-coach-gradient);
-  color: white;
-  box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Finans GPT Butonu */
-#finance-gpt.active {
-  background: var(--finance-gradient);
-  color: white;
-  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
-  transform: translateY(-2px);
-}
-
-.gpt-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-/* Sohbet Alanı */
+/* Chat mesajlaşma alanı */
 .chat-container {
   flex-grow: 1;
   overflow-y: auto;
@@ -242,8 +340,8 @@ body {
 }
 
 .message strong {
-    flex-shrink: 0;
-    font-weight: bold;
+  flex-shrink: 0;
+  font-weight: bold;
 }
 
 .user-message {
@@ -278,15 +376,21 @@ body.theme-finance .bot-message {
   border-left: 3px solid var(--finance-primary);
 }
 
-/* Giriş Alanı */
+/* Chat Input Container (Alt kısım) */
+.chat-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Chat girişi */
 .chat-input {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .input-wrapper {
@@ -325,28 +429,86 @@ body.theme-finance #user-input:focus {
   border-color: var(--finance-primary);
 }
 
-/* İşlem Butonları */
+/* Butonlar */
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 10px;
+  justify-content: center;
 }
 
-#gorsel-buton, #web-search-button {
-  padding: 12px 15px;
+#gorsel-buton, #web-search-button, #more-actions-button {
+  padding: 10px 15px;
   font-size: 14px;
   border-radius: 8px;
-  background-color: var(--theme-primary);
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  flex-grow: 1;
 }
 
-#gorsel-buton:hover, #web-search-button:hover {
-  background-color: var(--theme-secondary);
+#gorsel-buton:hover, #web-search-button:hover, #more-actions-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--theme-primary);
+}
+
+/* GPT Seçenekleri Butonları */
+.gpt-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.gpt-button {
+  padding: 8px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Gayrimenkul GPT Butonu */
+#real-estate-gpt.active {
+  background: var(--real-estate-gradient);
+  color: white;
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Zihin Koçu GPT Butonu */
+#mind-coach-gpt.active {
+  background: var(--mind-coach-gradient);
+  color: white;
+  box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Finans GPT Butonu */
+#finance-gpt.active {
+  background: var(--finance-gradient);
+  color: white;
+  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
+  transform: translateY(-2px);
+}
+
+.gpt-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 /* Gönder Butonu */
@@ -406,33 +568,6 @@ body.theme-finance .avatar {
   border-color: var(--finance-primary);
 }
 
-/* Footer Alanları */
-.center-footer {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.new-chat-button {
-  background-color: var(--theme-primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.new-chat-button:hover {
-  background-color: var(--theme-secondary);
-}
-
 .footer {
   width: 100%;
   text-align: center;
@@ -443,6 +578,7 @@ body.theme-finance .avatar {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   box-sizing: border-box;
+  z-index: 5;
 }
 
 /* Konuşan avatar video alanı */
@@ -456,13 +592,13 @@ body.theme-finance .avatar {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-width: 350px; /* Küçültülmüş boyut */
+  max-width: 350px;
   width: 90%;
 }
 
 #intro-video {
   width: 100%;
-  max-height: 250px; /* Küçültülmüş yükseklik */
+  max-height: 250px;
   border-radius: 20px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
   object-fit: contain;
@@ -594,41 +730,28 @@ body.theme-finance::-webkit-scrollbar-thumb {
 
 /* Mobil Düzenlemeler */
 @media (max-width: 768px) {
-  .center-container {
-    height: 85vh;
+  .sidebar {
+    display: none;
+  }
+  
+  .center-chat-container {
+    height: 90vh;
     width: 95%;
   }
   
   .chat-input {
     flex-direction: column;
-    padding: 10px;
   }
   
   .input-wrapper {
     width: 100%;
-    margin-bottom: 10px;
   }
   
-  .action-buttons {
+  .action-buttons, .gpt-options {
+    flex-direction: column;
+  }
+  
+  #gorsel-buton, #web-search-button, #more-actions-button, .gpt-button {
     width: 100%;
-    justify-content: space-between;
-  }
-  
-  #gorsel-buton, #web-search-button {
-    flex-grow: 1;
-    text-align: center;
-    justify-content: center;
-  }
-  
-  .message {
-    max-width: 90%;
-  }
-  
-  #video-wrapper {
-    max-width: 80%;
-  }
-  
-  #intro-video {
-    max-height: 200px;
   }
 }
