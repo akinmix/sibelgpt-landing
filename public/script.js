@@ -2,6 +2,9 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 // script.js - Güncellenmiş Versiyon
 
+// Global mod değişkeni
+window.currentGptMode = 'real-estate'; // Varsayılan mod
+
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
