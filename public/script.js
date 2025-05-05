@@ -1,12 +1,12 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// script.js - GÜNCELLENMİŞ HALİ (Web Araması Düzeltildi)
+// script.js - YENİDEN DÜZENLENMİŞ HALİ
 
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
 
 let currentConversation = [];
-let chatBox, userInput, newChatButton, historyList, splashScreen, mainInterface;
+let chatBox, userInput, newChatButton, splashScreen, mainInterface;
 let sendArrowButton; 
 let gorselButton;
 let webSearchButton; 
@@ -86,24 +86,17 @@ function hideLoadingIndicator() {
 }
 // --- Yükleniyor fonksiyonları sonu ---
 
-// ✅ Web araması işlevi - DÜZELTİLDİ
+// Web araması işlevi
 async function performWebSearch() {
-    // Kullanıcıdan prompt ile sormak yerine doğrudan input alanından okuyoruz
     const prompt = userInput.value.trim();
     
-    // Eğer input alanı boşsa, bir uyarı gösteriyoruz
     if (!prompt) {
         alert("Lütfen arama için bir soru veya anahtar kelime yazın.");
         return;
     }
     
-    // Kullanıcı mesajını sohbete ekliyoruz
     appendMessage("Sen", prompt, "user", true);
-    
-    // Yükleniyor animasyonunu gösteriyoruz
     showLoadingIndicator();
-    
-    // Input alanını temizliyoruz
     userInput.value = "";
     if (sendArrowButton) {
         sendArrowButton.classList.remove('visible');
@@ -112,7 +105,6 @@ async function performWebSearch() {
     try {
         console.log("Web araması için backend'e istek gönderiliyor: ", prompt);
         
-        // Backend API'nin web-search endpoint'ine istek gönderiyoruz
         const response = await fetch(`${BACKEND_URL}/web-search`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -124,7 +116,6 @@ async function performWebSearch() {
         
         console.log("Web araması yanıtı alındı, durum kodu:", response.status);
         
-        // Yükleniyor animasyonunu kaldırıyoruz
         hideLoadingIndicator();
         
         if (!response.ok) {
@@ -138,14 +129,13 @@ async function performWebSearch() {
         appendMessage("SibelGPT", reply, "bot", true);
         
     } catch (error) {
-        // Hata durumunda yükleniyor animasyonunu kaldırıyoruz
         hideLoadingIndicator();
         console.error("Web arama hatası:", error);
         appendMessage("SibelGPT", "⚠️ Web araması sırasında bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     }
 }
 
-// ✅ Görsel butonuna tıklandığında çağrılacak görsel üretim işlevi
+// Görsel butonuna tıklandığında çağrılacak görsel üretim işlevi
 async function handleGenerateImageClick() {
     const prompt = userInput.value.trim();
     if (!prompt) {
@@ -190,7 +180,6 @@ async function handleGenerateImageClick() {
         appendMessage("SibelGPT", "⚠️ Görsel üretme servisine bağlanırken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     }
 }
-
 
 // Ana mesaj gönderme fonksiyonu (Sohbet için)
 async function sendMessage() {
@@ -268,7 +257,6 @@ function handleInputKeyPress(event) {
   }
 }
 
-// -------- History, Conversation, Clear vb. Fonksiyonlar (Değişiklik Yok) --------
 // Sohbet geçmişini Local Storage'dan yükle
 function loadConversations() {
   const conversationsJson = localStorage.getItem(HISTORY_STORAGE_KEY);
@@ -280,6 +268,7 @@ function loadConversations() {
     return [];
   }
 }
+
 // Sohbet geçmişini Local Storage'a kaydet
 function saveConversations(conversations) {
   try {
@@ -296,6 +285,7 @@ function saveConversations(conversations) {
      }
   }
 }
+
 // Mevcut sohbeti kaydet (eğer anlamlıysa)
 function saveCurrentConversation() {
   if (!currentConversation || currentConversation.length <= 1) return; 
@@ -310,6 +300,7 @@ function saveCurrentConversation() {
   }); 
   saveConversations(conversations);
 }
+
 // Sohbet için başlık oluştur
 function generateConversationTitle(conversation) {
   const firstUserMessage = conversation.find(msg => msg.role === 'user');
@@ -325,6 +316,7 @@ function generateConversationTitle(conversation) {
   }
   return "Yeni Sohbet Başlığı"; 
 }
+
 // Sohbeti temizle
 function clearChat(mode) {
   if(!chatBox) return;
@@ -356,128 +348,161 @@ function clearChat(mode) {
       role: 'bot'
   }];
   
-  highlightSelectedChat(null); 
   if(userInput) userInput.value = ""; 
   if(sendArrowButton) sendArrowButton.classList.remove('visible'); 
 }
 
-// Geçmiş sohbetleri kenar çubuğunda göster
-function displayHistory() {
-  if(!historyList) return; 
-  const conversations = loadConversations();
-  historyList.innerHTML = ''; 
-  if (conversations.length === 0) {
-    const placeholder = document.createElement('li');
-    placeholder.textContent = 'Henüz kaydedilmiş sohbet yok.';
-    placeholder.style.cursor = 'default';
-    placeholder.style.opacity = '0.7';
-    historyList.appendChild(placeholder);
-  } else {
-    conversations.forEach(conv => {
-      const listItem = document.createElement('li');
-      
-      // Sohbet başlığını mod ikonu ile göster
-      let modeIcon = '🏠'; // Varsayılan
-      if (conv.mode === 'mind-coach') modeIcon = '🧠';
-      else if (conv.mode === 'finance') modeIcon = '💰';
-      
-      listItem.textContent = `${modeIcon} ${conv.title || "Adsız Sohbet"}`; 
-      listItem.setAttribute('data-chat-id', conv.id);
-      listItem.setAttribute('data-chat-mode', conv.mode || 'real-estate');
-      
-      const deleteButton = document.createElement('span');
-      deleteButton.textContent = '🗑️';
-      deleteButton.style.float = 'right';
-      deleteButton.style.cursor = 'pointer';
-      deleteButton.style.marginLeft = '10px';
-      deleteButton.style.visibility = 'hidden'; 
-      deleteButton.onclick = (e) => {
-          e.stopPropagation(); 
-          deleteConversation(conv.id);
-      };
-      listItem.onmouseover = () => { deleteButton.style.visibility = 'visible'; };
-      listItem.onmouseout = () => { deleteButton.style.visibility = 'hidden'; };
-      listItem.appendChild(deleteButton);
-      historyList.appendChild(listItem);
-    });
-  }
-}
-// Seçili sohbeti yükle
-function loadConversation(chatId) {
-  saveCurrentConversation(); 
-  const conversations = loadConversations();
-  const conversationToLoad = conversations.find(conv => conv.id == chatId); 
-  if (conversationToLoad) {
-    // Önce modu ayarla
-    const mode = conversationToLoad.mode || 'real-estate';
-    setGptMode(mode);
-    
-    clearChat(mode); 
-    currentConversation = [{ 
-        sender: 'SibelGPT',
-        text: chatBox.querySelector('.bot-message').textContent.replace('SibelGPT:', '').trim(),
-        role: 'bot'
-    }];
-    conversationToLoad.messages.forEach((msg, index) => {
-       if (index > 0) { 
-           appendMessage(msg.sender, msg.text, msg.role, false); 
-       }
-    });
-    currentConversation = JSON.parse(JSON.stringify(conversationToLoad.messages)); 
-    highlightSelectedChat(chatId); 
-    if(userInput) userInput.focus(); 
-  } else {
-      console.error("Sohbet bulunamadı:", chatId);
-  }
-}
-// Kenar çubuğunda seçili sohbeti vurgula
-function highlightSelectedChat(chatId) {
-    if (!historyList) return;
-    historyList.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
-    if (chatId !== null) {
-        const selectedItem = historyList.querySelector(`li[data-chat-id="${chatId}"]`);
-        if (selectedItem) selectedItem.classList.add('selected');
-    }
-}
-// Geçmiş listesinden bir sohbete tıklandığında
-function handleHistoryClick(event) {
-  const clickedElement = event.target;
-  const listItem = clickedElement.closest('li'); 
-  if (listItem && listItem.hasAttribute('data-chat-id')) {
-       if (event.target.tagName === 'SPAN' && event.target.textContent === '🗑️') {
-           return;
-       }
-       const chatId = listItem.getAttribute('data-chat-id');
-       loadConversation(chatId);
-       if(userInput) userInput.focus();
-  }
-}
-// Bir sohbeti silme fonksiyonu
-function deleteConversation(chatId) {
-    if (!confirm("Bu sohbeti silmek istediğinizden emin misiniz?")) {
-        return;
-    }
-    let conversations = loadConversations();
-    conversations = conversations.filter(conv => conv.id != chatId);
-    saveConversations(conversations);
-    displayHistory(); 
-    const selectedLi = historyList ? historyList.querySelector('.selected') : null;
-     if (!selectedLi || selectedLi.getAttribute('data-chat-id') == chatId) {
-         handleNewChat(); 
-     }
-}
 // Yeni sohbet butonu işlevi
 function handleNewChat() {
   saveCurrentConversation(); 
   clearChat(currentGptMode); 
-  displayHistory(); 
   if(userInput) userInput.focus(); 
 }
-// -------- History, Conversation, Clear vb. Fonksiyonlar Sonu --------
 
+// Avatar videosunu oynat
+function playIntroVideo() {
+  const video = introVideo || document.getElementById("intro-video");
+  const wrapper = videoWrapper || document.getElementById("video-wrapper");
+  const button = playButton || document.getElementById("play-button");
+
+  if (video && wrapper && button) {
+    wrapper.style.display = "flex"; 
+    wrapper.classList.remove("fade-out"); 
+    
+    video.muted = false; 
+    video.currentTime = 0;
+    
+    video.play().then(() => {
+        button.textContent = "🔊 Oynatılıyor..."; 
+        button.disabled = true; 
+    }).catch(e => {
+        console.warn("Video otomatik oynatılamadı:", e);
+        wrapper.style.display = 'none'; 
+    });
+
+    video.onended = () => {
+      wrapper.classList.add("fade-out");
+      button.textContent = "🎤 Dinle"; 
+      button.disabled = false; 
+      
+      setTimeout(() => {
+          if (wrapper.classList.contains('fade-out')) { 
+             wrapper.style.display = "none"; 
+             wrapper.classList.remove("fade-out"); 
+          }
+      }, 1500); 
+    };
+  } else {
+      console.error("Video veya kontrol elemanları bulunamadı!");
+  }
+}
 
 // Sayfa yüklendiğinde çalışacak kodlar
 window.addEventListener("load", () => {
+  // Elementleri seç
+  chatBox = document.getElementById("chat-box");
+  userInput = document.getElementById("user-input");
+  newChatButton = document.getElementById("new-chat-button");
+  splashScreen = document.getElementById("splash-screen");
+  mainInterface = document.getElementById("main-interface");
+  sendArrowButton = document.getElementById('send-arrow-button'); 
+  gorselButton = document.getElementById('gorsel-buton'); 
+  webSearchButton = document.getElementById('web-search-button');
+  videoWrapper = document.getElementById('video-wrapper'); 
+  introVideo = document.getElementById('intro-video');     
+  playButton = document.getElementById('play-button');     
+
+  // GPT Mod Butonları
+  const realEstateBtn = document.getElementById('real-estate-gpt');
+  const mindCoachBtn = document.getElementById('mind-coach-gpt');
+  const financeBtn = document.getElementById('finance-gpt');
+  
+  // GPT Mod butonu olaylarını ekle
+  if (realEstateBtn) {
+    realEstateBtn.addEventListener('click', () => setGptMode('real-estate'));
+  }
+  if (mindCoachBtn) {
+    mindCoachBtn.addEventListener('click', () => setGptMode('mind-coach'));
+  }
+  if (financeBtn) {
+    financeBtn.addEventListener('click', () => setGptMode('finance'));
+  }
+
+  // Başlangıçta varsayılan mod için body sınıfını ayarla
+  document.body.className = 'theme-real-estate';
+
+  // Splash ekranını yönet
+  if (splashScreen) {
+    splashScreen.addEventListener('animationend', (event) => {
+      if (event.target.classList.contains('splash-logo')) { 
+        // Doğrudan gösterilmesi için düzeltme yapıyoruz
+        splashScreen.style.opacity = 0;
+        splashScreen.style.display = "none"; // Tamamen gizle
+        
+        if(mainInterface) {
+          mainInterface.style.display = "flex";
+          mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
+        }
+        
+        initializeChatInterface();
+        
+        if (videoWrapper) {
+          videoWrapper.style.display = "flex"; 
+        }
+      }
+    });
+  } else {
+    // Splash screen yoksa hemen göster
+    if(mainInterface) {
+      mainInterface.style.display = "flex";
+      mainInterface.style.opacity = 1;
+    }
+    initializeChatInterface();
+    if (videoWrapper) {
+      videoWrapper.style.display = "flex";
+    }
+  }
+
+  // Olay dinleyicilerini ekle
+  if (userInput) {
+    userInput.addEventListener("keypress", handleInputKeyPress);
+    userInput.addEventListener('input', () => {
+      if (sendArrowButton) { 
+        if (userInput.value.trim() !== '') {
+          sendArrowButton.classList.add('visible');
+        } else {
+          sendArrowButton.classList.remove('visible');
+        }
+      }
+    });
+  }
+  
+  if (newChatButton) {
+    newChatButton.addEventListener("click", handleNewChat);
+  }
+  
+  if (sendArrowButton) { 
+    sendArrowButton.addEventListener('click', sendMessage);
+  }
+  
+  if (gorselButton) { 
+    gorselButton.addEventListener('click', handleGenerateImageClick);
+  }
+  
+  if (webSearchButton) {
+    console.log("Web arama butonu bulundu, dinleyici ekleniyor");
+    webSearchButton.addEventListener('click', function() {
+      console.log("Web arama butonuna tıklandı!");
+      performWebSearch();
+    });
+  } else {
+    console.log("Web arama butonu bulunamadı!");
+  }
+
+  if (playButton) { 
+    playButton.addEventListener('click', playIntroVideo);
+  }
+
   // ✅ Üye Ol / Giriş (E-Posta OTP) Butonları
   const emailButtons = document.querySelectorAll('.register-button, .login-button');
   emailButtons.forEach(btn => {
@@ -527,167 +552,15 @@ window.addEventListener("load", () => {
     }
   });
 
-  // Elementleri seç
-  chatBox = document.getElementById("chat-box");
-  userInput = document.getElementById("user-input");
-  newChatButton = document.querySelector(".new-chat-button button");
-  historyList = document.getElementById("history-list");
-  splashScreen = document.getElementById("splash-screen");
-  mainInterface = document.getElementById("main-interface");
-  sendArrowButton = document.getElementById('send-arrow-button'); 
-  gorselButton = document.getElementById('gorsel-buton'); 
-  webSearchButton = document.getElementById('web-search-button');
-  videoWrapper = document.getElementById('video-wrapper'); 
-  introVideo = document.getElementById('intro-video');     
-  playButton = document.getElementById('play-button');     
-
-  // GPT Mod Butonları
-  const realEstateBtn = document.getElementById('real-estate-gpt');
-  const mindCoachBtn = document.getElementById('mind-coach-gpt');
-  const financeBtn = document.getElementById('finance-gpt');
-  
-  // GPT Mod butonu olaylarını ekle
-  if (realEstateBtn) {
-    realEstateBtn.addEventListener('click', () => setGptMode('real-estate'));
-  }
-  if (mindCoachBtn) {
-    mindCoachBtn.addEventListener('click', () => setGptMode('mind-coach'));
-  }
-  if (financeBtn) {
-    financeBtn.addEventListener('click', () => setGptMode('finance'));
-  }
-
-  // Başlangıçta varsayılan mod için body sınıfını ayarla
-  document.body.className = 'theme-real-estate';
-
-  // Splash ekranını yönet - DÜZELTİLDİ
-  if (splashScreen) {
-      splashScreen.addEventListener('animationend', (event) => {
-          if (event.target.classList.contains('splash-logo')) { 
-              // Doğrudan gösterilmesi için düzeltme yapıyoruz
-              splashScreen.style.opacity = 0;
-              splashScreen.style.display = "none"; // Tamamen gizle
-              
-              if(mainInterface) {
-                  mainInterface.style.display = "flex";
-                  mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
-              }
-              
-              initializeChatInterface();
-              
-              if (videoWrapper) {
-                  videoWrapper.style.display = "flex"; 
-              }
-          }
-      });
-  } else {
-      // Splash screen yoksa hemen göster
-      if(mainInterface) {
-          mainInterface.style.display = "flex";
-          mainInterface.style.opacity = 1;
-      }
-      initializeChatInterface();
-      if (videoWrapper) {
-          videoWrapper.style.display = "flex";
-      }
-  }
-
-  // Olay dinleyicilerini ekle
-  if (userInput) {
-      userInput.addEventListener("keypress", handleInputKeyPress);
-      userInput.addEventListener('input', () => {
-          if (sendArrowButton) { 
-              if (userInput.value.trim() !== '') {
-                  sendArrowButton.classList.add('visible');
-              } else {
-                  sendArrowButton.classList.remove('visible');
-              }
-          }
-      });
-  }
-  if (newChatButton) {
-      newChatButton.addEventListener("click", handleNewChat);
-  }
-  if (historyList) {
-      historyList.addEventListener("click", handleHistoryClick);
-  }
-  if (sendArrowButton) { 
-      sendArrowButton.addEventListener('click', sendMessage);
-  }
-  if (gorselButton) { 
-      gorselButton.addEventListener('click', handleGenerateImageClick);
-  }
-  
-  // ✅ Web araması butonu için event listener - DÜZELTİLDİ
-  if (webSearchButton) {
-      console.log("Web arama butonu bulundu, dinleyici ekleniyor");
-      // Eski event listener'ı kaldır
-      webSearchButton.removeEventListener('click', performWebSearch);
-      // Yeni event listener ekle
-      webSearchButton.addEventListener('click', function() {
-          console.log("Web arama butonuna tıklandı!");
-          performWebSearch();
-      });
-  } else {
-      console.log("Web arama butonu bulunamadı!");
-  }
-
-  if (playButton) { 
-      playButton.addEventListener('click', playIntroVideo);
-  }
-
   // Başlangıç
   clearChat(currentGptMode); // Ekranı temizle ve başlangıç mesajını/sohbetini ayarla
-  displayHistory(); // Mevcut geçmişi göster
   setTimeout(() => { if(userInput) userInput.focus(); }, 600); 
 });
 
 // Ana arayüz başlatıldığında çağrılır
 function initializeChatInterface() {
-    // Display history burada çağrılıyor zaten load event'inde.
-    // displayHistory(); 
-}
-
-// Avatar videosunu oynat
-function playIntroVideo() {
-  const video = introVideo || document.getElementById("intro-video");
-  const wrapper = videoWrapper || document.getElementById("video-wrapper");
-  const button = playButton || document.getElementById("play-button");
-
-  if (video && wrapper && button) {
-    wrapper.style.display = "flex"; 
-    wrapper.classList.remove("fade-out"); 
-    
-    // Videoyu görünür yapalım (CSS'de display:none yoksa zaten görünür olabilir)
-    // video.style.display = 'block'; // Eğer CSS'de gizliyse bunu aç
-
-    video.muted = false; 
-    video.currentTime = 0;
-    
-    video.play().then(() => {
-        button.textContent = "🔊 Oynatılıyor..."; 
-        button.disabled = true; 
-    }).catch(e => {
-        console.warn("Video otomatik oynatılamadı:", e);
-        wrapper.style.display = 'none'; 
-    });
-
-    video.onended = () => {
-      wrapper.classList.add("fade-out");
-      button.textContent = "🎤 Dinle"; 
-      button.disabled = false; 
-      
-      setTimeout(() => {
-          if (wrapper.classList.contains('fade-out')) { 
-             wrapper.style.display = "none"; 
-             // video.style.display = 'none'; // Videoyu da gizle
-             wrapper.classList.remove("fade-out"); 
-          }
-      }, 1500); 
-    };
-  } else {
-      console.error("Video veya kontrol elemanları bulunamadı!");
-  }
+  // Sohbeti hemen başlat
+  clearChat(currentGptMode);
 }
 
 // indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
@@ -698,6 +571,7 @@ window.addEventListener('beforeunload', () => {
   saveCurrentConversation();
 });
 
+// Supabase bağlantısı
 const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
 const supabase = createClient(supabaseUrl, supabaseKey);
