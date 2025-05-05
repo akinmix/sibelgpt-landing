@@ -15,20 +15,15 @@ let gorselButton;
 let webSearchButton; 
 let videoWrapper, introVideo, playButton; 
 let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
-let currentGptMode = 'real-estate'; // Varsayılan mod
 
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
 
 // GPT modu değiştirme fonksiyonu
-// GPT modu değiştirme fonksiyonu
 function setGptMode(mode) {
-    // Eski mod: BUNU EKLE
-    var oldMode = currentGptMode;
+    console.log("Mod değiştiriliyor:", mode);
     
-    // Modu güncelle ve log tut
-    window.currentGptMode = mode; // window ekleyin
-    currentGptMode = mode;
-    console.log("Mod değişti: " + oldMode + " -> " + window.currentGptMode);
+    // Mod değişkenlerini güncelle
+    window.currentGptMode = mode;
     
     // Aktif buton stilini güncelle
     const buttons = document.querySelectorAll('.gpt-button');
@@ -114,13 +109,14 @@ async function performWebSearch() {
     
     try {
         console.log("Web araması için backend'e istek gönderiliyor: ", prompt);
+        console.log("Web araması modü:", window.currentGptMode);
         
         const response = await fetch(`${BACKEND_URL}/web-search`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 question: prompt,
-                mode: currentGptMode
+                mode: window.currentGptMode // Global değişkeni kullan
             }),
         });
         
@@ -204,13 +200,15 @@ async function sendMessage() {
   }
 
   try {
+    console.log("Mesaj gönderiliyor, mod:", window.currentGptMode);
+    
     // Seçili GPT modunu da gönder
     const response = await fetch(`${BACKEND_URL}/chat`, { 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
           question: message,
-          mode: currentGptMode // Seçilen modu gönder
+          mode: window.currentGptMode // Global değişkeni kullan
       }),
     });
     
@@ -306,7 +304,7 @@ function saveCurrentConversation() {
     id: chatId, 
     title: title, 
     messages: currentConversation,
-    mode: currentGptMode // Kayıt yaparken modu da kaydedelim
+    mode: window.currentGptMode // Global değişkeni kullan
   }); 
   saveConversations(conversations);
 }
@@ -475,7 +473,7 @@ function deleteConversation(chatId) {
 // Yeni sohbet butonu işlevi
 function handleNewChat() {
   saveCurrentConversation(); 
-  clearChat(currentGptMode); 
+  clearChat(window.currentGptMode); // Global değişkeni kullan
   displayHistory(); 
   if(userInput) userInput.focus(); 
 }
@@ -519,11 +517,21 @@ function playIntroVideo() {
 }
 
 // Sayfa yüklendiğinde çalışacak kodlar
-// Sayfa yüklendiğinde çalışacak kodlar
 window.addEventListener("load", () => {
   // Elementleri seç
-  // ... diğer element seçimleri
-  
+  chatBox = document.getElementById("chat-box");
+  userInput = document.getElementById("user-input");
+  newChatButton = document.querySelector(".new-chat-button button");
+  historyList = document.getElementById("history-list");
+  splashScreen = document.getElementById("splash-screen");
+  mainInterface = document.getElementById("main-interface");
+  sendArrowButton = document.getElementById('send-arrow-button'); 
+  gorselButton = document.getElementById('gorsel-buton'); 
+  webSearchButton = document.getElementById('web-search-button');
+  videoWrapper = document.getElementById('video-wrapper'); 
+  introVideo = document.getElementById('intro-video');     
+  playButton = document.getElementById('play-button');     
+
   // GPT Mod Butonları
   const realEstateBtn = document.getElementById('real-estate-gpt');
   const mindCoachBtn = document.getElementById('mind-coach-gpt');
@@ -531,10 +539,6 @@ window.addEventListener("load", () => {
   
   // GPT Mod butonu olaylarını tamamen yeniden tanımla
   if (realEstateBtn) {
-    // Eski event listener'ı kaldır (ihtiyaç duyulursa)
-    realEstateBtn.removeEventListener('click', () => setGptMode('real-estate'));
-    
-    // Yeni event listener'ı ekle
     realEstateBtn.onclick = function() {
       console.log("🏠 Gayrimenkul GPT'ye tıklandı");
       window.currentGptMode = 'real-estate';
@@ -543,10 +547,6 @@ window.addEventListener("load", () => {
   }
   
   if (mindCoachBtn) {
-    // Eski event listener'ı kaldır (ihtiyaç duyulursa)
-    mindCoachBtn.removeEventListener('click', () => setGptMode('mind-coach'));
-    
-    // Yeni event listener'ı ekle
     mindCoachBtn.onclick = function() {
       console.log("🧠 Zihin Koçu GPT'ye tıklandı");
       window.currentGptMode = 'mind-coach';
@@ -555,22 +555,15 @@ window.addEventListener("load", () => {
   }
   
   if (financeBtn) {
-    // Eski event listener'ı kaldır (ihtiyaç duyulursa)
-    financeBtn.removeEventListener('click', () => setGptMode('finance'));
-    
-    // Yeni event listener'ı ekle
     financeBtn.onclick = function() {
       console.log("💰 Finans GPT'ye tıklandı");
       window.currentGptMode = 'finance';
       setGptMode('finance');
     };
   }
-  
+
   // Başlangıçta varsayılan mod için body sınıfını ayarla
   document.body.className = 'theme-real-estate';
-  
-  // ... diğer kodlar
- 
 
   // Splash ekranını yönet
   if (splashScreen) {
@@ -632,9 +625,6 @@ window.addEventListener("load", () => {
   
   if (webSearchButton) {
       console.log("Web arama butonu bulundu, dinleyici ekleniyor");
-      // Eski event listener'ı kaldır
-      webSearchButton.removeEventListener('click', performWebSearch);
-      // Yeni event listener ekle
       webSearchButton.addEventListener('click', function() {
           console.log("Web arama butonuna tıklandı!");
           performWebSearch();
@@ -697,7 +687,7 @@ window.addEventListener("load", () => {
   });
 
   // Başlangıç
-  clearChat(currentGptMode); // Ekranı temizle ve başlangıç mesajını/sohbetini ayarla
+  clearChat(window.currentGptMode); // Global değişkeni kullan
   displayHistory(); // Mevcut geçmişi göster
   setTimeout(() => { if(userInput) userInput.focus(); }, 600); 
 });
@@ -718,9 +708,8 @@ window.addEventListener('beforeunload', () => {
 
 // Supabase bağlantısı
 const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiw
+    
 // Supabase OTP login işlemi
 async function handleLoginOrSignup() {
   const email = prompt("Lütfen e-posta adresinizi girin:");
