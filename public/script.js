@@ -516,188 +516,6 @@ function playIntroVideo() {
   }
 }
 
-// Sayfa yüklendiğinde çalışacak kodlar
-window.addEventListener("load", () => {
-  // Elementleri seç
-  chatBox = document.getElementById("chat-box");
-  userInput = document.getElementById("user-input");
-  newChatButton = document.querySelector(".new-chat-button button");
-  historyList = document.getElementById("history-list");
-  splashScreen = document.getElementById("splash-screen");
-  mainInterface = document.getElementById("main-interface");
-  sendArrowButton = document.getElementById('send-arrow-button'); 
-  gorselButton = document.getElementById('gorsel-buton'); 
-  webSearchButton = document.getElementById('web-search-button');
-  videoWrapper = document.getElementById('video-wrapper'); 
-  introVideo = document.getElementById('intro-video');     
-  playButton = document.getElementById('play-button');     
-
-  // GPT Mod Butonları
-  const realEstateBtn = document.getElementById('real-estate-gpt');
-  const mindCoachBtn = document.getElementById('mind-coach-gpt');
-  const financeBtn = document.getElementById('finance-gpt');
-  
-  // GPT Mod butonu olaylarını tamamen yeniden tanımla
-  if (realEstateBtn) {
-    realEstateBtn.onclick = function() {
-      console.log("🏠 Gayrimenkul GPT'ye tıklandı");
-      window.currentGptMode = 'real-estate';
-      setGptMode('real-estate');
-    };
-  }
-  
-  if (mindCoachBtn) {
-    mindCoachBtn.onclick = function() {
-      console.log("🧠 Zihin Koçu GPT'ye tıklandı");
-      window.currentGptMode = 'mind-coach';
-      setGptMode('mind-coach');
-    };
-  }
-  
-  if (financeBtn) {
-    financeBtn.onclick = function() {
-      console.log("💰 Finans GPT'ye tıklandı");
-      window.currentGptMode = 'finance';
-      setGptMode('finance');
-    };
-  }
-
-  // Başlangıçta varsayılan mod için body sınıfını ayarla
-  document.body.className = 'theme-real-estate';
-
-  // Splash ekranını yönet
-  if (splashScreen) {
-      splashScreen.addEventListener('animationend', (event) => {
-          if (event.target.classList.contains('splash-logo')) { 
-              // Doğrudan gösterilmesi için düzeltme yapıyoruz
-              splashScreen.style.opacity = 0;
-              splashScreen.style.display = "none"; // Tamamen gizle
-              
-              if(mainInterface) {
-                  mainInterface.style.display = "flex";
-                  mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
-              }
-              
-              initializeChatInterface();
-              
-              if (videoWrapper) {
-                  videoWrapper.style.display = "flex"; 
-              }
-          }
-      });
-  } else {
-      // Splash screen yoksa hemen göster
-      if(mainInterface) {
-          mainInterface.style.display = "flex";
-          mainInterface.style.opacity = 1;
-      }
-      initializeChatInterface();
-      if (videoWrapper) {
-          videoWrapper.style.display = "flex";
-      }
-  }
-
-  // Olay dinleyicilerini ekle
-  if (userInput) {
-      userInput.addEventListener("keypress", handleInputKeyPress);
-      userInput.addEventListener('input', () => {
-          if (sendArrowButton) { 
-              if (userInput.value.trim() !== '') {
-                  sendArrowButton.classList.add('visible');
-              } else {
-                  sendArrowButton.classList.remove('visible');
-              }
-          }
-      });
-  }
-  if (newChatButton) {
-      newChatButton.addEventListener("click", handleNewChat);
-  }
-  if (historyList) {
-      historyList.addEventListener("click", handleHistoryClick);
-  }
-  if (sendArrowButton) { 
-      sendArrowButton.addEventListener('click', sendMessage);
-  }
-  if (gorselButton) { 
-      gorselButton.addEventListener('click', handleGenerateImageClick);
-  }
-  
-  if (webSearchButton) {
-      console.log("Web arama butonu bulundu, dinleyici ekleniyor");
-      webSearchButton.addEventListener('click', function() {
-          console.log("Web arama butonuna tıklandı!");
-          performWebSearch();
-      });
-  } else {
-      console.log("Web arama butonu bulunamadı!");
-  }
-
-  if (playButton) { 
-      playButton.addEventListener('click', playIntroVideo);
-  }
-
-  // ✅ Üye Ol / Giriş (E-Posta OTP) Butonları
-  const emailButtons = document.querySelectorAll('.register-button, .login-button');
-  emailButtons.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const email = prompt("Lütfen e-posta adresinizi girin:");
-      if (!email) return;
-      const { error } = await supabase.auth.signInWithOtp({ email });
-      if (error) {
-        alert("Hata: " + error.message);
-      } else {
-        alert("E-posta adresinize giriş bağlantısı gönderildi.");
-      }
-    });
-  });
-
-  // ✅ Google ile Giriş Butonu
-  const googleBtn = document.getElementById("google-login");
-  if (googleBtn) {
-    googleBtn.addEventListener("click", async () => {
-      console.log("Google GİRİŞ tıklandı");
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-      });
-      if (error) {
-        alert("Google ile girişte hata oluştu: " + error.message);
-      }
-    });
-  }
-
-  // ✅ Çıkış Butonu
-  const logoutBtn = document.getElementById("logout-button");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      alert("Çıkış yapıldı.");
-      location.reload();
-    });
-  }
-
-  // ✅ Kullanıcı Giriş Yaptıysa Maili Göster
-  supabase.auth.getUser().then(({ data: { user } }) => {
-    if (user) {
-      const mailAlani = document.getElementById('kullanici-maili-alani');
-      if (mailAlani) {
-        mailAlani.innerHTML = `<div style="margin-top: 8px; font-size: 13px; color: #ccc;"><i class="fas fa-user"></i> ${user.email}</div>`;
-      }
-    }
-  });
-
-  // Başlangıç
-  clearChat(window.currentGptMode); // Global değişkeni kullan
-  displayHistory(); // Mevcut geçmişi göster
-  setTimeout(() => { if(userInput) userInput.focus(); }, 600); 
-});
-
-// Ana arayüz başlatıldığında çağrılır
-function initializeChatInterface() {
-  // Display history burada çağrılıyor
-  displayHistory(); 
-}
-
 // indirGorsel fonksiyonunu window nesnesine ekleyelim ki HTML içinden çağrılabilsin
 window.indirGorsel = indirGorsel;
 
@@ -723,20 +541,285 @@ async function handleLoginOrSignup() {
   }
 }
 
+// Sayfa yüklendiğinde çalışacak kodlar
+window.addEventListener("load", () => {
+  try {
+    console.log("Sayfa yüklenmesi başladı");
+    
+    // Elementleri seç
+    chatBox = document.getElementById("chat-box");
+    userInput = document.getElementById("user-input");
+    newChatButton = document.querySelector(".new-chat-button button");
+    historyList = document.getElementById("history-list");
+    splashScreen = document.getElementById("splash-screen");
+    mainInterface = document.getElementById("main-interface");
+    sendArrowButton = document.getElementById('send-arrow-button'); 
+    gorselButton = document.getElementById('gorsel-buton'); 
+    
+    // DOM elementleri için hata kontrolü
+    console.log("Element kontrolü: chatBox:", !!chatBox);
+    console.log("Element kontrolü: userInput:", !!userInput);
+    console.log("Element kontrolü: splashScreen:", !!splashScreen);
+    console.log("Element kontrolü: mainInterface:", !!mainInterface);
+    
+    // Web butonunu ekstra kontrol ile seç
+    webSearchButton = document.getElementById('web-search-button');
+    console.log("Web search button element:", webSearchButton);
+    
+    if (!webSearchButton) {
+      console.warn("Web arama butonu bulunamadı! HTML kontrol edilmeli.");
+    } else {
+      console.log("Web arama butonu bulundu, dinleyici ekleniyor");
+      webSearchButton.addEventListener('click', function() {
+        console.log("Web arama butonuna tıklandı!");
+        performWebSearch();
+      });
+    }
+    
+    videoWrapper = document.getElementById('video-wrapper'); 
+    introVideo = document.getElementById('intro-video');     
+    playButton = document.getElementById('play-button');     
+
+    // GPT Mod Butonları
+    const realEstateBtn = document.getElementById('real-estate-gpt');
+    const mindCoachBtn = document.getElementById('mind-coach-gpt');
+    const financeBtn = document.getElementById('finance-gpt');
+    
+    // GPT Mod butonu olaylarını tamamen yeniden tanımla
+    if (realEstateBtn) {
+      realEstateBtn.onclick = function() {
+        console.log("🏠 Gayrimenkul GPT'ye tıklandı");
+        window.currentGptMode = 'real-estate';
+        setGptMode('real-estate');
+      };
+    } else {
+      console.warn("Gayrimenkul GPT butonu bulunamadı!");
+    }
+    
+    if (mindCoachBtn) {
+      mindCoachBtn.onclick = function() {
+        console.log("🧠 Zihin Koçu GPT'ye tıklandı");
+        window.currentGptMode = 'mind-coach';
+        setGptMode('mind-coach');
+      };
+    } else {
+      console.warn("Zihin Koçu GPT butonu bulunamadı!");
+    }
+    
+    if (financeBtn) {
+      financeBtn.onclick = function() {
+        console.log("💰 Finans GPT'ye tıklandı");
+        window.currentGptMode = 'finance';
+        setGptMode('finance');
+      };
+    } else {
+      console.warn("Finans GPT butonu bulunamadı!");
+    }
+
+    // Başlangıçta varsayılan mod için body sınıfını ayarla
+    document.body.className = 'theme-real-estate';
+
+    // Splash ekranını yönet
+    if (splashScreen) {
+      console.log("Splash screen bulundu, animasyon dinleyici ekleniyor");
+      splashScreen.addEventListener('animationend', (event) => {
+        if (event.target.classList.contains('splash-logo')) { 
+          console.log("Splash animasyonu tamamlandı, ana arayüz gösteriliyor");
+          // Doğrudan gösterilmesi için düzeltme yapıyoruz
+          splashScreen.style.opacity = 0;
+          splashScreen.style.display = "none"; // Tamamen gizle
+          
+          setTimeout(() => {
+            if(mainInterface) {
+              mainInterface.style.display = "flex";
+              mainInterface.style.opacity = 1; // Görünürlüğünü garanti et
+              console.log("Ana arayüz gösteriliyor");
+            } else {
+              console.error("Ana arayüz elementi bulunamadı!");
+            }
+            
+            initializeChatInterface();
+            
+            if (videoWrapper) {
+              videoWrapper.style.display = "flex"; 
+            }
+          }, 100); // Kısa bir gecikme
+        }
+      });
+    } else {
+      console.warn("Splash screen bulunamadı, doğrudan ana arayüz gösteriliyor");
+      // Splash screen yoksa hemen göster
+      if(mainInterface) {
+        mainInterface.style.display = "flex";
+        mainInterface.style.opacity = 1;
+      } else {
+        console.error("Ana arayüz elementi bulunamadı!");
+      }
+      initializeChatInterface();
+      if (videoWrapper) {
+        videoWrapper.style.display = "flex";
+      }
+    }
+
+    // Olay dinleyicilerini ekle
+    if (userInput) {
+      userInput.addEventListener("keypress", handleInputKeyPress);
+      userInput.addEventListener('input', () => {
+        if (sendArrowButton) { 
+          if (userInput.value.trim() !== '') {
+            sendArrowButton.classList.add('visible');
+          } else {
+            sendArrowButton.classList.remove('visible');
+          }
+        }
+      });
+    }
+    
+    if (newChatButton) {
+      newChatButton.addEventListener("click", handleNewChat);
+    }
+    
+    if (historyList) {
+      historyList.addEventListener("click", handleHistoryClick);
+    }
+    
+    if (sendArrowButton) { 
+      sendArrowButton.addEventListener('click', sendMessage);
+    }
+    
+    if (gorselButton) { 
+      gorselButton.addEventListener('click', handleGenerateImageClick);
+    }
+    
+    if (playButton) { 
+      playButton.addEventListener('click', playIntroVideo);
+    }
+
+    // ✅ Üye Ol / Giriş (E-Posta OTP) Butonları
+    const emailButtons = document.querySelectorAll('.register-button, .login-button');
+    if (emailButtons.length > 0) {
+      emailButtons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+               const email = prompt("Lütfen e-posta adresinizi girin:");
+            if (!email) return;
+            try {
+              const { error } = await supabase.auth.signInWithOtp({ email });
+              if (error) {
+                alert("Hata: " + error.message);
+              } else {
+                alert("E-posta adresinize giriş bağlantısı gönderildi.");
+              }
+            } catch (e) {
+              console.error("Login hatası:", e);
+              alert("Giriş yapılırken bir hata oluştu.");
+            }
+          });
+        });
+      } else {
+        console.warn("Email giriş butonları bulunamadı!");
+      }
+
+      // ✅ Google ile Giriş Butonu
+      const googleBtn = document.getElementById("google-login");
+      if (googleBtn) {
+        googleBtn.addEventListener("click", async () => {
+          console.log("Google GİRİŞ tıklandı");
+          try {
+            const { error } = await supabase.auth.signInWithOAuth({
+              provider: 'google',
+            });
+            if (error) {
+              alert("Google ile girişte hata oluştu: " + error.message);
+            }
+          } catch (e) {
+            console.error("Google login hatası:", e);
+            alert("Google ile giriş yapılırken bir hata oluştu.");
+          }
+        });
+      }
+
+      // ✅ Çıkış Butonu
+      const logoutBtn = document.getElementById("logout-button");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+          try {
+            await supabase.auth.signOut();
+            alert("Çıkış yapıldı.");
+            location.reload();
+          } catch (e) {
+            console.error("Çıkış hatası:", e);
+            alert("Çıkış yapılırken bir hata oluştu.");
+          }
+        });
+      }
+
+      // ✅ Kullanıcı Giriş Yaptıysa Maili Göster
+      try {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+          if (user) {
+            const mailAlani = document.getElementById('kullanici-maili-alani');
+            if (mailAlani) {
+              mailAlani.innerHTML = `<div style="margin-top: 8px; font-size: 13px; color: #ccc;"><i class="fas fa-user"></i> ${user.email}</div>`;
+            }
+          }
+        }).catch(e => {
+          console.error("Kullanıcı bilgisi alınırken hata:", e);
+        });
+      } catch (e) {
+        console.error("Auth işleminde hata:", e);
+      }
+
+      // Başlangıç
+      clearChat(window.currentGptMode); // Global değişkeni kullan
+      displayHistory(); // Mevcut geçmişi göster
+      setTimeout(() => { if(userInput) userInput.focus(); }, 600);
+    } catch (mainError) {
+      console.error("Sayfa yüklenirken kritik hata:", mainError);
+      // Hatayı göster (opsiyonel)
+      if (document.body) {
+        document.body.innerHTML = `
+          <div style="text-align: center; margin-top: 50px; color: white;">
+            <h2>Sayfa yüklenirken bir hata oluştu</h2>
+            <p>Lütfen sayfayı yenileyin veya daha sonra tekrar deneyin.</p>
+            <button onclick="location.reload()" style="padding: 10px 20px; margin-top: 20px;">Sayfayı Yenile</button>
+            <p style="margin-top: 20px; font-size: 12px; color: gray;">Hata detayı: ${mainError.message}</p>
+          </div>
+        `;
+      }
+    }
+});
+
+// Ana arayüz başlatıldığında çağrılır
+function initializeChatInterface() {
+  try {
+    console.log("initializeChatInterface çağrıldı");
+    // Display history burada çağrılıyor
+    displayHistory();
+  } catch (e) {
+    console.error("Chat arayüzü başlatılırken hata:", e);
+  }
+}
+
 // DOM yüklendikten sonra olay dinleyicilerini ekle
 document.addEventListener('DOMContentLoaded', () => {
-  // Üye Ol ve Giriş butonları
-  document.querySelectorAll('.register-button, .login-button').forEach(button => {
-    button.addEventListener('click', handleLoginOrSignup);
-  });
+  console.log("DOMContentLoaded olayı tetiklendi");
   
-  // Çıkış butonu
-  const logoutButton = document.getElementById('logout-button');
-  if (logoutButton) {
-    logoutButton.addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      alert("Çıkış yapıldı.");
-      location.reload();
+  try {
+    // Üye Ol ve Giriş butonları
+    document.querySelectorAll('.register-button, .login-button').forEach(button => {
+      button.addEventListener('click', handleLoginOrSignup);
     });
+    
+    // Çıkış butonu
+    const logoutButton = document.getElementById('logout-button');
+    if (logoutButton) {
+      logoutButton.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        alert("Çıkış yapıldı.");
+        location.reload();
+      });
+    }
+  } catch (e) {
+    console.error("DOMContentLoaded işleyicisinde hata:", e);
   }
 });
