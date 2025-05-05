@@ -323,7 +323,7 @@ body {
 .chat-container {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 40px;
   scroll-behavior: smooth;
 }
 
