@@ -286,8 +286,8 @@ body {
 /* YENİ: Ortadaki Chat Container Stili */
 .center-chat-container {
   width: 100%;
-  max-width: 800px;
-  height: 80vh;
+  max-width: 950px;
+  height: 88vh;
   display: flex;
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.6);
