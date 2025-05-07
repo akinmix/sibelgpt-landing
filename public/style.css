@@ -754,4 +754,16 @@ body.theme-finance::-webkit-scrollbar-thumb {
   #gorsel-buton, #web-search-button, #more-actions-button, .gpt-button {
     width: 100%;
   }
+
+/* SibelGPT merkez başlığını gizle */
+.center-header {
+  display: none;
 }
+
+/* Chat alanının üst kısmındaki boşluğu düzelt */
+.chat-container {
+  padding-top: 30px;
+}
+
+} /* Bu parantez önceki bir bloğu kapatıyor */
+} /* Bu parantez başka bir bloğu kapatıyor */
