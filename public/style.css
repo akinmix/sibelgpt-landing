@@ -785,4 +785,17 @@ body.theme-finance::-webkit-scrollbar-thumb {
   .chat-container {
     padding-top: 30px;
   }
+  
+/* Modül Arka Planları */
+body.theme-real-estate {
+  background-image: url('arka_plan_gayrimenkul.jpg');
 }
+
+body.theme-mind-coach {
+  background-image: url('arka_plan.jpg');
+}
+
+body.theme-finance {
+  background-image: url('arka_plan_finans.jpg');
+}
+
