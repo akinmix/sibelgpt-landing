@@ -523,6 +523,28 @@ body.theme-finance .bot-message {
   color: var(--theme-primary);
   border-color: var(--theme-primary);
   transform: scale(1.05);
+  }
+
+/* Web araması butonu - mavi dünya */
+#web-search-button {
+  color: #1976d2 !important;
+}
+
+#web-search-button:hover {
+  background: rgba(25, 118, 210, 0.1);
+  color: #1565c0 !important;
+  border-color: #1976d2 !important;
+}
+
+/* Görsel oluştur butonu - kırmızı fırça */
+#gorsel-buton {
+  color: #d32f2f !important;
+}
+
+#gorsel-buton:hover {
+  background: rgba(211, 47, 47, 0.1);
+  color: #b71c1c !important;
+  border-color: #d32f2f !important;
 }
 
 /* Avatarlar */
