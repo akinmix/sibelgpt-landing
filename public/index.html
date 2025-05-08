@@ -38,9 +38,6 @@
   </div>
 
   <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-    <button id="help-button" class="auth-button" title="Yardım">
-      <i class="fas fa-question-circle"></i> Yardım
-    </button>
     <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
     <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
     <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
@@ -97,8 +94,8 @@
           
           <!-- Butonlar -->
           <div class="action-buttons">
-            <button id="web-search-button" title="Web Araması"><i class="fas fa-search" style="color: #03a9f4;"></i> Web Araması</button>
-            <button id="gorsel-buton" title="Görsel Oluştur"><i class="fas fa-palette" style="color: #ef5350;"></i> Görsel Oluştur</button>
+            <button id="web-search-button" title="Web Araması"><i class="fas fa-search"></i> Web Araması</button>
+            <button id="gorsel-buton" title="Görsel Oluştur"><i class="fas fa-image"></i> Görsel Oluştur</button>
             <button id="more-actions-button" title="Daha Fazla"><i class="fas fa-ellipsis-h"></i></button>
           </div>
           
@@ -146,159 +143,5 @@
     }
   }
   </script>
-      
-      <div class="help-modal-body">
-        <div class="help-tabs">
-          <button class="help-tab active" data-tab="genel">Genel Bilgiler</button>
-          <button class="help-tab" data-tab="moduller">GPT Modülleri</button>
-          <button class="help-tab" data-tab="ozellikler">Özellikler</button>
-          <button class="help-tab" data-tab="ipuclari">İpuçları</button>
-        </div>
-        
-        <div class="help-content">
-          <!-- Genel Bilgiler Sekmesi -->
-          <div id="genel" class="help-tab-content active">
-            <h3>SibelGPT'ye Hoş Geldiniz!</h3>
-            <p>SibelGPT, Sibel Kazan Midilli'nin uzun yıllara dayanan profesyonel deneyimini yapay zeka teknolojisiyle birleştiren, kapsamlı bir danışmanlık platformudur.</p>
-            
-            <h4>Ana Özellikler:</h4>
-            <ul>
-              <li><strong>Üç Uzmanlık Modülü:</strong> Gayrimenkul, Zihin Koçu ve Finans</li>
-              <li><strong>Gerçek Zamanlı Web Araması:</strong> En güncel bilgilere anında erişim</li>
-              <li><strong>Görsel Oluşturma:</strong> AI ile benzersiz görseller yaratın</li>
-              <li><strong>Sohbet Geçmişi:</strong> Tüm konuşmalarınız güvenle saklanır</li>
-            </ul>
-            
-            <h4>Nasıl Başlarım?</h4>
-            <ol>
-              <li>Üstteki modül butonlarından biri seçerek başlayın</li>
-              <li>Sorunuzu yazın veya konuşmak istediğiniz konuyu belirtin</li>
-              <li>Özel özellikler için butonları kullanın (Web Araması, Görsel Oluştur)</li>
-            </ol>
-          </div>
-          
-          <!-- GPT Modülleri Sekmesi -->
-          <div id="moduller" class="help-tab-content">
-            <h3>GPT Modülleri</h3>
-            
-            <div class="module-card">
-              <div class="module-icon">🏠</div>
-              <h4>Gayrimenkul GPT</h4>
-              <p>Emlak sektöründe uzman danışmanlık hizmeti:</p>
-              <ul>
-                <li>Satılık/kiralık emlak ilanlarını bulma</li>
-                <li>Gayrimenkul yatırım danışmanlığı</li>
-                <li>Emlak sektörü analizi</li>
-                <li>Konut kredisi ve finansman seçenekleri</li>
-              </ul>
-            </div>
-            
-            <div class="module-card">
-              <div class="module-icon">🧠</div>
-              <h4>Zihin Koçu GPT</h4>
-              <p>Kişisel gelişim ve zihinsel sağlık konularında rehberlik:</p>
-              <ul>
-                <li>Numeroloji ve astroloji yorumları</li>
-                <li>Motivasyon ve kendini geliştirme</li>
-                <li>Stres yönetimi ve meditasyon</li>
-                <li>Yaşam dengesini kurma stratejileri</li>
-              </ul>
-            </div>
-            
-            <div class="module-card">
-              <div class="module-icon">💰</div>
-              <h4>Finans GPT</h4>
-              <p>Yatırım ve finansal planlama uzmanı:</p>
-              <ul>
-                <li>Borsa analizleri ve hisse senedi önerileri</li>
-                <li>Teknik ve temel analiz yorumları</li>
-                <li>Kripto para yatırımları</li>
-                <li>Portföy yönetimi ve risk analizi</li>
-              </ul>
-            </div>
-          </div>
-          
-          <!-- Özellikler Sekmesi -->
-          <div id="ozellikler" class="help-tab-content">
-            <h3>Özel Özellikler</h3>
-            
-            <h4><i class="fas fa-search"></i> Web Araması</h4>
-            <p>Güncel bilgilere anında erişim sağlayın:</p>
-            <ul>
-              <li>Son dakika haberleri ve gelişmeler</li>
-              <li>Güncel piyasa verileri</li>
-              <li>Anlık döviz kurları ve borsa değerleri</li>
-              <li>Hava durumu ve trafik bilgileri</li>
-            </ul>
-            
-            <h4><i class="fas fa-image"></i> Görsel Oluşturma</h4>
-            <p>Yapay zeka ile benzersiz görseller yaratın:</p>
-            <ul>
-              <li>Proje görselleri ve sunumlar için</li>
-              <li>Logo ve marka tasarımları</li>
-              <li>Konsept görselleri</li>
-              <li>İllüstrasyonlar ve dijital sanat</li>
-            </ul>
-            
-            <h4><i class="fas fa-history"></i> Sohbet Geçmişi</h4>
-            <p>Tüm konuşmalarınıza kolayca erişin:</p>
-            <ul>
-              <li>Önceki konuşmalarınızı görüntüleyin</li>
-              <li>Favori sohbetlerinizi kaydedin</li>
-              <li>İhtiyacınız olan bilgilere hızla ulaşın</li>
-            </ul>
-          </div>
-          
-          <!-- İpuçları Sekmesi -->
-          <div id="ipuclari" class="help-tab-content">
-            <h3>Kullanım İpuçları</h3>
-            
-            <h4>Daha İyi Sonuçlar Almanın Püf Noktaları:</h4>
-            
-            <div class="tip-card">
-              <i class="fas fa-lightbulb tip-icon"></i>
-              <div>
-                <h5>Spesifik Sorular Sorun</h5>
-                <p>Genel sorular yerine detaylı ve spesifik sorular sorun. Örneğin: "İstanbul'da ev fiyatları" yerine "Kadıköy bölgesinde 3+1 dairelerin ortalama fiyatı ne?"</p>
-              </div>
-            </div>
-            
-            <div class="tip-card">
-              <i class="fas fa-exchange-alt tip-icon"></i>
-              <div>
-                <h5>Doğru Modülü Seçin</h5>
-                <p>Her modül kendi uzmanlık alanında daha başarılıdır. Emlak soruları için Gayrimenkul GPT, yatırım soruları için Finans GPT kullanın.</p>
-              </div>
-            </div>
-            
-            <div class="tip-card">
-              <i class="fas fa-clock tip-icon"></i>
-              <div>
-                <h5>Güncel Bilgi İçin Web Araması Kullanın</h5>
-                <p>Anlık veriler için (hava durumu, borsa, haberler) mutlaka Web Araması özelliğini kullanın.</p>
-              </div>
-            </div>
-            
-            <div class="tip-card">
-              <i class="fas fa-comments tip-icon"></i>
-              <div>
-                <h5>İletişimi Sürdürün</h5>
-                <p>Bir konuşmada birden fazla soru sorabilir, ek açıklamalar isteyebilirsiniz. SibelGPT konuşmanın bağlamını korur.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="help-modal-footer">
-          <a href="help.html" target="_blank" class="detailed-guide-btn">
-            <i class="fas fa-book"></i> Detaylı Kılavuza Git
-          </a>
-          <button id="close-help-btn" class="primary-btn">
-            Anladım, Başlayalım!
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
