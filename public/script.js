@@ -14,9 +14,6 @@ let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
 let currentGptMode = 'real-estate'; // Varsayılan mod
 
-// Yardım modalı için değişkenler
-let helpModal, helpButton, closeModalBtn, closeHelpBtn;
-
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
 
 // GPT modu değiştirme fonksiyonu
@@ -56,107 +53,6 @@ function setGptMode(mode) {
     
     // Sohbeti temizle ve yeni moda göre başlat
     clearChat(mode);
-}
-
-// --- Yardım Modal Fonksiyonları ---
-
-// Modal'ı aç
-function openHelpModal() {
-  if (!helpModal) return;
-  helpModal.style.display = 'flex';
-  // Animasyon için timeout
-  setTimeout(() => {
-    helpModal.classList.add('active');
-  }, 10);
-  
-  // İlk sekmeyi aktif yap
-  const firstTab = helpModal.querySelector('.help-tab');
-  if (firstTab) {
-    switchHelpTab('genel');
-  }
-}
-
-// Modal'ı kapat
-function closeHelpModal() {
-  if (!helpModal) return;
-  helpModal.classList.remove('active');
-  // Animasyon tamamlandıktan sonra gizle
-  setTimeout(() => {
-    helpModal.style.display = 'none';
-  }, 300);
-}
-
-// Sekme değiştir
-function switchHelpTab(tabName) {
-  if (!helpModal) return;
-  
-  // Tüm sekmeleri ve içerikleri pasif yap
-  const allTabs = helpModal.querySelectorAll('.help-tab');
-  const allContents = helpModal.querySelectorAll('.help-tab-content');
-  
-  allTabs.forEach(tab => tab.classList.remove('active'));
-  allContents.forEach(content => content.classList.remove('active'));
-  
-  // Seçili sekmeyi aktif yap
-  const selectedTab = helpModal.querySelector(`[data-tab="${tabName}"]`);
-  const selectedContent = helpModal.querySelector(`#${tabName}`);
-  
-  if (selectedTab && selectedContent) {
-    selectedTab.classList.add('active');
-    selectedContent.classList.add('active');
-  }
-}
-
-// Modal dışına tıklandığında kapat
-function clickOutsideModal(event) {
-  if (event.target === helpModal) {
-    closeHelpModal();
-  }
-}
-
-// ESC tuşu ile kapat
-function handleEscapeKey(event) {
-  if (event.key === 'Escape' && helpModal.classList.contains('active')) {
-    closeHelpModal();
-  }
-}
-
-// Yardım modal'ını başlat
-function initializeHelpModal() {
-  // Elementleri seç
-  helpModal = document.getElementById('help-modal');
-  helpButton = document.getElementById('help-button');
-  closeModalBtn = document.getElementById('close-help-modal');
-  closeHelpBtn = document.getElementById('close-help-btn');
-  
-  // Event listener'ları ekle
-  if (helpButton) {
-    helpButton.addEventListener('click', openHelpModal);
-  }
-  
-  if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', closeHelpModal);
-  }
-  
-  if (closeHelpBtn) {
-    closeHelpBtn.addEventListener('click', closeHelpModal);
-  }
-  
-  if (helpModal) {
-    helpModal.addEventListener('click', clickOutsideModal);
-    
-    // Sekme tıklama event'leri
-    const tabButtons = helpModal.querySelectorAll('.help-tab');
-    tabButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const tabName = button.getAttribute('data-tab');
-        switchHelpTab(tabName);
-      });
-    });
-  }
-  
-  // ESC tuşu event'i
-  document.addEventListener('keydown', handleEscapeKey);
 }
 
 // --- Yükleniyor animasyonunu ekleme/kaldırma fonksiyonları ---
@@ -770,16 +666,6 @@ window.addEventListener("load", () => {
       }
     }
   });
-
-  // Yardım modalını başlat
-  initializeHelpModal();
-  
-  // İlk kullanım kontrolü (isteğe bağlı)
-  const firstVisit = localStorage.getItem('sibelgpt_first_visit');
-  if (!firstVisit) {
-    setTimeout(openHelpModal, 2000); // 2 saniye sonra aç
-    localStorage.setItem('sibelgpt_first_visit', 'false');
-  }
 
   // Başlangıç
   clearChat(currentGptMode); // Ekranı temizle ve başlangıç mesajını/sohbetini ayarla
