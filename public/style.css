@@ -788,16 +788,13 @@ body.theme-finance::-webkit-scrollbar-thumb {
   
 /* Modül Arka Planları */
 body.theme-real-estate {
-  background-image: url('https://www.sibelgpt.com/arka_plan_gayrimenkul.jpg') !important;
-  background-size: cover !important;
+  background-image: url('/arka_plan_gayrimenkul.jpg') !important;
 }
 
 body.theme-mind-coach {
-  background-image: url('https://www.sibelgpt.com/arka_plan.jpg') !important;
-  background-size: cover !important;
+  background-image: url('/arka_plan.jpg') !important;
 }
 
 body.theme-finance {
-  background-image: url('https://www.sibelgpt.com/arka_plan_finans.jpg') !important;
-  background-size: cover !important;
+  background-image: url('/arka_plan_finans.jpg') !important;
 }
