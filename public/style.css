@@ -62,7 +62,7 @@ body.theme-real-estate {
   --theme-gradient: var(--real-estate-gradient);
   --theme-light: var(--real-estate-light);
   --theme-medium: var(--real-estate-medium);
-  background-image: url('arka_plan_gayrimenkul.jpg'); /* DÜZELTİLDİ */
+  background-image: url('arka_plan_gayrimenkul.jpg');
 }
 
 body.theme-mind-coach {
@@ -71,7 +71,7 @@ body.theme-mind-coach {
   --theme-gradient: var(--mind-coach-gradient);
   --theme-light: var(--mind-coach-light);
   --theme-medium: var(--mind-coach-medium);
-  background-image: url('arka_plan.jpg'); /* DÜZELTİLDİ - Genel arka planınız sanırım bu */
+  background-image: url('arka_plan.jpg');
 }
 
 body.theme-finance {
@@ -80,7 +80,7 @@ body.theme-finance {
   --theme-gradient: var(--finance-gradient);
   --theme-light: var(--finance-light);
   --theme-medium: var(--finance-medium);
-  background-image: url('arka_plan_finans.jpg'); /* DÜZELTİLDİ */
+  background-image: url('arka_plan_finans.jpg');
 }
 
 /* Splash Ekranı */
@@ -588,34 +588,34 @@ body.theme-finance {
 /* Konuşan Avatar Video Alanı */
 #video-wrapper {
   position: fixed;
-  bottom: 20px; /* Sağ alta alalım */
-  right: 20px;
-  /* top: 50%; left: 50%; transform: translate(-50%, -50%); */ /* Ortalamak yerine */
+  top: 50%; /* DİKEYDE ORTALA */
+  left: 50%; /* YATAYDA ORTALA */
+  transform: translate(-50%, -50%); /* TAM ORTALA */
   z-index: 9998; /* En üstte ama splash'in altında */
-  display: none; /* Başlangıçta gizli */
+  display: none; /* Başlangıçta gizli, JS ile gösterilecek */
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-width: 280px; /* Biraz daha küçük */
-  width: 80vw; /* Mobil için */
-  background-color: rgba(0,0,0,0.7);
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  max-width: 320px; /* Genişliği biraz ayarlayalım */
+  width: 85vw; /* Mobil için responsive genişlik */
+  background-color: rgba(0,0,0,0.75); /* Biraz daha belirgin arka plan */
+  padding: 20px;
+  border-radius: 15px; /* Daha yuvarlak köşeler */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5); /* Daha belirgin gölge */
 }
 
 #intro-video {
   width: 100%;
-  max-height: 200px; /* Yükseklik sınırı */
-  border-radius: 8px;
+  max-height: 220px; /* Yükseklik sınırı */
+  border-radius: 10px; /* Video için de yuvarlak köşe */
   object-fit: cover; /* Videoyu kapla */
 }
 
 #play-button {
-  padding: 8px 15px;
-  font-size: 13px;
+  padding: 10px 20px; /* Buton boyutu */
+  font-size: 14px; /* Buton yazı boyutu */
   border: none;
-  border-radius: 18px;
+  border-radius: 20px; /* Buton için yuvarlak köşe */
   background-color: var(--theme-primary);
   color: var(--text-color-light);
   cursor: pointer;
@@ -634,8 +634,8 @@ body.theme-finance {
 }
 
 @keyframes fadeOutVideo {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.9); pointer-events: none; }
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); } /* Transform'u koru */
+  to { opacity: 0; transform: translate(-50%, -50%) scale(0.9); pointer-events: none; } /* Transform'u koru */
 }
 
 /* Yükleniyor Animasyonu (Mesaj içinde) */
@@ -800,18 +800,18 @@ body.theme-finance {
       font-size: 12px;
   }
 
-  #video-wrapper { /* Video mobil için farklı konumda olabilir */
-      max-width: 200px;
-      bottom: 10px;
-      right: 10px;
-      padding: 10px;
+  #video-wrapper { /* Video mobil için farklı konumda olabilir, ortalamayı koruyalım */
+      max-width: 260px; /* Mobil için biraz daha dar */
+      width: 80vw;
+      padding: 15px;
+      /* top: 50%; left: 50%; transform: translate(-50%, -50%); Bu zaten globalde var */
   }
   #intro-video {
-      max-height: 150px;
+      max-height: 180px; /* Mobil için video yüksekliği */
   }
   #play-button {
-      padding: 6px 12px;
-      font-size: 12px;
+      padding: 8px 15px; /* Mobil için buton boyutu */
+      font-size: 13px;
   }
 }
 
