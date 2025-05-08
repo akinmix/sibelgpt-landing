@@ -330,10 +330,10 @@ function clearChat(mode) {
       welcomeMessage = `<strong>SibelGPT:</strong> Merhaba! Zihin Koçu modunu seçtiniz. Size kişisel gelişim, motivasyon ve zihinsel sağlık konularında rehberlik edebilirim. Hayatınızdaki zorlukları aşmanıza veya hedeflerinize ulaşmanıza nasıl yardımcı olabilirim?`;
       break;
     case 'finance':
-      welcomeMessage = `<strong>SibelGPT:</strong> Merhaba! Finans GPT modunu seçtiniz. Yatırım stratejileri, finansal planlama, bütçe yönetimi ve finansal hedeflerinize ulaşma konularında size yardımcı olabilirim. Finansal konularda nasıl yardımcı olabilirim?`;
+      welcomeMessage = `<strong>SibelGPT:</strong> Merhaba! Finans GPT modunu seçtiniz. Yatırım stratejileri, finansal planlama, bütçe yönetimi ve finansal hedeflerinize ulaşma konularında size yardımcı olabilirim.`;
       break;
     default: // real-estate veya tanımlanmamış bir mod
-      welcomeMessage = `<strong>SibelGPT:</strong> Merhaba! Gayrimenkul GPT modunu seçtiniz. İdeal evinizi bulmanıza, gayrimenkul yatırımlarınızı değerlendirmenize ve emlak sektörüyle ilgili sorularınızı yanıtlamanıza yardımcı olabilirim. Size nasıl yardımcı olabilirim?`;
+      welcomeMessage = `<strong>SibelGPT:</strong> Merhaba! Gayrimenkul GPT modunu seçtiniz. İdeal evinizi bulmanıza, gayrimenkul yatırımlarınızı değerlendirmenize ve emlak sektörüyle ilgili sorularınızı yanıtlamanıza yardımcı olabilirim.`;
       break;
   }
   
