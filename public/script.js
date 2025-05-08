@@ -522,7 +522,14 @@ window.addEventListener("load", () => {
   webSearchButton = document.getElementById('web-search-button');
   videoWrapper = document.getElementById('video-wrapper'); 
   introVideo = document.getElementById('intro-video');     
-  playButton = document.getElementById('play-button');     
+  playButton = document.getElementById('play-button');    
+  // Yardım butonu event listener'ı
+  const helpButton = document.getElementById('help-button');
+  if (helpButton) {
+   helpButton.addEventListener('click', () => {
+    window.open('help.html', '_blank');
+  });
+}
 
   // GPT Mod Butonları
   const realEstateBtn = document.getElementById('real-estate-gpt');
