@@ -1,36 +1,68 @@
-/* style.css - Simgeli Butonlar ile Güncellenmiş Versiyon */
+/* style.css - SibelGPT */
 
-/* GPT Tema Renkleri */
+/* Kök Değişkenler: Tema Renkleri ve Genel Ayarlar */
 :root {
-  /* Gayrimenkul GPT - Mavi/Yeşil */
-  --real-estate-primary: #1976d2;
-  --real-estate-secondary: #26a69a;
-  --real-estate-gradient: linear-gradient(135deg, #1976d2, #26a69a);
-  --real-estate-light: rgba(25, 118, 210, 0.1);
-  --real-estate-medium: rgba(25, 118, 210, 0.5);
+  /* Font Ailesi */
+  --font-family-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Gayrimenkul GPT - Mavi/Yeşil Tema */
+  --real-estate-primary: #1976d2; /* Ana Mavi */
+  --real-estate-secondary: #26a69a; /* İkincil Turkuaz */
+  --real-estate-gradient: linear-gradient(135deg, var(--real-estate-primary), var(--real-estate-secondary));
+  --real-estate-light: rgba(25, 118, 210, 0.1); /* Açık Mavi (Bot mesajları için) */
+  --real-estate-medium: rgba(25, 118, 210, 0.5); /* Orta Mavi (Scrollbar için) */
   
-  /* Zihin Koçu GPT - Mor/Pembe */
-  --mind-coach-primary: #8e24aa;
-  --mind-coach-secondary: #ec407a;
-  --mind-coach-gradient: linear-gradient(135deg, #8e24aa, #ec407a);
-  --mind-coach-light: rgba(142, 36, 170, 0.1);
-  --mind-coach-medium: rgba(142, 36, 170, 0.5);
+  /* Zihin Koçu GPT - Mor/Pembe Tema */
+  --mind-coach-primary: #8e24aa; /* Ana Mor */
+  --mind-coach-secondary: #ec407a; /* İkincil Pembe */
+  --mind-coach-gradient: linear-gradient(135deg, var(--mind-coach-primary), var(--mind-coach-secondary));
+  --mind-coach-light: rgba(142, 36, 170, 0.1); /* Açık Mor */
+  --mind-coach-medium: rgba(142, 36, 170, 0.5); /* Orta Mor */
   
-  /* Finans GPT - Yeşil/Altın */
-  --finance-primary: #2e7d32;
-  --finance-secondary: #ffc107;
-  --finance-gradient: linear-gradient(135deg, #2e7d32, #ffc107);
-  --finance-light: rgba(46, 125, 50, 0.1);
-  --finance-medium: rgba(46, 125, 50, 0.5);
+  /* Finans GPT - Yeşil/Altın Tema */
+  --finance-primary: #2e7d32; /* Ana Yeşil */
+  --finance-secondary: #ffc107; /* İkincil Altın Sarısı */
+  --finance-gradient: linear-gradient(135deg, var(--finance-primary), var(--finance-secondary));
+  --finance-light: rgba(46, 125, 50, 0.1); /* Açık Yeşil */
+  --finance-medium: rgba(46, 125, 50, 0.5); /* Orta Yeşil */
+
+  /* Genel Renkler */
+  --text-color-light: #ffffff;
+  --text-color-dark: #333333;
+  --background-dark-alpha-heavy: rgba(0, 0, 0, 0.7);
+  --background-dark-alpha-medium: rgba(0, 0, 0, 0.6);
+  --background-dark-alpha-light: rgba(0, 0, 0, 0.4);
+  --border-color-light-alpha: rgba(255, 255, 255, 0.1);
+  --border-color-dark-alpha: rgba(0, 0, 0, 0.1);
 }
 
-/* Aktif Tema Renkleri */
+/* Genel Body Stilleri */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-primary);
+  background-color: #000000; /* Varsayılan arka plan rengi (resim yüklenemezse) */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--text-color-light);
+  height: 100vh;
+  overflow: hidden; /* Ana scrollbar'ı engelle, içerikler kendi scrollbar'ına sahip olacak */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background-image 0.7s ease-in-out; /* Arka plan resmi değişimi için yumuşak geçiş */
+}
+
+/* Tema Uygulamaları: Her tema için özel değişkenler ve arka plan resmi */
 body.theme-real-estate {
   --theme-primary: var(--real-estate-primary);
   --theme-secondary: var(--real-estate-secondary);
   --theme-gradient: var(--real-estate-gradient);
   --theme-light: var(--real-estate-light);
   --theme-medium: var(--real-estate-medium);
+  background-image: url('arka_plan_gayrimenkul.jpg'); /* DÜZELTİLDİ */
 }
 
 body.theme-mind-coach {
@@ -39,6 +71,7 @@ body.theme-mind-coach {
   --theme-gradient: var(--mind-coach-gradient);
   --theme-light: var(--mind-coach-light);
   --theme-medium: var(--mind-coach-medium);
+  background-image: url('arka_plan.jpg'); /* DÜZELTİLDİ - Genel arka planınız sanırım bu */
 }
 
 body.theme-finance {
@@ -47,209 +80,226 @@ body.theme-finance {
   --theme-gradient: var(--finance-gradient);
   --theme-light: var(--finance-light);
   --theme-medium: var(--finance-medium);
+  background-image: url('arka_plan_finans.jpg'); /* DÜZELTİLDİ */
 }
 
-/* Genel ve Arka Plan */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #000;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: fixed;
-  background-size: cover;
-  color: #fff;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-/* Splash ekran stilleri */
+/* Splash Ekranı */
 #splash-screen {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: black;
+  background-color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  transition: opacity 1s ease;
-  pointer-events: none;
+  z-index: 10000; /* En üstte */
+  transition: opacity 1s ease-out;
+  pointer-events: none; /* Geçiş sonrası tıklamaları engelleme */
 }
 
 .splash-logo {
-  width: 850px;
+  width: clamp(300px, 80vw, 850px); /* Responsive logo boyutu */
+  height: auto;
   animation: fadeInOut 4s ease-in-out forwards;
 }
 
 @keyframes fadeInOut {
   0% { opacity: 0; transform: scale(0.8); }
-  30% { opacity: 1; transform: scale(1); }
-  70% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.2); }
+  25% { opacity: 1; transform: scale(1); } /* Daha hızlı görünür yap */
+  75% { opacity: 1; transform: scale(1); } /* Biraz daha uzun kal */
+  100% { opacity: 0; transform: scale(1.1); } /* Yumuşak kayboluş */
 }
 
-/* Sağ Üst Köşe Butonları */
+/* Ana Arayüz Düzeni */
+.main-layout {
+  display: flex;
+  flex-direction: row; /* Sidebar ve content yan yana */
+  flex-grow: 1; /* Body'nin kalan yüksekliğini doldur */
+  overflow: hidden; /* İçerik taşmalarını engelle */
+  opacity: 0; /* Splash sonrası görünür olacak */
+  transition: opacity 0.5s ease-in;
+}
+
+.main-layout.visible {
+    opacity: 1;
+}
+
+/* Sağ Üst Köşe Butonları (Giriş/Kayıt, Çıkış) */
 .top-right-buttons {
   position: absolute;
   top: 20px;
   right: 20px;
-  z-index: 9999;
+  z-index: 999; /* Diğer elementlerin üzerinde */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
-  pointer-events: auto;
+  gap: 8px;
 }
 
 .auth-button {
-  display: inline-block;
-  padding: 2px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 60px;
-  color: rgba(255, 255, 255, 0.8);
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px; /* Daha yuvarlak */
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-size: 13px;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .auth-button:hover {
   border-color: var(--theme-primary);
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--text-color-light);
+  background-color: var(--theme-primary);
+  box-shadow: 0 2px 10px rgba(var(--theme-primary), 0.5);
 }
 
-.main-layout {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-/* Sidebar Stilleri (Olduğu gibi korunuyor) */
+/* Sidebar (Sol Panel) */
 .sidebar {
-  width: 225px;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  width: 240px; /* Biraz daha geniş */
+  background-color: var(--background-dark-alpha-heavy);
+  backdrop-filter: blur(8px);
   padding: 20px;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Boyutu sabit kalsın */
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--border-color-light-alpha);
+  transition: width 0.3s ease; /* Mobil için gizleme animasyonu */
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
+  gap: 12px;
   margin-bottom: 30px;
-  justify-content: center;
-  flex-shrink: 0;
+  justify-content: center; /* Logoyu ve başlığı ortala */
 }
 
 .sidebar-header .app-logo {
-  height: 35px;
+  height: 38px;
   width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  flex-shrink: 0;
 }
 
 .sidebar-header span {
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-.new-chat-button {
-  margin-bottom: 20px;
-  flex-shrink: 0;
+  font-size: 22px;
+  font-weight: 600; /* Biraz daha ince */
+  color: var(--text-color-light);
 }
 
 .new-chat-button button {
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px 18px;
   font-size: 14px;
+  font-weight: 500;
   border-radius: 8px;
   background-color: var(--theme-primary);
-  color: white;
+  color: var(--text-color-light);
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: background-color 0.2s ease;
+  gap: 10px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-bottom: 20px;
 }
 
 .new-chat-button button:hover {
   background-color: var(--theme-secondary);
 }
+.new-chat-button button:active {
+  transform: scale(0.98);
+}
 
 .history {
+  flex-grow: 1; /* Kalan alanı doldur */
+  overflow: hidden; /* Başlık sabit, liste scroll edilebilir */
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .history h2 {
   font-size: 13px;
+  font-weight: 600;
   margin-top: 0;
   margin-bottom: 10px;
-  color: rgba(255, 255, 255, 0.8);
-  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 5px;
 }
 
 .history ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto; /* Sadece bu kısım scroll edilecek */
   flex-grow: 1;
-  overflow-y: auto;
 }
 
 .history li {
-  padding: 10px;
+  padding: 10px 12px;
   margin-bottom: 8px;
   border-radius: 6px;
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.1);
-  font-size: 13px;
+  background-color: rgba(255, 255, 255, 0.08);
+  font-size: 14px; /* Biraz daha büyük */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+  border-left: 3px solid transparent;
+  position: relative; /* Silme butonu için */
 }
 
 .history li:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
+  border-left-color: var(--theme-secondary);
 }
 
 .history li.selected {
   background-color: var(--theme-medium);
-  font-weight: bold;
-  border-left: 4px solid var(--theme-primary);
-  padding-left: 6px;
+  font-weight: 500;
+  color: var(--text-color-light);
+  border-left: 3px solid var(--theme-primary);
 }
 
+.history li .delete-chat-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
+  visibility: hidden; /* Normalde gizli */
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.history li:hover .delete-chat-button {
+  visibility: visible; /* Hover'da görünür */
+  opacity: 1;
+}
+
+.history li .delete-chat-button:hover {
+  color: #ff6b6b; /* Silme butonu hover rengi */
+}
+
+
 .sidebar-links-group {
-  flex-shrink: 0;
-  margin-top: auto;
+  margin-top: auto; /* En alta yasla */
   padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color-light-alpha);
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -258,117 +308,125 @@ body {
 .sidebar-links-group a {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: 13px;
-  transition: color 0.2s ease, background-color 0.2s ease;
-  padding: 10px;
+  padding: 10px 12px;
   border-radius: 6px;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .sidebar-links-group a:hover {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-color-light);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.sidebar-links-group a i {
+.sidebar-links-group a i { /* Font Awesome ikonları için */
   font-size: 16px;
+  width: 18px; /* İkonlar için sabit genişlik */
+  text-align: center;
 }
 
+/* Ana İçerik Alanı (Sohbet) */
 .content-area {
-  flex-grow: 1;
+  flex-grow: 1; /* Kalan tüm genişliği al */
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  flex-direction: column; /* İçerik dikeyde yayılsın */
+  overflow: hidden; /* İç scrollbar'lar için */
   position: relative;
-  justify-content: center;
-  align-items: center;
+  /* Arka plan resminin daha iyi görünmesi için hafif bir overlay eklenebilir */
+  /* background: rgba(0,0,0,0.1); */ 
 }
 
-/* YENİ: Ortadaki Chat Container Stili */
 .center-chat-container {
   width: 100%;
-  max-width: 1100px;
-  height: 125vh;
+  max-width: 1100px; /* Maksimum genişlik */
+  height: 100%; /* Content-area'nın tamamını kapla */
   display: flex;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(5px);
-  border-radius: 12px;
+  background-color: var(--background-dark-alpha-medium);
+  backdrop-filter: blur(6px);
+  border-radius: 12px; /* Sadece mobil veya dar ekranlarda görülebilir */
   overflow: hidden;
-  margin: 0 auto;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  margin: 20px auto; /* Üstten ve alttan boşluk, ortalı */
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.3);
+  max-height: calc(100vh - 40px); /* Footer vs. hesaba katılarak */
 }
 
-/* Chat mesajlaşma alanı */
+/* Sohbet Mesajları Alanı */
 .chat-container {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 40px;
-  scroll-behavior: smooth;
+  flex-grow: 1; /* Kalan alanı doldur */
+  overflow-y: auto; /* Dikey scroll */
+  padding: 25px 30px; /* İç boşluklar */
+  scroll-behavior: smooth; /* Yeni mesajlara yumuşak kayma */
 }
 
 .message {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 14px 20px;
-  border-radius: 12px;
+  padding: 12px 18px;
+  border-radius: 10px; /* Daha yumuşak köşeler */
   margin-bottom: 12px;
-  max-width: 100%;
-  font-size: 16px;
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  max-width: 75%; /* Mesaj genişliği */
+  font-size: 15px;
+  line-height: 1.5;
+  display: flex; /* Avatar ve metin için */
+  gap: 12px;
+  align-items: flex-start; /* Avatarı üste hizala */
+  word-wrap: break-word; /* Uzun kelimeleri kır */
 }
 
-.message strong {
-  flex-shrink: 0;
-  font-weight: bold;
+.message strong { /* Gönderen ismi */
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+  color: rgba(255,255,255,0.9);
 }
 
 .user-message {
-  align-self: flex-end;
-  background-color: rgba(255, 255, 255, 0.2);
-  text-align: right;
-  flex-direction: row-reverse;
-  margin-left: auto;
+  align-self: flex-end; /* Sağa yasla */
+  background-color: var(--theme-primary); /* Kullanıcı mesajı arka planı */
+  color: var(--text-color-light);
+  margin-left: auto; /* Sağa ittir */
+  border-bottom-right-radius: 4px; /* Hafif kuyruk efekti */
 }
+.user-message strong {
+    color: rgba(255,255,255,0.8);
+}
+
 
 .bot-message {
-  align-self: flex-start;
-  background-color: var(--theme-light);
-  border-left: 3px solid var(--theme-primary);
-  position: relative;
-  margin-right: auto;
+  align-self: flex-start; /* Sola yasla */
+  background-color: rgba(255, 255, 255, 0.15); /* Bot mesajı arka planı */
+  border-left: 3px solid var(--theme-primary); /* Tema renginde vurgu */
+  margin-right: auto; /* Sola ittir */
+  border-bottom-left-radius: 4px;
 }
 
-/* Tema Göre Bot Mesajları */
-body.theme-real-estate .bot-message {
-  background-color: var(--real-estate-light);
-  border-left: 3px solid var(--real-estate-primary);
+/* Tema göre bot mesajlarının özel stilleri (zaten :root ve body.theme-* ile yönetiliyor) */
+/* Bu kısımlar kaldırılabilir veya daha spesifik bir şey için tutulabilir */
+/* body.theme-real-estate .bot-message { ... } */
+
+/* Avatar Stilleri */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0; /* Boyutu sabit kalsın */
+  border: 2px solid var(--theme-primary); /* Tema renginde çerçeve */
+  object-fit: cover; /* Resimler için */
+  margin-top: 2px; /* Dikey hizalama için */
 }
 
-body.theme-mind-coach .bot-message {
-  background-color: var(--mind-coach-light);
-  border-left: 3px solid var(--mind-coach-primary);
-}
-
-body.theme-finance .bot-message {
-  background-color: var(--finance-light);
-  border-left: 3px solid var(--finance-primary);
-}
-
-/* Chat Input Container (Alt kısım) */
+/* Mesaj Giriş Alanı */
 .chat-input-container {
+  padding: 15px 25px;
+  background-color: var(--background-dark-alpha-light);
+  border-top: 1px solid var(--border-color-light-alpha);
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* GPT butonları alta gelecek */
   gap: 10px;
-  padding: 15px;
-  background-color: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Chat girişi */
 .chat-input {
   display: flex;
   align-items: center;
@@ -380,110 +438,53 @@ body.theme-finance .bot-message {
   position: relative;
   display: flex;
   align-items: center;
-  background: white;
-  border-radius: 8px;
-  padding: 8px 12px;
-  border: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 25px; /* Tam yuvarlak köşeler */
+  padding: 0px 8px; /* Butonlar için yer */
+  border: 1px solid #d0d0d0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 #user-input {
   flex-grow: 1;
-  padding: 10px 80px 10px 45px;
-  font-size: 16px;
-  border-radius: 8px;
+  padding: 12px 15px; /* İç boşluklar */
+  font-size: 15px;
+  border-radius: 25px; /* input-wrapper ile uyumlu */
   border: none;
   outline: none;
-  background: transparent;
-  color: black;
-  width: 100%;
+  background: transparent; /* input-wrapper'ın arka planını kullan */
+  color: var(--text-color-dark);
+  width: 100%; /* Esnek genişlik */
   box-sizing: border-box;
+  min-height: 48px; /* Tek satır için yükseklik */
+  resize: none; /* Yeniden boyutlandırmayı engelle (textarea ise) */
+  line-height: 1.5;
 }
 
-/* Butonlar */
-.action-buttons {
-  display: none; /* Artık kullanılmıyor */
-}
-
-/* GPT Seçenekleri Butonları */
-.gpt-options {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.gpt-button {
-  padding: 8px 15px;
-  font-size: 14px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  flex-grow: 1;
-  text-align: center;
-}
-
-/* Gayrimenkul GPT Butonu */
-#real-estate-gpt.active {
-  background: var(--real-estate-gradient);
-  color: white;
-  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Zihin Koçu GPT Butonu */
-#mind-coach-gpt.active {
-  background: var(--mind-coach-gradient);
-  color: white;
-  box-shadow: 0 4px 8px rgba(142, 36, 170, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Finans GPT Butonu */
-#finance-gpt.active {
-  background: var(--finance-gradient);
-  color: white;
-  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
-  transform: translateY(-2px);
-}
-
-.gpt-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-/* Gönder Butonu - Sol taraf */
+/* Gönder Butonu (Ok) */
 #send-arrow-button {
   position: absolute;
-  left: 8px;
+  left: 10px; /* Input içinde solda */
   top: 50%;
   transform: translateY(-50%);
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  font-size: 16px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: var(--theme-primary);
-  color: white;
+  color: var(--text-color-light);
   border: none;
   cursor: pointer;
-  display: none;
+  display: flex; /* İkonu ortalamak için */
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 10;
+  font-size: 18px;
+  transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+  opacity: 0; /* Başlangıçta gizli */
+  pointer-events: none; /* Başlangıçta tıklanamaz */
+  z-index: 2;
 }
 
 #send-arrow-button.visible {
-  display: flex;
   opacity: 1;
   pointer-events: auto;
 }
@@ -491,313 +492,355 @@ body.theme-finance .bot-message {
 #send-arrow-button:hover {
   background-color: var(--theme-secondary);
 }
+#send-arrow-button:active {
+  transform: translateY(-50%) scale(0.9);
+}
 
-/* Simge butonları container - sağ taraf */
+/* Input içindeki ikon butonları (Sağ taraf) */
 .icon-buttons {
   position: absolute;
   right: 8px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
-  z-index: 10;
+  z-index: 2;
 }
 
-/* Simge butonları */
 .icon-button {
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.95);
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  color: #333;
-  font-size: 15px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 50%; /* Tam yuvarlak */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: #555555;
+  font-size: 18px; /* İkon boyutu */
 }
 
 .icon-button:hover {
-  background: #f0f0f0;
+  background-color: rgba(0, 0, 0, 0.08);
   color: var(--theme-primary);
-  border-color: var(--theme-primary);
-  transform: scale(1.05);
-  }
-
-/* Web araması butonu - mavi dünya */
-#web-search-button {
-  color: #1976d2 !important;
 }
 
-#web-search-button:hover {
-  background: rgba(25, 118, 210, 0.1);
-  color: #1565c0 !important;
-  border-color: #1976d2 !important;
+/* Özel ikon buton renkleri */
+#web-search-button { color: #1976d2; }
+#web-search-button:hover { color: #115293; background-color: rgba(25,118,210,0.1); }
+#gorsel-buton { color: #d32f2f; }
+#gorsel-buton:hover { color: #9a0007; background-color: rgba(211,47,47,0.1); }
+
+/* GPT Mod Seçenek Butonları */
+.gpt-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px; /* Input alanından biraz boşluk */
+  flex-wrap: wrap; /* Mobil için alta kaydır */
 }
 
-/* Görsel oluştur butonu - kırmızı fırça */
-#gorsel-buton {
-  color: #d32f2f !important;
+.gpt-button {
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--border-color-light-alpha);
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-#gorsel-buton:hover {
-  background: rgba(211, 47, 47, 0.1);
-  color: #b71c1c !important;
-  border-color: #d32f2f !important;
+.gpt-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--theme-secondary);
+  color: var(--text-color-light);
+  transform: translateY(-1px);
 }
 
-/* Avatarlar */
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  border: 2px solid var(--theme-primary);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  transition: border-color 0.5s ease;
+.gpt-button.active {
+  background: var(--theme-gradient);
+  color: var(--text-color-light);
+  border-color: transparent;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2); /* Aktif butona daha belirgin gölge */
+  transform: translateY(-1px);
 }
 
-/* Avatar Border Rengi Temalara Göre */
-body.theme-real-estate .avatar {
-  border-color: var(--real-estate-primary);
-}
-
-body.theme-mind-coach .avatar {
-  border-color: var(--mind-coach-primary);
-}
-
-body.theme-finance .avatar {
-  border-color: var(--finance-primary);
-}
-
+/* Footer */
 .footer {
   width: 100%;
   text-align: center;
-  font-size: 13px;
-  color: #ffffff;
-  padding: 15px 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 12px 0;
+  background-color: var(--background-dark-alpha-medium);
+  backdrop-filter: blur(3px);
   box-sizing: border-box;
-  z-index: 5;
+  z-index: 5; /* Sidebar'ın üzerinde olabilir */
+  border-top: 1px solid var(--border-color-light-alpha);
 }
 
-/* Konuşan avatar video alanı */
+/* Konuşan Avatar Video Alanı */
 #video-wrapper {
   position: fixed;
-  top: 44%;
-  left: 55%;
-  transform: translate(-50%, -50%);
-  z-index: 9998;
-  display: none;
+  bottom: 20px; /* Sağ alta alalım */
+  right: 20px;
+  /* top: 50%; left: 50%; transform: translate(-50%, -50%); */ /* Ortalamak yerine */
+  z-index: 9998; /* En üstte ama splash'in altında */
+  display: none; /* Başlangıçta gizli */
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-width: 350px;
-  width: 90%;
+  max-width: 280px; /* Biraz daha küçük */
+  width: 80vw; /* Mobil için */
+  background-color: rgba(0,0,0,0.7);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
 }
 
 #intro-video {
   width: 100%;
-  max-height: 250px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-  object-fit: contain;
+  max-height: 200px; /* Yükseklik sınırı */
+  border-radius: 8px;
+  object-fit: cover; /* Videoyu kapla */
 }
 
 #play-button {
-  margin-top: 5px;
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 8px 15px;
+  font-size: 13px;
   border: none;
-  border-radius: 15px;
+  border-radius: 18px;
   background-color: var(--theme-primary);
-  color: white;
+  color: var(--text-color-light);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 #play-button:hover {
   background-color: var(--theme-secondary);
 }
+#play-button:active {
+  transform: scale(0.95);
+}
 
 #video-wrapper.fade-out {
-  animation: fadeOut 1.5s forwards;
+  animation: fadeOutVideo 1s forwards ease-out;
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
-    pointer-events: none;
-  }
+@keyframes fadeOutVideo {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.9); pointer-events: none; }
 }
 
-/* Yükleniyor Animasyonu */
+/* Yükleniyor Animasyonu (Mesaj içinde) */
 .message.loading-indicator {
-   padding-top: 18px;
-   padding-bottom: 18px;
+   padding: 18px 20px; /* Dikey boşluğu artır */
+   background-color: rgba(255, 255, 255, 0.1); /* Bot mesajı gibi */
+   border-left: 3px solid var(--theme-primary);
 }
 
-.message.loading-indicator strong {
+.message.loading-indicator strong { /* "SibelGPT:" yazısını gizle */
     display: none;
 }
 
 .dots-container {
-    display: inline-flex;
+    display: flex; /* inline-flex yerine flex */
     align-items: center;
-    justify-content: center;
-    height: 1em;
+    justify-content: flex-start; /* Sola yasla */
+    height: 1em; /* Font boyutuyla orantılı */
 }
 
 .dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 9px; /* Biraz daha büyük */
+    height: 9px;
     border-radius: 50%;
-    background-color: var(--theme-primary);
-    margin: 0 3px;
+    background-color: var(--theme-primary); /* Tema rengini kullan */
+    margin: 0 4px; /* Noktalar arası boşluk */
     animation: dot-pulse 1.4s infinite ease-in-out;
-    animation-fill-mode: both;
+    animation-fill-mode: both; /* Animasyon durumunu koru */
 }
 
-/* Tema Göre Yükleniyor Noktaları */
-body.theme-real-estate .dot {
-  background-color: var(--real-estate-primary);
-}
+/* Tema göre yükleniyor noktalarının rengi zaten --theme-primary ile ayarlı */
 
-body.theme-mind-coach .dot {
-  background-color: var(--mind-coach-primary);
-}
-
-body.theme-finance .dot {
-  background-color: var(--finance-primary);
-}
-
-.dot:nth-child(1) {
-    animation-delay: -0.32s;
-}
-
-.dot:nth-child(2) {
-    animation-delay: -0.16s;
-}
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+.dot:nth-child(3) { animation-delay: 0s; } /* Üçüncü nokta için gecikme yok */
 
 @keyframes dot-pulse {
-  0%, 80%, 100% {
-    transform: scale(0.4);
-    opacity: 0.5;
-  }
-  40% {
-    transform: scale(1.0);
-    opacity: 1;
-  }
+  0%, 80%, 100% { transform: scale(0.5); opacity: 0.6; }
+  40% { transform: scale(1.0); opacity: 1; }
 }
 
-/* Scrollbar Stilleri */
+/* Scrollbar Stilleri (Webkit tabanlı tarayıcılar için) */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px; /* Biraz daha kalın */
+  height: 10px; /* Yatay scrollbar için */
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1); /* Hafif koyu track */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--theme-medium);
+  background: var(--theme-medium); /* Tema orta rengi */
   border-radius: 10px;
+  border: 2px solid transparent; /* Kenar boşluğu efekti */
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--theme-primary);
+  background: var(--theme-primary); /* Tema ana rengi */
 }
 
-/* Tema Göre Scrollbar Stili */
-body.theme-real-estate::-webkit-scrollbar-thumb {
-  background: var(--real-estate-medium);
+/* Firefox için scrollbar stilleri (daha sınırlı) */
+/* body, .history ul, .chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-medium) rgba(0, 0, 0, 0.1);
+} */
+
+/* Mobil ve Tablet Düzenlemeleri */
+@media (max-width: 1024px) { /* Tablet ve altı */
+    .center-chat-container {
+        margin: 10px; /* Kenarlara daha yakın */
+        max-height: calc(100vh - 20px);
+        border-radius: 8px; /* Daha az yuvarlaklık */
+    }
 }
 
-body.theme-mind-coach::-webkit-scrollbar-thumb {
-  background: var(--mind-coach-medium);
-}
-
-body.theme-finance::-webkit-scrollbar-thumb {
-  background: var(--finance-medium);
-}
-
-/* Mobil Düzenlemeler */
-@media (max-width: 768px) {
+@media (max-width: 768px) { /* Mobil cihazlar */
   .sidebar {
-    display: none;
+    position: fixed; /* Sabit pozisyon */
+    left: -260px; /* Başlangıçta ekran dışında */
+    top: 0;
+    height: 100%;
+    z-index: 1000; /* Diğer her şeyin üzerinde */
+    box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+    /* transition: left 0.3s ease-in-out; */ /* JS ile yönetilecek */
+  }
+  .sidebar.open {
+    left: 0; /* Açıldığında */
+  }
+
+  .main-layout {
+      /* Sidebar açıldığında content-area'yı itmek veya overlay için JS gerekebilir */
   }
    
+  .content-area {
+      /* Sidebar mobil için gizlendiğinde tam genişlik */
+  }
+
   .center-chat-container {
-    height: 90vh;
-    width: 95%;
+    height: calc(100vh - 20px); /* Neredeyse tam ekran */
+    width: calc(100% - 20px); /* Kenarlardan biraz boşluk */
+    margin: 10px;
+    border-radius: 8px;
   }
   
-  .chat-input {
-    flex-direction: column;
+  .chat-container {
+    padding: 15px; /* Daha az iç boşluk */
   }
-  
+
+  .message {
+      max-width: 90%; /* Mesajlar biraz daha geniş olabilir */
+  }
+
+  .chat-input-container {
+    padding: 10px 15px;
+  }
+
   .input-wrapper {
-    width: 100%;
+      padding: 0 5px;
+  }
+  #user-input {
+    padding: 10px 10px 10px 45px; /* Sol taraftaki gönder butonu için yer */
+    min-height: 44px;
+  }
+  #send-arrow-button {
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      left: 7px;
+  }
+  .icon-buttons {
+    gap: 3px;
+    right: 5px;
+  }
+  .icon-button {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
   
   .gpt-options {
-    flex-direction: column;
+    gap: 8px; /* Butonlar arası boşluk */
+    /* flex-direction: column; */ /* Eğer alt alta istenirse */
   }
   
   .gpt-button {
-    width: 100%;
+    padding: 7px 12px;
+    font-size: 12px;
+    /* width: 100%; */ /* Eğer flex-direction: column ise */
   }
 
-  /* Mobil için simge butonları ayarı */
-  .icon-buttons {
-    gap: 6px;
+  .top-right-buttons {
+      top: 10px;
+      right: 10px;
+      flex-direction: row; /* Yan yana */
+      align-items: center;
   }
-  
-  .icon-button {
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
+  .auth-button {
+      padding: 5px 10px;
+      font-size: 12px;
   }
-  
-  #user-input {
-    padding: 10px 70px 10px 40px;
+
+  #video-wrapper { /* Video mobil için farklı konumda olabilir */
+      max-width: 200px;
+      bottom: 10px;
+      right: 10px;
+      padding: 10px;
+  }
+  #intro-video {
+      max-height: 150px;
+  }
+  #play-button {
+      padding: 6px 12px;
+      font-size: 12px;
   }
 }
 
-/* EKLENEN: Ekstra mobil düzenlemeler */
-@media (max-width: 768px) {
-  /* SibelGPT merkez başlığını gizle */
-  .center-header {
-    display: none;
-  }
-
-  /* Chat alanının üst kısmındaki boşluğu düzelt */
-  .chat-container {
-    padding-top: 30px;
-  }
-  
-/* Modül Arka Planları */
-body.theme-real-estate {
-  background-image: url('arka_plan_gayrimenkul.jpg');
+/* Çok küçük ekranlar için ek düzenlemeler */
+@media (max-width: 480px) {
+    .sidebar-header span {
+        font-size: 18px; /* Başlık fontunu küçült */
+    }
+    .sidebar-header .app-logo {
+        height: 30px;
+    }
+    .new-chat-button button {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+    .history li {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+    .message {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+    #user-input {
+        font-size: 14px;
+    }
 }
 
-body.theme-mind-coach {
-  background-image: url('arka_plan.jpg');
-}
-
-body.theme-finance {
-  background-image: url('arka_plan_finans.jpg');
-}
