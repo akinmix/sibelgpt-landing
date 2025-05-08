@@ -1,4 +1,4 @@
-/* style.css - Güncellenmiş Versiyon */
+/* style.css - Simgeli Butonlar ile Güncellenmiş Versiyon */
 
 /* GPT Tema Renkleri */
 :root {
@@ -298,27 +298,6 @@ body {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
-.center-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 15px;
-  background-color: rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.center-header .app-logo {
-  height: 30px;
-  width: auto;
-}
-
-.center-header span {
-  font-size: 20px;
-  font-weight: bold;
-  color: #fff;
-}
-
 /* Chat mesajlaşma alanı */
 .chat-container {
   flex-grow: 1;
@@ -398,63 +377,28 @@ body.theme-finance .bot-message {
   position: relative;
   display: flex;
   align-items: center;
+  background: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
 }
 
 #user-input {
   flex-grow: 1;
-  padding: 14px;
-  padding-left: 45px;
+  padding: 10px 80px 10px 45px;
   font-size: 16px;
   border-radius: 8px;
   border: none;
   outline: none;
-  background: white;
+  background: transparent;
   color: black;
   width: 100%;
   box-sizing: border-box;
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-/* Tema Göre Input Odaklandığında Border Rengi */
-body.theme-real-estate #user-input:focus {
-  border-color: var(--real-estate-primary);
-}
-
-body.theme-mind-coach #user-input:focus {
-  border-color: var(--mind-coach-primary);
-}
-
-body.theme-finance #user-input:focus {
-  border-color: var(--finance-primary);
 }
 
 /* Butonlar */
 .action-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-#gorsel-buton, #web-search-button, #more-actions-button {
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 8px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  flex-grow: 1;
-}
-
-#gorsel-buton:hover, #web-search-button:hover, #more-actions-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: var(--theme-primary);
+  display: none; /* Artık kullanılmıyor */
 }
 
 /* GPT Seçenekleri Butonları */
@@ -511,7 +455,7 @@ body.theme-finance #user-input:focus {
   color: white;
 }
 
-/* Gönder Butonu */
+/* Gönder Butonu - Sol taraf */
 #send-arrow-button {
   position: absolute;
   left: 8px;
@@ -532,6 +476,7 @@ body.theme-finance #user-input:focus {
   transition: background-color 0.2s ease, opacity 0.2s ease;
   opacity: 0;
   pointer-events: none;
+  z-index: 10;
 }
 
 #send-arrow-button.visible {
@@ -542,6 +487,42 @@ body.theme-finance #user-input:focus {
 
 #send-arrow-button:hover {
   background-color: var(--theme-secondary);
+}
+
+/* Simge butonları container - sağ taraf */
+.icon-buttons {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Simge butonları */
+.icon-button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: #333;
+  font-size: 15px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.icon-button:hover {
+  background: #f0f0f0;
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+  transform: scale(1.05);
 }
 
 /* Avatarlar */
@@ -747,23 +728,39 @@ body.theme-finance::-webkit-scrollbar-thumb {
     width: 100%;
   }
   
-  .action-buttons, .gpt-options {
+  .gpt-options {
     flex-direction: column;
   }
   
-  #gorsel-buton, #web-search-button, #more-actions-button, .gpt-button {
+  .gpt-button {
     width: 100%;
   }
 
-/* SibelGPT merkez başlığını gizle */
-.center-header {
-  display: none;
+  /* Mobil için simge butonları ayarı */
+  .icon-buttons {
+    gap: 6px;
+  }
+  
+  .icon-button {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  #user-input {
+    padding: 10px 70px 10px 40px;
+  }
 }
 
-/* Chat alanının üst kısmındaki boşluğu düzelt */
-.chat-container {
-  padding-top: 30px;
-}
+/* EKLENEN: Ekstra mobil düzenlemeler */
+@media (max-width: 768px) {
+  /* SibelGPT merkez başlığını gizle */
+  .center-header {
+    display: none;
+  }
 
-} /* Bu parantez önceki bir bloğu kapatıyor */
-} /* Bu parantez başka bir bloğu kapatıyor */
+  /* Chat alanının üst kısmındaki boşluğu düzelt */
+  .chat-container {
+    padding-top: 30px;
+  }
+}
