@@ -606,7 +606,7 @@ body.theme-finance {
 
 #intro-video {
   width: 100%;
-  max-height: 220px; /* Yükseklik sınırı */
+  max-height: 290px; /* Yükseklik sınırı */
   border-radius: 10px; /* Video için de yuvarlak köşe */
   object-fit: cover; /* Videoyu kapla */
 }
