@@ -588,8 +588,8 @@ body.theme-finance {
 /* Konuşan Avatar Video Alanı */
 #video-wrapper {
   position: fixed;
-  top: 50%; /* DİKEYDE ORTALA */
-  left: 50%; /* YATAYDA ORTALA */
+  top: 42%; /* DİKEYDE ORTALA */
+  left: 55%; /* YATAYDA ORTALA */
   transform: translate(-50%, -50%); /* TAM ORTALA */
   z-index: 9998; /* En üstte ama splash'in altında */
   display: none; /* Başlangıçta gizli, JS ile gösterilecek */
