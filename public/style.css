@@ -366,7 +366,7 @@ body.theme-finance {
   padding: 12px 18px;
   border-radius: 10px; /* Daha yumuşak köşeler */
   margin-bottom: 12px;
-  max-width: 75%; /* Mesaj genişliği */
+  max-width: 100%; /* Mesaj genişliği */
   font-size: 15px;
   line-height: 1.5;
   display: flex; /* Avatar ve metin için */
