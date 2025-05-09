@@ -447,7 +447,7 @@ body.theme-finance {
 
 #user-input {
   flex-grow: 1;
-  padding: 12px 15px; /* İç boşluklar */
+  padding: 12px 33px; /* İç boşluklar */
   font-size: 15px;
   border-radius: 25px; /* input-wrapper ile uyumlu */
   border: none;
