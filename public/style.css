@@ -464,7 +464,7 @@ body.theme-finance {
 /* Gönder Butonu (Ok) */
 #send-arrow-button {
   position: absolute;
-  left: 10px; /* Input içinde solda */
+  left: 5px; /* Input içinde solda */
   top: 50%;
   transform: translateY(-50%);
   width: 36px;
