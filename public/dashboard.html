@@ -208,7 +208,7 @@
     </div>
 
     <script>
-        // API URL - Frontend için düzeltilmiş
+        // API URL
         const API_URL = window.location.hostname === 'localhost' 
             ? 'http://localhost:10000' 
             : 'https://sibelgpt-backend.onrender.com';
@@ -235,12 +235,17 @@
         function setCurrentDate() {
             const date = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            document.getElementById('top-district-count').textContent = stats.ilce_dagilimi[0] ? formatNumber(stats.ilce_dagilimi[0].ilan_sayisi) : '0';
+            document.getElementById('current-date').textContent = date.toLocaleDateString('tr-TR', options);
         }
 
         // Render district grid
         function renderDistrictGrid(districts) {
             const grid = document.getElementById('district-grid');
+            if (!districts || !districts.length) {
+                grid.innerHTML = '<p>Veri bulunamadı</p>';
+                return;
+            }
+            
             const top10 = districts.slice(0, 10);
             
             grid.innerHTML = top10.map((district, index) => {
@@ -259,6 +264,11 @@
         // Render price ranges
         function renderPriceRanges(priceRanges) {
             const container = document.getElementById('price-ranges');
+            if (!priceRanges || !priceRanges.length) {
+                container.innerHTML = '<p>Veri bulunamadı</p>';
+                return;
+            }
+            
             const colors = ['#4caf50', '#2196f3', '#ff9800', '#f44336'];
             
             // Sort by percentage
@@ -278,6 +288,11 @@
         // Render room type grid
         function renderRoomTypeGrid(roomTypes) {
             const grid = document.getElementById('room-type-grid');
+            if (!roomTypes || !roomTypes.length) {
+                grid.innerHTML = '<p>Veri bulunamadı</p>';
+                return;
+            }
+            
             const top6 = roomTypes.slice(0, 6);
             
             grid.innerHTML = top6.map((room) => `
@@ -307,7 +322,7 @@
             error.style.display = 'none';
             
             try {
-                console.log('Fetching from:', `${API_URL}/statistics/dashboard`);
+                console.log('Fetching from:', `${API_URL}/statistics/test`);
                 
                 const response = await fetch(`${API_URL}/statistics/test`, {
                     method: 'GET',
@@ -332,17 +347,21 @@
                 
                 const stats = data.statistics;
                 
+                // Veri kontrolü
+                if (!stats.genel_ozet) {
+                    throw new Error('Genel özet verisi eksik');
+                }
+                
+                if (!stats.ilce_dagilimi) stats.ilce_dagilimi = [];
+                if (!stats.fiyat_dagilimi) stats.fiyat_dagilimi = [];
+                if (!stats.oda_tipi_dagilimi) stats.oda_tipi_dagilimi = [];
+                
                 // Update general stats
                 document.getElementById('total-listings').textContent = formatNumber(stats.genel_ozet.toplam_ilan);
                 document.getElementById('avg-price').textContent = formatPrice(stats.genel_ozet.ortalama_fiyat);
                 document.getElementById('top-district').textContent = stats.genel_ozet.en_cok_ilan_ilce;
-                document.getElementById('top-district-count').textContent = formatNumber(stats.ilce_dagilimi[0].ilan_sayisi);
-
-                // Veri kontrolü
-                if (!stats.ilce_dagilimi) stats.ilce_dagilimi = [];
-                if (!stats.fiyat_dagilimi) stats.fiyat_dagilimi = [];
-                if (!stats.oda_tipi_dagilimi) stats.oda_tipi_dagilimi = [];
-
+                document.getElementById('top-district-count').textContent = stats.ilce_dagilimi[0] ? formatNumber(stats.ilce_dagilimi[0].ilan_sayisi) : '0';
+                
                 // Render grids
                 renderDistrictGrid(stats.ilce_dagilimi);
                 renderPriceRanges(stats.fiyat_dagilimi);
