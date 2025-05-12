@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SibelGPT Gayrimenkul Dashboard</title>
+    <style>
+        body { 
+            background: #f5f5f5; 
+            padding: 20px; 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #1976d2, #26a69a);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #1976d2;
+        }
+        .stat-card.secondary { border-left-color: #26a69a; }
+        .stat-card.tertiary { border-left-color: #ff6b6b; }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            color: #333;
+        }
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .district-item {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .price-bar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+        }
+        .price-bar {
+            background: #e0e0e0;
+            height: 24px;
+            flex-grow: 1;
+            margin: 0 10px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .price-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.5s ease;
+        }
+        .quick-search-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .quick-search-btn {
+            padding: 8px 16px;
+            border: 2px solid #1976d2;
+            border-radius: 25px;
+            background: white;
+            color: #1976d2;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .quick-search-btn:hover {
+            background: #1976d2;
+            color: white;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <h3>Dashboard yükleniyor...</h3>
+            <p>Veriler alınıyor...</p>
+        </div>
+
+        <!-- Main Dashboard (Hidden initially) -->
+        <div id="dashboard" style="display: none;">
+            <!-- Header -->
+            <div class="header-banner">
+                <h2 style="margin: 0; font-size: 24px;">🏠 SibelGPT Gayrimenkul Piyasa Özeti</h2>
+                <p style="margin: 5px 0; opacity: 0.9;">📅 <span id="current-date"></span> - REMAX SONUÇ Portföyü</p>
+            </div>
+            
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4 style="color: #1976d2; margin: 0; font-size: 16px;">📊 Toplam İlan</h4>
+                    <p class="stat-value" id="total-listings">-</p>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Aktif gayrimenkul ilanı</p>
+                </div>
+                
+                <div class="stat-card secondary">
+                    <h4 style="color: #26a69a; margin: 0; font-size: 16px;">💰 Ortalama Fiyat</h4>
+                    <p class="stat-value" id="avg-price">-</p>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Tüm ilanlar</p>
+                </div>
+                
+                <div class="stat-card tertiary">
+                    <h4 style="color: #ff6b6b; margin: 0; font-size: 16px;">🔥 En Çok İlan</h4>
+                    <p class="stat-value" id="top-district">-</p>
+                    <p style="font-size: 13px; color: #666; margin: 0;"><span id="top-district-count">-</span> aktif ilan</p>
+                </div>
+            </div>
+            
+            <!-- District Distribution -->
+            <div class="section-card">
+                <h3 style="color: #333; margin-top: 0; font-size: 18px; margin-bottom: 15px;">📍 İlçe Bazlı İlan Dağılımı</h3>
+                <div class="district-grid" id="district-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+            
+            <!-- Price Range Distribution -->
+            <div class="section-card" style="background: #fffbf0; border: 1px solid #ffd89b;">
+                <h4 style="color: #f39c12; margin-top: 0; font-size: 18px;">💵 Fiyat Aralıklarına Göre Dağılım</h4>
+                <div id="price-ranges">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+            
+            <!-- Room Type Distribution -->
+            <div class="section-card">
+                <h3 style="color: #333; margin-top: 0; font-size: 18px; margin-bottom: 15px;">🏠 Oda Tipi Dağılımı (En Popüler 6)</h3>
+                <div class="district-grid" id="room-type-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+            
+            <!-- Quick Searches -->
+            <div class="section-card" style="background: #e8f5e9; border: 1px solid #4caf50;">
+                <h4 style="color: #2e7d32; margin-top: 0; font-size: 18px;">🔍 Hızlı Sorgular</h4>
+                <div class="quick-search-buttons">
+                    <button class="quick-search-btn" onclick="quickSearch('kadıköy 3+1')">Kadıköy 3+1</button>
+                    <button class="quick-search-btn" onclick="quickSearch('10 milyon altı')">10M altı</button>
+                    <button class="quick-search-btn" onclick="quickSearch('deniz manzaralı')">Deniz manzaralı</button>
+                    <button class="quick-search-btn" onclick="quickSearch('metrobüs yakını')">Metrobüs yakını</button>
+                    <button class="quick-search-btn" onclick="quickSearch('bahçeli')">Bahçeli</button>
+                    <button class="quick-search-btn" onclick="quickSearch('site içinde')">Site içinde</button>
+                </div>
+            </div>
+            
+            <!-- Welcome Message -->
+            <div class="section-card" style="text-align: center; background: #e3f2fd; border: 1px solid #2196f3;">
+                <p style="font-size: 18px; margin: 0 0 10px 0;"><strong>Merhaba! Ben SibelGPT, size nasıl yardımcı olabilirim?</strong></p>
+                <p style="font-size: 15px; margin: 0;">Yukarıdaki hızlı sorgulardan birine tıklayabilir veya özel kriterlerinizi yazabilirsiniz.</p>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error" style="display: none;">
+            <h3>Hata!</h3>
+            <p id="error-message"></p>
+            <button onclick="loadDashboard()" style="padding: 10px 20px; margin-top: 10px;">Tekrar Dene</button>
+        </div>
+    </div>
+
+    <script>
+        // API URL - Frontend için düzeltilmiş
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:10000' 
+            : 'https://sibelgpt-backend.onrender.com';
+
+        console.log('API URL:', API_URL);
+
+        // Format numbers
+        function formatNumber(num) {
+            return new Intl.NumberFormat('tr-TR').format(num);
+        }
+
+        // Format price
+        function formatPrice(price) {
+            if (!price) return '0 ₺';
+            if (price >= 1000000) {
+                return (price / 1000000).toFixed(1) + 'M ₺';
+            } else if (price >= 1000) {
+                return (price / 1000).toFixed(0) + 'K ₺';
+            }
+            return formatNumber(price) + ' ₺';
+        }
+
+        // Set current date
+        function setCurrentDate() {
+            const date = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('current-date').textContent = date.toLocaleDateString('tr-TR', options);
+        }
+
+        // Render district grid
+        function renderDistrictGrid(districts) {
+            const grid = document.getElementById('district-grid');
+            const top10 = districts.slice(0, 10);
+            
+            grid.innerHTML = top10.map((district, index) => {
+                const emoji = index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}️⃣`;
+                return `
+                    <div class="district-item">
+                        <div>
+                            <strong style="color: #1976d2;">${emoji} ${district.ilce}:</strong> ${district.ilan_sayisi} ilan
+                        </div>
+                        <span style="color: #666; font-size: 14px;">(Ort: ${formatPrice(district.ortalama_fiyat)})</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render price ranges
+        function renderPriceRanges(priceRanges) {
+            const container = document.getElementById('price-ranges');
+            const colors = ['#4caf50', '#2196f3', '#ff9800', '#f44336'];
+            
+            // Sort by percentage
+            priceRanges.sort((a, b) => b.yuzde - a.yuzde);
+            
+            container.innerHTML = priceRanges.map((range, index) => `
+                <div class="price-bar-container">
+                    <span style="width: 80px; font-weight: 500;">${range.aralik}</span>
+                    <div class="price-bar">
+                        <div class="price-bar-fill" style="background: ${colors[index % colors.length]}; width: ${range.yuzde}%;"></div>
+                    </div>
+                    <span style="font-weight: bold; width: 45px; text-align: right;">%${range.yuzde}</span>
+                </div>
+            `).join('');
+        }
+
+        // Render room type grid
+        function renderRoomTypeGrid(roomTypes) {
+            const grid = document.getElementById('room-type-grid');
+            const top6 = roomTypes.slice(0, 6);
+            
+            grid.innerHTML = top6.map((room) => `
+                <div class="district-item">
+                    <div>
+                        <strong style="color: #26a69a;">${room.oda_sayisi}:</strong> ${room.ilan_sayisi} ilan
+                    </div>
+                    <span style="color: #666; font-size: 14px;">(Ort: ${formatPrice(room.ortalama_fiyat)})</span>
+                </div>
+            `).join('');
+        }
+
+        // Quick search function
+        function quickSearch(query) {
+            // Redirect to main chat with the query
+            window.location.href = `https://www.sibelgpt.com/?q=${encodeURIComponent(query)}`;
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            const loading = document.getElementById('loading');
+            const dashboard = document.getElementById('dashboard');
+            const error = document.getElementById('error');
+            
+            loading.style.display = 'block';
+            dashboard.style.display = 'none';
+            error.style.display = 'none';
+            
+            try {
+                console.log('Fetching from:', `${API_URL}/statistics/dashboard`);
+                
+                const response = await fetch(`${API_URL}/statistics/dashboard`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`API hatası: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Received data:', data);
+                
+                if (!data.statistics) {
+                    throw new Error('Veri formatı hatalı');
+                }
+                
+                const stats = data.statistics;
+                
+                // Update general stats
+                document.getElementById('total-listings').textContent = formatNumber(stats.genel_ozet.toplam_ilan);
+                document.getElementById('avg-price').textContent = formatPrice(stats.genel_ozet.ortalama_fiyat);
+                document.getElementById('top-district').textContent = stats.genel_ozet.en_cok_ilan_ilce;
+                document.getElementById('top-district-count').textContent = formatNumber(stats.ilce_dagilimi[0].ilan_sayisi);
+                
+                // Render grids
+                renderDistrictGrid(stats.ilce_dagilimi);
+                renderPriceRanges(stats.fiyat_dagilimi);
+                renderRoomTypeGrid(stats.oda_tipi_dagilimi);
+                
+                // Set date
+                setCurrentDate();
+                
+                // Show dashboard
+                loading.style.display = 'none';
+                dashboard.style.display = 'block';
+                
+            } catch (err) {
+                console.error('Veri yükleme hatası:', err);
+                document.getElementById('error-message').textContent = err.message || 'Veri yüklenirken bir hata oluştu.';
+                loading.style.display = 'none';
+                error.style.display = 'block';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>
