@@ -235,7 +235,7 @@
         function setCurrentDate() {
             const date = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            document.getElementById('current-date').textContent = date.toLocaleDateString('tr-TR', options);
+            document.getElementById('top-district-count').textContent = stats.ilce_dagilimi[0] ? formatNumber(stats.ilce_dagilimi[0].ilan_sayisi) : '0';
         }
 
         // Render district grid
@@ -337,7 +337,12 @@
                 document.getElementById('avg-price').textContent = formatPrice(stats.genel_ozet.ortalama_fiyat);
                 document.getElementById('top-district').textContent = stats.genel_ozet.en_cok_ilan_ilce;
                 document.getElementById('top-district-count').textContent = formatNumber(stats.ilce_dagilimi[0].ilan_sayisi);
-                
+
+                // Veri kontrolü
+                if (!stats.ilce_dagilimi) stats.ilce_dagilimi = [];
+                if (!stats.fiyat_dagilimi) stats.fiyat_dagilimi = [];
+                if (!stats.oda_tipi_dagilimi) stats.oda_tipi_dagilimi = [];
+
                 // Render grids
                 renderDistrictGrid(stats.ilce_dagilimi);
                 renderPriceRanges(stats.fiyat_dagilimi);
