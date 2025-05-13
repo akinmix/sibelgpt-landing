@@ -312,83 +312,83 @@
         }
 
         // Load dashboard data
-        async function loadDashboard() {
-            const loading = document.getElementById('loading');
-            const dashboard = document.getElementById('dashboard');
-            const error = document.getElementById('error');
-            
-            loading.style.display = 'block';
-            dashboard.style.display = 'none';
-            error.style.display = 'none';
-            
-            try {
-                // GERÇEK ENDPOINT'İ KULLANALIM
-                console.log('Fetching from:', `${API_URL}/statistics/dashboard`);
-                
-                const response = await fetch(`${API_URL}/statistics/dashboard`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-                
-                if (!response.ok) {
-                    // Hata mesajını daha detaylı alalım
-                    const errorBody = await response.json();
-                    console.error('Error response:', errorBody);
-                    throw new Error(`API hatası: ${response.status} - ${JSON.stringify(errorBody)}`);
-                }
-                
-                const data = await response.json();
-                console.log('Received data:', data);
-                
-                if (!data.statistics) {
-                    throw new Error('Veri formatı hatalı');
-                }
-                
-                const stats = data.statistics;
-                
-                // Veri kontrolü
-                if (!stats.genel_ozet) {
-                    throw new Error('Genel özet verisi eksik');
-                }
-                
-                if (!stats.ilce_dagilimi) stats.ilce_dagilimi = [];
-                if (!stats.fiyat_dagilimi) stats.fiyat_dagilimi = [];
-                if (!stats.oda_tipi_dagilimi) stats.oda_tipi_dagilimi = [];
-                
-                // Update general stats
-                document.getElementById('total-listings').textContent = formatNumber(stats.genel_ozet.toplam_ilan);
-                document.getElementById('avg-price').textContent = formatPrice(stats.genel_ozet.ortalama_fiyat || 0);
-                document.getElementById('top-district').textContent = stats.genel_ozet.en_cok_ilan_ilce;
-                document.getElementById('top-district-count').textContent = stats.ilce_dagilimi[0] ? formatNumber(stats.ilce_dagilimi[0].ilan_sayisi) : '0';
-                
-                // Render grids
-                renderDistrictGrid(stats.ilce_dagilimi);
-                renderPriceRanges(stats.fiyat_dagilimi);
-                renderRoomTypeGrid(stats.oda_tipi_dagilimi);
-                
-                // Set date
-                setCurrentDate();
-                
-                // Show dashboard
-                loading.style.display = 'none';
-                dashboard.style.display = 'block';
-                
-            } catch (err) {
-                console.error('Veri yükleme hatası:', err);
-                document.getElementById('error-message').innerHTML = `
-                    <p>${err.message || 'Veri yüklenirken bir hata oluştu.'}</p>
-                    <pre style="font-size: 12px; color: #666;">${JSON.stringify(err, null, 2)}</pre>
-                `;
-                loading.style.display = 'none';
-                error.style.display = 'block';
+        // loadDashboard fonksiyonunda data processing kısmını güncelleyin
+    async function loadDashboard() {
+    const loading = document.getElementById('loading');
+    const dashboard = document.getElementById('dashboard');
+    const error = document.getElementById('error');
+    
+    loading.style.display = 'block';
+    dashboard.style.display = 'none';
+    error.style.display = 'none';
+    
+    try {
+        console.log('Fetching from:', `${API_URL}/statistics/dashboard`);
+        
+        const response = await fetch(`${API_URL}/statistics/dashboard`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
+        });
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorBody = await response.json();
+            console.error('Error response:', errorBody);
+            throw new Error(`API hatası: ${response.status}`);
         }
+        
+        const data = await response.json();
+        console.log('Received data:', data);
+        
+        // HATA BU KISIMDA! Stats kontrolünü düzeltelim
+        const stats = data.statistics;
+        if (!stats) {
+            throw new Error('İstatistik verisi bulunamadı');
+        }
+        
+        // NULL kontrollerini ekleyelim
+        const genel_ozet = stats.genel_ozet || {};
+        const ilce_dagilimi = stats.ilce_dagilimi || [];
+        const fiyat_dagilimi = stats.fiyat_dagilimi || [];
+        const oda_tipi_dagilimi = stats.oda_tipi_dagilimi || [];
+        
+        // Update general stats - güvenli erişim
+        document.getElementById('total-listings').textContent = formatNumber(genel_ozet.toplam_ilan || 0);
+        document.getElementById('avg-price').textContent = formatPrice(genel_ozet.ortalama_fiyat || 0);
+        document.getElementById('top-district').textContent = genel_ozet.en_cok_ilan_ilce || 'Bilinmiyor';
+        
+        // En çok ilan olan ilçe sayısı - güvenli erişim
+        if (ilce_dagilimi.length > 0 && ilce_dagilimi[0]) {
+            document.getElementById('top-district-count').textContent = formatNumber(ilce_dagilimi[0].ilan_sayisi || 0);
+        } else {
+            document.getElementById('top-district-count').textContent = '0';
+        }
+        
+        // Render grids - güvenli
+        renderDistrictGrid(ilce_dagilimi);
+        renderPriceRanges(fiyat_dagilimi);
+        renderRoomTypeGrid(oda_tipi_dagilimi);
+        
+        // Set date
+        setCurrentDate();
+        
+        // Show dashboard
+        loading.style.display = 'none';
+        dashboard.style.display = 'block';
+        
+    } catch (err) {
+        console.error('Veri yükleme hatası:', err);
+        document.getElementById('error-message').innerHTML = `
+            <p>${err.message || 'Veri yüklenirken bir hata oluştu.'}</p>
+        `;
+        loading.style.display = 'none';
+        error.style.display = 'block';
+    }
+}
 
         // Initialize
         document.addEventListener('DOMContentLoaded', loadDashboard);
