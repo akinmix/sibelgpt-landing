@@ -177,7 +177,7 @@ body.theme-finance {
 .sidebar-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 30px;
   justify-content: center; /* Logoyu ve başlığı ortala */
 }
