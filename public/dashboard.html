@@ -363,7 +363,7 @@
                 
                 // Update general stats
                 document.getElementById('total-listings').textContent = formatNumber(stats.genel_ozet.toplam_ilan);
-                document.getElementById('avg-price').textContent = formatPrice(stats.genel_ozet.ortalama_fiyat);
+                document.getElementById('avg-price').textContent = formatPrice(stats.genel_ozet.ortalama_fiyat || 0);
                 document.getElementById('top-district').textContent = stats.genel_ozet.en_cok_ilan_ilce;
                 document.getElementById('top-district-count').textContent = stats.ilce_dagilimi[0] ? formatNumber(stats.ilce_dagilimi[0].ilan_sayisi) : '0';
                 
