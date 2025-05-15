@@ -279,8 +279,16 @@ async function playBotMessage(text, buttonElement) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ text: text.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").replace(/&[^;]+;/g, "").replace(/['"]/g, "").trim() })
-    });
+      body: JSON.stringify({ 
+        text: text
+          .replace(/<[^>]*>/g, '')  // HTML etiketlerini kaldır
+          .replace(/&nbsp;/g, ' ')  // &nbsp; yerine boşluk
+          .replace(/\\n/g, ' ')     // \n karakterlerini boşluğa çevir
+          .replace(/\n/g, ' ')      // Yeni satırları boşluğa çevir
+          .replace(/\s+/g, ' ')     // Çoklu boşlukları tek boşluğa çevir
+          .trim()
+})
+
     
     if (!response.ok) {
       throw new Error('Ses oluşturulamadı');
