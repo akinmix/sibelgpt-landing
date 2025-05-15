@@ -15,6 +15,9 @@ let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
 let currentGptMode = 'real-estate'; // Varsayılan mod
 
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
+let currentAudio = null; // Şu anda çalan ses
+let playingButtonElement = null; // Şu anda çalan buton
+let currentGptMode = 'real-estate'; // Varsayılan mod
 
 // GPT modu değiştirme fonksiyonu
 function setGptMode(mode) {
@@ -230,6 +233,22 @@ function appendMessage(sender, text, role, addToHistory = false) {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = text;
     messageElem.appendChild(contentDiv);
+    // Bot mesajına ses butonu ekle
+    if (role === 'bot' && sender === 'SibelGPT') {
+    const voiceButton = document.createElement('button');
+    voiceButton.className = 'voice-button';
+    voiceButton.innerHTML = '🔊';
+    voiceButton.setAttribute('data-text', text.replace(/<[^>]*>/g, '')); // HTML etiketlerini temizle
+    voiceButton.setAttribute('title', 'Mesajı seslendir');
+    voiceButton.onclick = handleVoiceButtonClick;
+    
+    // Ses butonunu mesajın içine ekle
+    messageElem.style.position = 'relative';
+    voiceButton.style.position = 'absolute';
+    voiceButton.style.top = '10px';
+    voiceButton.style.right = '10px';
+    messageElem.appendChild(voiceButton);
+}
 
     chatBox.appendChild(messageElem);
 
@@ -243,6 +262,104 @@ function appendMessage(sender, text, role, addToHistory = false) {
 }
 
 // Görsel indirme fonksiyonu
+// Ses oluşturma ve çalma fonksiyonu
+async function playBotMessage(text, buttonElement) {
+  // Eğer başka bir ses çalıyorsa, önce onu durdur
+  if (currentAudio && !currentAudio.paused) {
+    stopAudio();
+  }
+  
+  // Butonu güncelle - yükleniyor
+  buttonElement.innerHTML = '⏳';
+  buttonElement.disabled = true;
+  
+  try {
+    // Backend'e istek gönder
+    const response = await fetch(`${BACKEND_URL}/generate-speech`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: text })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Ses oluşturulamadı');
+    }
+    
+    const data = await response.json();
+    
+    // Ses dosyasını çal
+    currentAudio = new Audio(data.audio_url);
+    playingButtonElement = buttonElement;
+    
+    // Butonu güncelle - çalıyor
+    buttonElement.innerHTML = '⏸️';
+    buttonElement.disabled = false;
+    
+    // Ses başladığında
+    currentAudio.onplay = () => {
+      buttonElement.innerHTML = '⏸️';
+    };
+    
+    // Ses durduğunda
+    currentAudio.onpause = () => {
+      buttonElement.innerHTML = '🔊';
+    };
+    
+    // Ses bittiğinde
+    currentAudio.onended = () => {
+      buttonElement.innerHTML = '🔊';
+      currentAudio = null;
+      playingButtonElement = null;
+    };
+    
+    // Hata durumunda
+    currentAudio.onerror = () => {
+      buttonElement.innerHTML = '🔊';
+      buttonElement.disabled = false;
+      currentAudio = null;
+      playingButtonElement = null;
+      alert('Ses çalınamadı');
+    };
+    
+    // Sesi çal
+    await currentAudio.play();
+    
+  } catch (error) {
+    console.error('Ses oluşturma hatası:', error);
+    buttonElement.innerHTML = '🔊';
+    buttonElement.disabled = false;
+    alert('Ses oluşturulamadı. Lütfen daha sonra tekrar deneyin.');
+  }
+}
+
+// Sesi durdurma fonksiyonu
+function stopAudio() {
+  if (currentAudio && !currentAudio.paused) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+  if (playingButtonElement) {
+    playingButtonElement.innerHTML = '🔊';
+  }
+  currentAudio = null;
+  playingButtonElement = null;
+}
+
+// Bot mesajı için ses butonu tıklama işleyicisi
+function handleVoiceButtonClick(event) {
+  const button = event.target;
+  const text = button.getAttribute('data-text');
+  
+  // Eğer bu butonun sesi çalıyorsa, durdur
+  if (currentAudio && playingButtonElement === button) {
+    stopAudio();
+  } else {
+    // Değilse, bu mesajı çal
+    playBotMessage(text, button);
+  }
+}
 function indirGorsel(url) {
   window.open(url, '_blank'); 
 }
@@ -726,5 +843,10 @@ document.addEventListener('DOMContentLoaded', () => {
       alert("Çıkış yapıldı.");
       location.reload();
     });
-  }
+
+    // Ses fonksiyonlarını global yap
+  window.playBotMessage = playBotMessage;
+  window.handleVoiceButtonClick = handleVoiceButtonClick;
+  window.stopAudio = stopAudio;
+
 });
