@@ -294,11 +294,12 @@ async function playBotMessage(text, buttonElement) {
       throw new Error('Ses oluşturulamadı');
     }
     
-    const data = await response.json();
-    
+    // Binary ses verisini al
+    const audioBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+
     // Ses dosyasını çal
-    currentAudio = new Audio(data.audio_url);
-    playingButtonElement = buttonElement;
+    currentAudio = new Audio(audioUrl);
     
     // Butonu güncelle - çalıyor
     buttonElement.innerHTML = '⏸️';
