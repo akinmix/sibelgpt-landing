@@ -17,7 +17,6 @@ let currentGptMode = 'real-estate'; // Varsayılan mod
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
 let currentAudio = null; // Şu anda çalan ses
 let playingButtonElement = null; // Şu anda çalan buton
-let currentGptMode = 'real-estate'; // Varsayılan mod
 
 // GPT modu değiştirme fonksiyonu
 function setGptMode(mode) {
