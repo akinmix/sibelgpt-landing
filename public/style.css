@@ -936,3 +936,145 @@ body.theme-finance {
 .bot-message {
   position: relative;
 }
+  /* Ses Butonu İyileştirmeleri - Script.js değiştirmeden */
+
+/* Mevcut ses butonu stillerini geliştir */
+.voice-button {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary)) !important;
+  color: white;
+  cursor: pointer;
+  font-size: 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.voice-button:hover {
+  transform: scale(1.15) !important;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4) !important;
+}
+
+.voice-button:active {
+  transform: scale(0.95) !important;
+}
+
+/* Basit nabız efekti - JavaScript gerektirmez */
+.voice-button:active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.5);
+  animation: simple-pulse 0.5s;
+}
+
+@keyframes simple-pulse {
+  to {
+    box-shadow: 0 0 0 15px rgba(255,255,255,0);
+  }
+}
+
+/* Temaya göre özel renkler */
+body.theme-real-estate .voice-button {
+  background: linear-gradient(135deg, #1976d2, #42a5f5) !important;
+}
+
+body.theme-real-estate .voice-button:hover {
+  background: linear-gradient(135deg, #1565c0, #2196f3) !important;
+}
+
+body.theme-mind-coach .voice-button {
+  background: linear-gradient(135deg, #8e24aa, #ba68c8) !important;
+}
+
+body.theme-mind-coach .voice-button:hover {
+  background: linear-gradient(135deg, #7b1fa2, #ab47bc) !important;
+}
+
+body.theme-finance .voice-button {
+  background: linear-gradient(135deg, #2e7d32, #66bb6a) !important;
+}
+
+body.theme-finance .voice-button:hover {
+  background: linear-gradient(135deg, #1b5e20, #4caf50) !important;
+}
+
+/* İkon için güzel bir gölge efekti */
+.voice-button::before {
+  content: '🔊';
+  filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+}
+
+/* Disabled durumu */
+.voice-button:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: scale(1) !important;
+}
+
+/* Butonun bot mesajı içindeki pozisyonu */
+.bot-message .voice-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.bot-message:hover .voice-button {
+  opacity: 1;
+}
+
+/* Parlama efekti */
+.voice-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255,255,255,0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg) translate(-50%, -50%);
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+.voice-button:hover::after {
+  opacity: 1;
+  animation: shine 0.5s ease-in-out;
+}
+
+@keyframes shine {
+  0% { transform: rotate(45deg) translate(-50%, -50%); }
+  100% { transform: rotate(45deg) translate(50%, 50%); }
+}
+
+/* Mobil için düzenlemeler */
+@media (max-width: 768px) {
+  .voice-button {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 16px !important;
+  }
+  
+  .bot-message .voice-button {
+    top: 8px;
+    right: 8px;
+  }
+}
