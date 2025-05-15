@@ -288,7 +288,7 @@ async function playBotMessage(text, buttonElement) {
           .replace(/\s+/g, ' ')     // Çoklu boşlukları tek boşluğa çevir
           .trim()
 })
-
+});
     
     if (!response.ok) {
       throw new Error('Ses oluşturulamadı');
