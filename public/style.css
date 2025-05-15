@@ -794,7 +794,34 @@ body.theme-finance {
       right: 10px;
       flex-direction: row; /* Yan yana */
       align-items: center;
-  }
+  .chat-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--background-dark-alpha-medium);
+    padding: 10px;
+    z-index: 100;
+}
+
+  .gpt-options {
+    display: flex !important; /* Önemli: override için */
+    justify-content: space-around;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+
+  .gpt-button {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+    margin: 2px;
+    white-space: nowrap;
+}
+
+  .chat-container {
+    padding-bottom: 120px;
+}
+  
   .auth-button {
       padding: 5px 10px;
       font-size: 12px;
