@@ -279,7 +279,7 @@ async function playBotMessage(text, buttonElement) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ text: text })
+      body: JSON.stringify({ text: text.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() })
     });
     
     if (!response.ok) {
