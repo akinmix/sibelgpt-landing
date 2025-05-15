@@ -842,5 +842,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert("Çıkış yapıldı.");
       location.reload();
     });
+  }
+});
 
  
