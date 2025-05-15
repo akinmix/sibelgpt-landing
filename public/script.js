@@ -843,9 +843,4 @@ document.addEventListener('DOMContentLoaded', () => {
       location.reload();
     });
 
-    // Ses fonksiyonlarını global yap
-  window.playBotMessage = playBotMessage;
-  window.handleVoiceButtonClick = handleVoiceButtonClick;
-  window.stopAudio = stopAudio;
-
-});
+ 
