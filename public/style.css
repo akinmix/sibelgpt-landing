@@ -905,32 +905,6 @@ body.theme-finance {
   flex-direction: column;
   gap: 5px;
 }
-/* Ses Butonu Stilleri */
-.voice-button {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  background-color: var(--theme-primary);
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.voice-button:hover {
-  background-color: var(--theme-secondary);
-  transform: scale(1.1);
-}
-
-.voice-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 
 /* Bot mesajı pozisyonlama */
 .bot-message {
