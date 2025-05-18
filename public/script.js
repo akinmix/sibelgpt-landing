@@ -196,13 +196,20 @@ async function sendMessage() {
   }
 
   try {
+    // Sohbet geçmişini hazırla
+    const historyToSend = currentConversation.map(msg => ({
+         role: msg.role,
+         text: msg.text
+
+    }));     
     // Seçili GPT modunu da gönder
     const response = await fetch(`${BACKEND_URL}/chat`, { 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
           question: message,
-          mode: currentGptMode // Seçilen modu gönder
+          mode: currentGptMode,
+          conversation_history: historyToSend // Sohbet geçmişini gönder
       }),
     });
     
