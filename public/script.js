@@ -198,10 +198,14 @@ async function sendMessage() {
   try {
     // Sohbet geçmişini hazırla
     const historyToSend = currentConversation.map(msg => ({
-         role: msg.role,
-         text: msg.text
-
-    }));     
+        // 'bot' rolünü 'assistant' olarak değiştir
+        const role = msg.role === 'bot' ? 'assistant' : msg.role;
+        return {
+            role: role,  
+            text: msg.text
+     };
+   });
+     
     // Seçili GPT modunu da gönder
     const response = await fetch(`${BACKEND_URL}/chat`, { 
       method: "POST",
