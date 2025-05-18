@@ -188,48 +188,47 @@ async function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
 
-  appendMessage("Sen", message, "user", true); // Kullanıcı mesajını ekle
-  showLoadingIndicator(); // Animasyonu göster
+  appendMessage("Sen", message, "user", true);
+  showLoadingIndicator();
   userInput.value = ""; 
   if (sendArrowButton) { 
-      sendArrowButton.classList.remove('visible');
+    sendArrowButton.classList.remove('visible');
   }
 
   try {
     // Sohbet geçmişini hazırla
-    const historyToSend = currentConversation.map(msg => ({
-        // 'bot' rolünü 'assistant' olarak değiştir
-        const role = msg.role === 'bot' ? 'assistant' : msg.role;
-        return {
-            role: role,  
-            text: msg.text
-     };
-   });
-     
+    const historyToSend = currentConversation.map(msg => {
+      // 'bot' rolünü 'assistant' olarak değiştir
+      const role = msg.role === 'bot' ? 'assistant' : msg.role;
+      return {
+        role: role,
+        text: msg.text
+      };
+    });
+    
     // Seçili GPT modunu da gönder
     const response = await fetch(`${BACKEND_URL}/chat`, { 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
-          question: message,
-          mode: currentGptMode,
-          conversation_history: historyToSend // Sohbet geçmişini gönder
+        question: message,
+        mode: currentGptMode, 
+        conversation_history: historyToSend
       }),
     });
     
-    hideLoadingIndicator(); // Cevap gelince animasyonu kaldır
+    hideLoadingIndicator();
 
     const data = await response.json();
     const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
     appendMessage("SibelGPT", reply, "bot", true); 
 
   } catch (error) {
-     hideLoadingIndicator(); // Hata durumunda da animasyonu kaldır
-     appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu veya sunucuya ulaşılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
+    hideLoadingIndicator();
+    appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu veya sunucuya ulaşılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     console.error("Mesaj gönderirken hata:", error);
   }
 }
-
 // Mesajı ekrana ve geçmişe ekler
 function appendMessage(sender, text, role, addToHistory = false) {
     if (!chatBox) return;
