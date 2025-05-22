@@ -32,14 +32,29 @@ function setGptMode(mode) {
         case 'real-estate':
             activeButton = document.getElementById('real-estate-gpt');
             document.body.className = 'theme-real-estate';
+            // Banner'ı gizle
+            if (window.hideFinanceBanner) {
+                window.hideFinanceBanner();
+                document.body.classList.remove('finance-banner-active');
+            }
             break;
         case 'mind-coach':
             activeButton = document.getElementById('mind-coach-gpt');
             document.body.className = 'theme-mind-coach';
+            // Banner'ı gizle
+            if (window.hideFinanceBanner) {
+                window.hideFinanceBanner();
+                document.body.classList.remove('finance-banner-active');
+            }
             break;
         case 'finance':
             activeButton = document.getElementById('finance-gpt');
             document.body.className = 'theme-finance';
+            // Banner'ı göster
+            if (window.showFinanceBanner) {
+                window.showFinanceBanner();
+                document.body.classList.add('finance-banner-active');
+            }
             break;
     }
     
