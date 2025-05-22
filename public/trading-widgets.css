@@ -1,0 +1,131 @@
+/* trading-widgets.css */
+/* SibelGPT TradingView Widget Stilleri */
+
+/* ===== FİNANS BANNER ===== */
+.finance-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #2e7d32, #ffc107);
+  color: white;
+  padding: 8px 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  font-family: 'Segoe UI', sans-serif;
+  display: none;
+  animation: slideDownBanner 0.5s ease-out;
+}
+
+@keyframes slideDownBanner {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.banner-title {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.banner-tickers {
+  flex: 1;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ticker-item {
+  display: inline-block;
+  padding: 4px 8px;
+  margin: 0 2px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.ticker-item:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.ticker-loading {
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+}
+
+/* ===== BANNER AKTİFKEN BODY AYARLAMASI ===== */
+body.finance-banner-active {
+  padding-top: 50px !important;
+}
+
+.finance-banner-active .main-layout {
+  margin-top: 50px;
+}
+
+/* ===== MOBİL UYUM ===== */
+@media (max-width: 768px) {
+  .finance-banner {
+    padding: 6px 10px;
+  }
+  
+  .banner-content {
+    gap: 10px;
+  }
+  
+  .banner-title {
+    font-size: 12px;
+  }
+  
+  .banner-tickers {
+    font-size: 11px;
+  }
+  
+  .ticker-item {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  
+  body.finance-banner-active {
+    padding-top: 40px !important;
+  }
+  
+  .finance-banner-active .main-layout {
+    margin-top: 40px;
+  }
+}
+
+/* ===== SCROLL ÇUBUGU (Mobil ticker kaydırma için) ===== */
+.banner-tickers::-webkit-scrollbar {
+  height: 2px;
+}
+
+.banner-tickers::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+}
+
+.banner-tickers::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+}
+
+.banner-tickers::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.5);
+}
