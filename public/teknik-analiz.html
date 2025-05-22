@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teknik Analiz | SibelGPT</title>
+  <style>
+    :root {
+      --gap-size: 20px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1e1e1e;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .analysis-header {
+      background: linear-gradient(135deg, #2e7d32, #ffc107);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .analysis-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    #current-symbol {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    .close-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .close-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .chart-container {
+      height: calc(100vh - 80px);
+      width: 100%;
+    }
+    @media (max-width: 768px) {
+      .analysis-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      #current-symbol {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="analysis-header">
+    <div>
+      <h1>📈 SibelGPT Teknik Analiz</h1>
+      <div id="current-symbol">THYAO</div>
+    </div>
+    <button class="close-btn" onclick="window.close()">✕ Kapat</button>
+  </div>
+
+  <div class="chart-container">
+    <!-- TradingView Advanced Chart Widget -->
+    <div class="tradingview-widget-container" style="height:100%;width:100%">
+      <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+      {
+        "autosize": true,
+        "interval": "D",
+        "timezone": "Europe/Istanbul",
+        "theme": "dark",
+        "style": "1",
+        "locale": "tr",
+        "withdateranges": true,
+        "hide_side_toolbar": false,
+        "allow_symbol_change": true,
+        "details": true,
+        "calendar": false,
+        "support_host": "https://www.tradingview.com"
+      }
+      </script>
+    </div>
+  </div>
+
+  <script>
+    // URL'den sembol oku
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+    
+    const fullSymbol = getQueryParam('tvwidgetsymbol') || 'BIST:THYAO';
+    const symbol = fullSymbol.split(':')[1];
+    document.getElementById('current-symbol').textContent = symbol;
+    document.title = `${symbol} Teknik Analiz | SibelGPT`;
+  </script>
+</body>
+</html>
