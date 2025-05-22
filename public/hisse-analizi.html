@@ -67,7 +67,7 @@
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
         {
-          "symbol": "NASDAQ:AAPL",
+          "symbol": "NASDAQ:" + (new URLSearchParams(window.location.search).get('symbol') || 'AAPL'),
           "width": "100%",
           "locale": "tr",
           "colorTheme": "light",
