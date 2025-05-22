@@ -1080,3 +1080,97 @@ body.theme-finance {
 #modal-confirm:hover {
   background: var(--theme-secondary);
 }
+/* ===== HİSSE ANALİZİ SAYFASI STİLLERİ ===== */
+.analysis-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.analysis-header {
+  background: var(--finance-gradient);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.analysis-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.close-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+#symbol-display {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#current-symbol {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--finance-primary);
+  margin: 0;
+}
+
+.widgets-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.widget-section {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.widget-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid var(--finance-primary);
+  padding-bottom: 10px;
+}
+
+/* Mobil uyum */
+@media (max-width: 768px) {
+  .analysis-container {
+    padding: 10px;
+  }
+  
+  .analysis-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  #current-symbol {
+    font-size: 28px;
+  }
+}
