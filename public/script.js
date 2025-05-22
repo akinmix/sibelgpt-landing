@@ -987,3 +987,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+// ===== TEKNİK ANALİZ MODAL FONKSİYONLARI =====
+function showTechnicalAnalysisModal() {
+ const modal = document.getElementById('stock-modal');
+ const input = document.getElementById('stock-symbol-input');
+ const confirmBtn = document.getElementById('modal-confirm');
+ const modalTitle = modal.querySelector('.modal-header h3');
+ 
+ if (modal) {
+   // Modal içeriğini teknik analiz için değiştir
+   modalTitle.textContent = '📈 Teknik Analiz';
+   
+   modal.style.display = 'flex';
+   modal.style.position = 'fixed';
+   modal.style.top = '50%';
+   modal.style.left = '50%';
+   modal.style.transform = 'translate(-50%, -50%)';
+   modal.style.zIndex = '99999';
+   
+   if (input) {
+     input.focus();
+     input.value = '';
+   }
+   
+   // Confirm butonunu geçici olarak değiştir
+   confirmBtn.textContent = 'Teknik Analiz';
+   confirmBtn.onclick = handleTechnicalAnalysis;
+ }
+}
+
+function handleTechnicalAnalysis() {
+ const input = document.getElementById('stock-symbol-input');
+ const symbol = input.value.trim().toUpperCase();
+ 
+ if (!symbol) {
+   alert('Lütfen bir hisse kodu girin!');
+   return;
+ }
+ 
+ // Teknik analiz sayfasını aç
+ const analysisUrl = `teknik-analiz.html?tvwidgetsymbol=BIST:${symbol}`;
+ window.open(analysisUrl, '_blank');
+ 
+ // Modal'ı kapat ve eski haline döndür
+ hideStockModal();
+ resetModalToStockAnalysis();
+}
+
+function resetModalToStockAnalysis() {
+ const modal = document.getElementById('stock-modal');
+ const confirmBtn = document.getElementById('modal-confirm');
+ const modalTitle = modal.querySelector('.modal-header h3');
+ 
+ // Modal'ı hisse analizi moduna geri döndür
+ modalTitle.textContent = '📊 Hisse Analizi';
+ confirmBtn.textContent = 'Analiz Et';
+ confirmBtn.onclick = handleStockAnalysis;
+}
