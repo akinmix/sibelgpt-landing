@@ -936,8 +936,11 @@ function handleStockAnalysis() {
     return;
   }
   
-  // Şimdilik test için alert
-  alert(`${symbol} analizi hazırlanıyor...`);
+  // Analiz sayfasını yeni tab'da aç
+  const analysisUrl = `hisse-analizi.html?symbol=${symbol}`;
+  window.open(analysisUrl, '_blank');
+  
+  // Modal'ı kapat
   hideStockModal();
 }
 
