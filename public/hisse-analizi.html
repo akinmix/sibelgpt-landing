@@ -47,6 +47,7 @@
    #symbol-info { height: 120px; }
    #company-profile { height: 390px; }
    #fundamental-data { height: 390px; }
+   #top-stories { height: 390px; }
    #technical-analysis { height: 425px; }
    @media (max-width: 800px) {
      main { grid-template-columns: 1fr; }
@@ -146,6 +147,25 @@
          "height": 390,
          "colorTheme": "light",
          "symbol": "NASDAQ:AAPL",
+         "locale": "tr"
+       }
+       </script>
+     </div>
+   </section>
+
+   <section id="top-stories" class="span-one-column">
+     <!-- Top Stories Widget -->
+     <div class="tradingview-widget-container">
+       <div class="tradingview-widget-container__widget"></div>
+       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+       {
+         "feedMode": "symbol",
+         "symbol": "NASDAQ:AAPL",
+         "colorTheme": "light",
+         "isTransparent": true,
+         "displayMode": "regular",
+         "width": "100%",
+         "height": "100%",
          "locale": "tr"
        }
        </script>
