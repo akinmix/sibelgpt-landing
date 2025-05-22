@@ -82,20 +82,23 @@ class TradingWidgetManager {
         }
     }
 
-    // Banner içeriğini güncelle
-    updateBanner() {
-        const tickersContainer = document.getElementById('banner-tickers');
-        if (!tickersContainer || !this.widgetData) return;
+  // Banner içeriğini güncelle
+updateBanner() {
+    const tickersContainer = document.getElementById('banner-tickers');
+    if (!tickersContainer || !this.widgetData) return;
 
-        // Sembolleri banner formatında göster
-        const symbols = this.widgetData.symbols;
-        const tickerHTML = symbols.map(symbol => {
-            return `<span class="ticker-item">${symbol.description}</span>`;
-        }).join(' | ');
+    // TradingView gerçek widget'ını ekle
+    const tradingViewHTML = `
+        <div class="tradingview-widget-container" style="display: inline-block; width: 100%;">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-tickers.js" async>
+            ${JSON.stringify(this.widgetData)}
+            </script>
+        </div>
+    `;
 
-        tickersContainer.innerHTML = tickerHTML;
-    }
-
+    tickersContainer.innerHTML = tradingViewHTML;
+}
     // Otomatik yenileme başlat
     startAutoRefresh() {
         this.updateInterval = setInterval(() => {
