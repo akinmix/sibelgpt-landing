@@ -693,6 +693,12 @@ window.addEventListener("load", () => {
   const realEstateBtn = document.getElementById('real-estate-gpt');
   const mindCoachBtn = document.getElementById('mind-coach-gpt');
   const financeBtn = document.getElementById('finance-gpt');
+  const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
+  if (stockAnalysisBtn) {
+    stockAnalysisBtn.addEventListener('click', () => {
+      alert('Hisse Analizi butonu çalışıyor! 🎉');
+    });
+}
   
   // GPT Mod butonu olaylarını ekle
   if (realEstateBtn) {
