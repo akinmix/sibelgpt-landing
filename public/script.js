@@ -905,6 +905,14 @@ function showStockModal() {
   
   if (modal) {
     modal.style.display = 'flex';
+    
+    // Pozisyonu zorla ayarla
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.zIndex = '99999';
+    
     if (input) {
       input.focus();
       input.value = '';
