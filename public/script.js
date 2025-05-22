@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// script.js - Güncellenmiş Versiyon
+// script.js - Düzeltilmiş Versiyon
 
 // Sohbet geçmişini Local Storage'da tutmak için anahtar
 const HISTORY_STORAGE_KEY = 'sibelgpt_conversations';
@@ -17,6 +17,9 @@ let currentGptMode = 'real-estate'; // Varsayılan mod
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
 let currentAudio = null; // Şu anda çalan ses
 let playingButtonElement = null; // Şu anda çalan buton
+
+// Modal durumu takibi için
+let currentModalMode = 'stock'; // 'stock' veya 'technical'
 
 // GPT modu değiştirme fonksiyonu
 function setGptMode(mode) {
@@ -40,7 +43,7 @@ function setGptMode(mode) {
                 window.hideFinanceBanner();
                 document.body.classList.remove('finance-banner-active');
             }
-            // Hisse analizi butonunu gizle
+            // Hisse analizi butonlarını gizle
             if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'none';
             if (technicalAnalysisBtn) technicalAnalysisBtn.style.display = 'none';
             break;
@@ -52,7 +55,7 @@ function setGptMode(mode) {
                 window.hideFinanceBanner();
                 document.body.classList.remove('finance-banner-active');
             }
-            // Her iki butonunu da gizle
+            // Her iki butonu da gizle
             if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'none';
             if (technicalAnalysisBtn) technicalAnalysisBtn.style.display = 'none';
             break;
@@ -64,7 +67,7 @@ function setGptMode(mode) {
                 window.showFinanceBanner();
                 document.body.classList.add('finance-banner-active');
             }
-            // Her iki butonu da  göster
+            // Her iki butonu da göster
             if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'inline-block';
             if (technicalAnalysisBtn) technicalAnalysisBtn.style.display = 'inline-block';
             break;
@@ -113,7 +116,6 @@ function hideLoadingIndicator() {
      const oldIndicators = chatBox.querySelectorAll('.loading-indicator');
      oldIndicators.forEach(el => el.remove());
 }
-// --- Yükleniyor fonksiyonları sonu ---
 
 // Web araması işlevi
 async function performWebSearch() {
@@ -256,6 +258,7 @@ async function sendMessage() {
     console.error("Mesaj gönderirken hata:", error);
   }
 }
+
 // Mesajı ekrana ve geçmişe ekler
 function appendMessage(sender, text, role, addToHistory = false) {
     if (!chatBox) return;
@@ -269,22 +272,23 @@ function appendMessage(sender, text, role, addToHistory = false) {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = text;
     messageElem.appendChild(contentDiv);
+    
     // Bot mesajına ses butonu ekle
     if (role === 'bot' && sender === 'SibelGPT') {
-    const voiceButton = document.createElement('button');
-    voiceButton.className = 'voice-button';
-    voiceButton.innerHTML = '🔊';
-    voiceButton.setAttribute('data-text', text.replace(/<[^>]*>/g, '')); // HTML etiketlerini temizle
-    voiceButton.setAttribute('title', 'Mesajı seslendir');
-    voiceButton.onclick = handleVoiceButtonClick;
-    
-    // Ses butonunu mesajın içine ekle
-    messageElem.style.position = 'relative';
-    voiceButton.style.position = 'absolute';
-    voiceButton.style.top = '10px';
-    voiceButton.style.right = '10px';
-    messageElem.appendChild(voiceButton);
-}
+        const voiceButton = document.createElement('button');
+        voiceButton.className = 'voice-button';
+        voiceButton.innerHTML = '🔊';
+        voiceButton.setAttribute('data-text', text.replace(/<[^>]*>/g, '')); // HTML etiketlerini temizle
+        voiceButton.setAttribute('title', 'Mesajı seslendir');
+        voiceButton.onclick = handleVoiceButtonClick;
+        
+        // Ses butonunu mesajın içine ekle
+        messageElem.style.position = 'relative';
+        voiceButton.style.position = 'absolute';
+        voiceButton.style.top = '10px';
+        voiceButton.style.right = '10px';
+        messageElem.appendChild(voiceButton);
+    }
 
     chatBox.appendChild(messageElem);
 
@@ -297,7 +301,6 @@ function appendMessage(sender, text, role, addToHistory = false) {
     }, 100);
 }
 
-// Görsel indirme fonksiyonu
 // Ses oluşturma ve çalma fonksiyonu
 async function playBotMessage(text, buttonElement) {
   // Eğer başka bir ses çalıyorsa, önce onu durdur
@@ -324,8 +327,8 @@ async function playBotMessage(text, buttonElement) {
           .replace(/\n/g, ' ')      // Yeni satırları boşluğa çevir
           .replace(/\s+/g, ' ')     // Çoklu boşlukları tek boşluğa çevir
           .trim()
-})
-});
+      })
+    });
     
     if (!response.ok) {
       throw new Error('Ses oluşturulamadı');
@@ -405,6 +408,7 @@ function handleVoiceButtonClick(event) {
     playBotMessage(text, button);
   }
 }
+
 function indirGorsel(url) {
   window.open(url, '_blank'); 
 }
@@ -685,6 +689,7 @@ window.addEventListener("load", () => {
   videoWrapper = document.getElementById('video-wrapper'); 
   introVideo = document.getElementById('intro-video');     
   playButton = document.getElementById('play-button');    
+  
   // Yardım butonu event listener'ı
   const helpButton = document.getElementById('help-button');
   if (helpButton) {
@@ -699,16 +704,21 @@ window.addEventListener("load", () => {
   const financeBtn = document.getElementById('finance-gpt');
   const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
   const technicalAnalysisBtn = document.getElementById('technical-analysis-btn');
+  
   if (stockAnalysisBtn) {
     stockAnalysisBtn.addEventListener('click', () => {
+      currentModalMode = 'stock';
       showStockModal();
     });
-}
+  }
+  
   if (technicalAnalysisBtn) {
-  technicalAnalysisBtn.addEventListener('click', () => {
-    showTechnicalAnalysisModal();
-  });
-}
+    technicalAnalysisBtn.addEventListener('click', () => {
+      currentModalMode = 'technical';
+      showTechnicalAnalysisModal();
+    });
+  }
+  
   // GPT Mod butonu olaylarını ekle
   if (realEstateBtn) {
     realEstateBtn.addEventListener('click', () => setGptMode('real-estate'));
@@ -902,7 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
- // Ses fonksiyonlarını global yap 
+// Ses fonksiyonlarını global yap 
 window.playBotMessage = playBotMessage;
 window.handleVoiceButtonClick = handleVoiceButtonClick;
 window.stopAudio = stopAudio;
@@ -911,11 +921,42 @@ window.stopAudio = stopAudio;
 function showStockModal() {
   const modal = document.getElementById('stock-modal');
   const input = document.getElementById('stock-symbol-input');
+  const modalTitle = modal.querySelector('.modal-header h3');
+  const confirmBtn = document.getElementById('modal-confirm');
   
   if (modal) {
+    // Modal başlığını ve buton metnini ayarla
+    modalTitle.textContent = '📊 Hisse Analizi';
+    confirmBtn.textContent = 'Analiz Et';
+    
     modal.style.display = 'flex';
     
     // Pozisyonu zorla ayarla
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.zIndex = '99999';
+    
+    if (input) {
+      input.focus();
+      input.value = '';
+    }
+  }
+}
+
+function showTechnicalAnalysisModal() {
+  const modal = document.getElementById('stock-modal');
+  const input = document.getElementById('stock-symbol-input');
+  const modalTitle = modal.querySelector('.modal-header h3');
+  const confirmBtn = document.getElementById('modal-confirm');
+  
+  if (modal) {
+    // Modal başlığını ve buton metnini teknik analiz için değiştir
+    modalTitle.textContent = '📈 Teknik Analiz';
+    confirmBtn.textContent = 'Teknik Analiz';
+    
+    modal.style.display = 'flex';
     modal.style.position = 'fixed';
     modal.style.top = '50%';
     modal.style.left = '50%';
@@ -934,6 +975,8 @@ function hideStockModal() {
   if (modal) {
     modal.style.display = 'none';
   }
+  // Modal kapandığında durumu sıfırla
+  currentModalMode = 'stock';
 }
 
 function handleStockAnalysis() {
@@ -945,8 +988,15 @@ function handleStockAnalysis() {
     return;
   }
   
-  // Hep BIST kullan
-  const analysisUrl = `hisse-analizi.html?tvwidgetsymbol=BIST:${symbol}`;
+  let analysisUrl;
+  
+  // Modal moduna göre farklı URL'ler
+  if (currentModalMode === 'technical') {
+    analysisUrl = `teknik-analiz.html?tvwidgetsymbol=BIST:${symbol}`;
+  } else {
+    analysisUrl = `hisse-analizi.html?tvwidgetsymbol=BIST:${symbol}`;
+  }
+  
   window.open(analysisUrl, '_blank');
   
   // Modal'ı kapat
@@ -987,60 +1037,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-// ===== TEKNİK ANALİZ MODAL FONKSİYONLARI =====
-function showTechnicalAnalysisModal() {
- const modal = document.getElementById('stock-modal');
- const input = document.getElementById('stock-symbol-input');
- const confirmBtn = document.getElementById('modal-confirm');
- const modalTitle = modal.querySelector('.modal-header h3');
- 
- if (modal) {
-   // Modal içeriğini teknik analiz için değiştir
-   modalTitle.textContent = '📈 Teknik Analiz';
-   
-   modal.style.display = 'flex';
-   modal.style.position = 'fixed';
-   modal.style.top = '50%';
-   modal.style.left = '50%';
-   modal.style.transform = 'translate(-50%, -50%)';
-   modal.style.zIndex = '99999';
-   
-   if (input) {
-     input.focus();
-     input.value = '';
-   }
-   
-   // Confirm butonunu geçici olarak değiştir
-   confirmBtn.textContent = 'Teknik Analiz';
-   confirmBtn.onclick = handleTechnicalAnalysis;
- }
-}
-
-function handleTechnicalAnalysis() {
- const input = document.getElementById('stock-symbol-input');
- const symbol = input.value.trim().toUpperCase();
- 
- if (!symbol) {
-   alert('Lütfen bir hisse kodu girin!');
-   return;
- }
- 
- // Teknik analiz sayfasını aç
- const analysisUrl = `teknik-analiz.html?tvwidgetsymbol=BIST:${symbol}`;
- window.open(analysisUrl, '_blank');
- 
- // Modal'ı kapat ve eski haline döndür
- hideStockModal();
- resetModalToStockAnalysis();
-}
-
-function resetModalToStockAnalysis() {
- const modal = document.getElementById('stock-modal');
- const confirmBtn = document.getElementById('modal-confirm');
- const modalTitle = modal.querySelector('.modal-header h3');
- 
- // Modal'ı hisse analizi moduna geri döndür
- modalTitle.textContent = '📊 Hisse Analizi';
- confirmBtn.textContent = 'Analiz Et';
- confirmBtn.onclick = handleStockAnalysis;
-}
