@@ -28,6 +28,7 @@ function setGptMode(mode) {
     
     // Hisse analizi butonunu yönet
     const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
+    const technicalAnalysisBtn = document.getElementById('technical-analysis-btn');
     
     // İlgili butonu aktif et
     let activeButton;
@@ -50,8 +51,9 @@ function setGptMode(mode) {
                 window.hideFinanceBanner();
                 document.body.classList.remove('finance-banner-active');
             }
-            // Hisse analizi butonunu gizle
+            // Her iki butonunu da gizle
             if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'none';
+            if (technicalAnalysisBtn) technicalAnalysisBtn.style.display = 'none';
             break;
             
         case 'finance':
@@ -61,8 +63,9 @@ function setGptMode(mode) {
                 window.showFinanceBanner();
                 document.body.classList.add('finance-banner-active');
             }
-            // Hisse analizi butonunu göster
+            // Her iki butonu da  göster
             if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'inline-block';
+            if (technicalAnalysisBtn) technicalAnalysisBtn.style.display = 'inline-block';
             break;
     }
     
