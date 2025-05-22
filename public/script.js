@@ -42,6 +42,7 @@ function setGptMode(mode) {
             }
             // Hisse analizi butonunu gizle
             if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'none';
+            if (technicalAnalysisBtn) technicalAnalysisBtn.style.display = 'none';
             break;
             
         case 'mind-coach':
