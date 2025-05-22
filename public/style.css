@@ -961,8 +961,11 @@ body.theme-finance {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100vw;  /* ← BUNU EKLE
-  height: 100vh; /* ← BUNU EKLE
+  width: 100vw;  
+  height: 100vh; 
+  margin: 0 !important;     
+  padding: 0 !important;    
+  transform: none !important; 
 }
 
 .modal-content {
