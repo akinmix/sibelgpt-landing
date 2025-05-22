@@ -70,7 +70,7 @@ class TradingWidgetManager {
     // Widget verilerini backend'den al
     async loadWidgetData() {
         try {
-            const response = await fetch('/test-trading-widget');
+            const response = await fetch('https://sibelgpt-backend.onrender.com/test-trading-widget');
             const data = await response.json();
             
             if (data.status === 'success') {
