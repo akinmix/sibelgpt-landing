@@ -951,24 +951,22 @@ body.theme-finance {
 }
 /* ===== HİSSE ANALİZİ MODAL STİLLERİ ===== */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
   background: rgba(0, 0, 0, 0.8);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;  
-  height: 100vh; 
-  margin: 0 !important;     
-  padding: 0 !important;    
-  transform: none !important; 
+  z-index: 99999;
+  width: 100vw;
+  height: 100vh;
+  display: block;
 }
 
 .modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
   border-radius: 15px;
   width: 90%;
@@ -976,7 +974,6 @@ body.theme-finance {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
-
 .modal-header {
   background: var(--theme-primary);
   color: white;
