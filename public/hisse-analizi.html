@@ -1,151 +1,168 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hisse Analizi | SibelGPT</title>
-  <style>
-    :root {
-      --gap-size: 20px;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #f8f9fa;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .analysis-header {
-      background: linear-gradient(135deg, #2e7d32, #ffc107);
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .analysis-header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-    #current-symbol {
-      font-size: 36px;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-    main {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-gap: var(--gap-size);
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .span-full-grid { grid-column: span 2; }
-    .span-one-column { grid-column: span 1; }
-    #advanced-chart { height: 500px; }
-    #symbol-info { height: 120px; }
-    #company-profile { height: 390px; }
-    #fundamental-data { height: 490px; }
-    #technical-analysis, #top-stories { height: 425px; }
-    @media (max-width: 800px) {
-      main { grid-template-columns: 1fr; }
-      .span-one-column { grid-column: span 1; }
-    }
-  </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Hisse Analizi | SibelGPT</title>
+ <style>
+   :root {
+     --gap-size: 20px;
+     box-sizing: border-box;
+     font-family: 'Segoe UI', sans-serif;
+   }
+   * { box-sizing: border-box; }
+   body {
+     margin: 0;
+     padding: 20px;
+     background: #f8f9fa;
+     font-family: 'Segoe UI', sans-serif;
+   }
+   .analysis-header {
+     background: linear-gradient(135deg, #2e7d32, #ffc107);
+     color: white;
+     padding: 20px;
+     border-radius: 10px;
+     text-align: center;
+     margin-bottom: 30px;
+   }
+   .analysis-header h1 {
+     margin: 0;
+     font-size: 28px;
+   }
+   #current-symbol {
+     font-size: 36px;
+     font-weight: bold;
+     margin: 10px 0;
+   }
+   main {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-gap: var(--gap-size);
+     max-width: 1400px;
+     margin: 0 auto;
+   }
+   .span-full-grid { grid-column: span 2; }
+   .span-one-column { grid-column: span 1; }
+   #advanced-chart { height: 500px; }
+   #symbol-info { height: 120px; }
+   #company-profile { height: 390px; }
+   #fundamental-data { height: 390px; }
+   #technical-analysis { height: 425px; }
+   @media (max-width: 800px) {
+     main { grid-template-columns: 1fr; }
+     .span-one-column { grid-column: span 1; }
+   }
+ </style>
 </head>
 <body>
-  <div class="analysis-header">
-    <h1>📊 SibelGPT Hisse Analizi</h1>
-    <div id="current-symbol">AAPL</div>
-  </div>
+ <div class="analysis-header">
+   <h1>📊 SibelGPT Hisse Analizi</h1>
+   <div id="current-symbol">AAPL</div>
+ </div>
 
-  <main>
-    <section id="symbol-info" class="span-full-grid">
-      <!-- Symbol Info Widget -->
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
-        {
-          "symbol": "NASDAQ:" + (new URLSearchParams(window.location.search).get('symbol') || 'AAPL'),
-          "width": "100%",
-          "locale": "tr",
-          "colorTheme": "light",
-          "isTransparent": true
-        }
-        </script>
-      </div>
-    </section>
+ <main>
+   <section id="symbol-info" class="span-full-grid">
+     <!-- Symbol Info Widget -->
+     <div class="tradingview-widget-container">
+       <div class="tradingview-widget-container__widget"></div>
+       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+       {
+         "symbol": "NASDAQ:AAPL",
+         "width": "100%",
+         "locale": "tr",
+         "colorTheme": "light",
+         "isTransparent": true
+       }
+       </script>
+     </div>
+   </section>
 
-    <section id="advanced-chart" class="span-full-grid">
-      <!-- Advanced Chart Widget -->
-      <div class="tradingview-widget-container" style="height:100%;width:100%">
-        <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-        {
-          "autosize": true,
-          "symbol": "NASDAQ:AAPL",
-          "interval": "D",
-          "timezone": "Europe/Istanbul",
-          "theme": "light",
-          "style": "1",
-          "locale": "tr",
-          "allow_symbol_change": true,
-          "calendar": false
-        }
-        </script>
-      </div>
-    </section>
+   <section id="advanced-chart" class="span-full-grid">
+     <!-- Advanced Chart Widget -->
+     <div class="tradingview-widget-container" style="height:100%;width:100%">
+       <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+       {
+         "autosize": true,
+         "symbol": "NASDAQ:AAPL",
+         "interval": "D",
+         "timezone": "Europe/Istanbul",
+         "theme": "light",
+         "style": "1",
+         "locale": "tr",
+         "allow_symbol_change": true,
+         "calendar": false
+       }
+       </script>
+     </div>
+   </section>
 
-    <section id="technical-analysis" class="span-one-column">
-      <!-- Technical Analysis Widget -->
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-        {
-          "interval": "15m",
-          "width": "100%",
-          "isTransparent": true,
-          "height": "100%",
-          "symbol": "NASDAQ:AAPL",
-          "showIntervalTabs": true,
-          "displayMode": "single",
-          "locale": "tr",
-          "colorTheme": "light"
-        }
-        </script>
-      </div>
-    </section>
+   <section id="technical-analysis" class="span-one-column">
+     <!-- Technical Analysis Widget -->
+     <div class="tradingview-widget-container">
+       <div class="tradingview-widget-container__widget"></div>
+       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+       {
+         "interval": "15m",
+         "width": "100%",
+         "isTransparent": true,
+         "height": "100%",
+         "symbol": "NASDAQ:AAPL",
+         "showIntervalTabs": true,
+         "displayMode": "single",
+         "locale": "tr",
+         "colorTheme": "light"
+       }
+       </script>
+     </div>
+   </section>
 
-    <section id="company-profile" class="span-one-column">
-      <!-- Company Profile Widget -->
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js" async>
-        {
-          "width": "100%",
-          "height": "100%",
-          "colorTheme": "light",
-          "isTransparent": true,
-          "symbol": "NASDAQ:AAPL",
-          "locale": "tr"
-        }
-        </script>
-      </div>
-    </section>
-  </main>
+   <section id="company-profile" class="span-one-column">
+     <!-- Company Profile Widget -->
+     <div class="tradingview-widget-container">
+       <div class="tradingview-widget-container__widget"></div>
+       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js" async>
+       {
+         "width": "100%",
+         "height": "100%",
+         "colorTheme": "light",
+         "isTransparent": true,
+         "symbol": "NASDAQ:AAPL",
+         "locale": "tr"
+       }
+       </script>
+     </div>
+   </section>
 
-  <script>
-    // URL'den sembol oku
-    function getQueryParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-    
-    const fullSymbol = getQueryParam('tvwidgetsymbol') || 'BIST:TABGD';
-    const symbol = fullSymbol.split(':')[1]; // BIST:TABGD → TABGD
-    document.getElementById('current-symbol').textContent = symbol;
-    document.title = `${symbol} Analizi | SibelGPT`;
-  </script>
+   <section id="fundamental-data" class="span-one-column">
+     <!-- Fundamental Data Widget -->
+     <div class="tradingview-widget-container">
+       <div class="tradingview-widget-container__widget"></div>
+       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-fundamental-data.js" async>
+       {
+         "symbol": "NASDAQ:AAPL",
+         "width": "100%",
+         "height": "100%",
+         "colorTheme": "light",
+         "isTransparent": true,
+         "locale": "tr"
+       }
+       </script>
+     </div>
+   </section>
+ </main>
+
+ <script>
+   // URL'den sembol oku
+   function getQueryParam(param) {
+     const urlParams = new URLSearchParams(window.location.search);
+     return urlParams.get(param);
+   }
+   
+   const fullSymbol = getQueryParam('tvwidgetsymbol') || 'BIST:TABGD';
+   const symbol = fullSymbol.split(':')[1]; // BIST:TABGD → TABGD
+   document.getElementById('current-symbol').textContent = symbol;
+   document.title = `${symbol} Analizi | SibelGPT`;
+ </script>
 </body>
 </html>
