@@ -897,3 +897,73 @@ document.addEventListener('DOMContentLoaded', () => {
 window.playBotMessage = playBotMessage;
 window.handleVoiceButtonClick = handleVoiceButtonClick;
 window.stopAudio = stopAudio;
+
+// ===== HİSSE ANALİZİ MODAL FONKSİYONLARI =====
+function showStockModal() {
+  const modal = document.getElementById('stock-modal');
+  const input = document.getElementById('stock-symbol-input');
+  
+  if (modal) {
+    modal.style.display = 'flex';
+    if (input) {
+      input.focus();
+      input.value = '';
+    }
+  }
+}
+
+function hideStockModal() {
+  const modal = document.getElementById('stock-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+function handleStockAnalysis() {
+  const input = document.getElementById('stock-symbol-input');
+  const symbol = input.value.trim().toUpperCase();
+  
+  if (!symbol) {
+    alert('Lütfen bir hisse kodu girin!');
+    return;
+  }
+  
+  // Şimdilik test için alert
+  alert(`${symbol} analizi hazırlanıyor...`);
+  hideStockModal();
+}
+
+// Modal event listener'ları
+document.addEventListener('DOMContentLoaded', () => {
+  const modalClose = document.getElementById('modal-close');
+  const modalCancel = document.getElementById('modal-cancel');
+  const modalConfirm = document.getElementById('modal-confirm');
+  const stockInput = document.getElementById('stock-symbol-input');
+  const exampleSymbols = document.querySelectorAll('.example-symbol');
+  
+  // Kapatma butonları
+  if (modalClose) modalClose.addEventListener('click', hideStockModal);
+  if (modalCancel) modalCancel.addEventListener('click', hideStockModal);
+  
+  // Analiz butonu
+  if (modalConfirm) modalConfirm.addEventListener('click', handleStockAnalysis);
+  
+  // Enter tuşu
+  if (stockInput) {
+    stockInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleStockAnalysis();
+      }
+    });
+  }
+  
+  // Örnek sembol tıklamaları
+  exampleSymbols.forEach(symbol => {
+    symbol.addEventListener('click', () => {
+      const symbolCode = symbol.getAttribute('data-symbol');
+      if (stockInput) {
+        stockInput.value = symbolCode;
+      }
+    });
+  });
+});
