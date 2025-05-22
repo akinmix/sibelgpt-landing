@@ -146,6 +146,29 @@
     </video>
     <button id="play-button">🎤 Dinle</button>
   </div>
+  
+  <!-- Hisse Analizi Modal -->
+<div id="stock-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📊 Hisse Analizi</h3>
+      <button class="modal-close" id="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Hangi hisse için detaylı analiz istiyorsunuz?</p>
+      <input type="text" id="stock-symbol-input" placeholder="Örn: AAPL, GOOGL, THYAO" />
+      <div class="symbol-examples">
+        <span class="example-symbol" data-symbol="AAPL">AAPL</span>
+        <span class="example-symbol" data-symbol="GOOGL">GOOGL</span>
+        <span class="example-symbol" data-symbol="THYAO">THYAO</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="modal-cancel">İptal</button>
+      <button id="modal-confirm">Analiz Et</button>
+    </div>
+  </div>
+</div>
 
   <script type="module" src="script.js"></script>
   <script src="trading-widgets.js"></script>
