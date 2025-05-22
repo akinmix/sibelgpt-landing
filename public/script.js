@@ -26,35 +26,43 @@ function setGptMode(mode) {
     const buttons = document.querySelectorAll('.gpt-button');
     buttons.forEach(btn => btn.classList.remove('active'));
     
+    // Hisse analizi butonunu yönet
+    const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
+    
     // İlgili butonu aktif et
     let activeButton;
     switch(mode) {
         case 'real-estate':
             activeButton = document.getElementById('real-estate-gpt');
             document.body.className = 'theme-real-estate';
-            // Banner'ı gizle
             if (window.hideFinanceBanner) {
                 window.hideFinanceBanner();
                 document.body.classList.remove('finance-banner-active');
             }
+            // Hisse analizi butonunu gizle
+            if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'none';
             break;
+            
         case 'mind-coach':
             activeButton = document.getElementById('mind-coach-gpt');
             document.body.className = 'theme-mind-coach';
-            // Banner'ı gizle
             if (window.hideFinanceBanner) {
                 window.hideFinanceBanner();
                 document.body.classList.remove('finance-banner-active');
             }
+            // Hisse analizi butonunu gizle
+            if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'none';
             break;
+            
         case 'finance':
             activeButton = document.getElementById('finance-gpt');
             document.body.className = 'theme-finance';
-            // Banner'ı göster
             if (window.showFinanceBanner) {
                 window.showFinanceBanner();
                 document.body.classList.add('finance-banner-active');
             }
+            // Hisse analizi butonunu göster
+            if (stockAnalysisBtn) stockAnalysisBtn.style.display = 'inline-block';
             break;
     }
     
