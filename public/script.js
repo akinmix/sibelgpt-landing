@@ -696,7 +696,7 @@ window.addEventListener("load", () => {
   const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
   if (stockAnalysisBtn) {
     stockAnalysisBtn.addEventListener('click', () => {
-      alert('Hisse Analizi butonu çalışıyor! 🎉');
+      showStockModal();
     });
 }
   
