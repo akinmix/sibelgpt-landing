@@ -936,8 +936,8 @@ function handleStockAnalysis() {
     return;
   }
   
-  // Analiz sayfasını yeni tab'da aç
-  const analysisUrl = `hisse-analizi.html?tvwidgetsymbol=NASDAQ:${symbol}`;
+  // Hep BIST kullan
+  const analysisUrl = `hisse-analizi.html?tvwidgetsymbol=BIST:${symbol}`;
   window.open(analysisUrl, '_blank');
   
   // Modal'ı kapat
