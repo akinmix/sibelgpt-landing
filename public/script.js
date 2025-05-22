@@ -697,12 +697,17 @@ window.addEventListener("load", () => {
   const mindCoachBtn = document.getElementById('mind-coach-gpt');
   const financeBtn = document.getElementById('finance-gpt');
   const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
+  const technicalAnalysisBtn = document.getElementById('technical-analysis-btn');
   if (stockAnalysisBtn) {
     stockAnalysisBtn.addEventListener('click', () => {
       showStockModal();
     });
 }
-  
+  if (technicalAnalysisBtn) {
+  technicalAnalysisBtn.addEventListener('click', () => {
+    showTechnicalAnalysisModal();
+  });
+}
   // GPT Mod butonu olaylarını ekle
   if (realEstateBtn) {
     realEstateBtn.addEventListener('click', () => setGptMode('real-estate'));
