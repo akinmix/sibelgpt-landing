@@ -984,17 +984,65 @@ function handleStockAnalysis() {
   const symbol = input.value.trim().toUpperCase();
   
   if (!symbol) {
-    alert('Lütfen bir hisse kodu girin!');
+    alert('Lütfen bir sembol girin!');
     return;
+  }
+  
+  // Sembol tipini algıla ve doğru prefix ekle
+  let fullSymbol = '';
+  
+  // Kripto para kontrolleri
+  if (symbol === 'BITCOIN' || symbol === 'BTC') {
+    fullSymbol = 'BINANCE:BTCUSD';
+  } else if (symbol === 'ETHEREUM' || symbol === 'ETH') {
+    fullSymbol = 'BINANCE:ETHUSD';
+  } else if (symbol.includes('USD') && (symbol.includes('BTC') || symbol.includes('ETH'))) {
+    fullSymbol = `BINANCE:${symbol}`;
+  }
+  
+  // Döviz paritesi kontrolleri
+  else if (symbol === 'USDTRY' || symbol === 'USD/TRY') {
+    fullSymbol = 'FX:USDTRY';
+  } else if (symbol === 'EURTRY' || symbol === 'EUR/TRY') {
+    fullSymbol = 'FX:EURTRY';
+  } else if (symbol === 'EURUSD' || symbol === 'EUR/USD') {
+    fullSymbol = 'FX:EURUSD';
+  } else if (symbol === 'GBPUSD' || symbol === 'GBP/USD') {
+    fullSymbol = 'FX:GBPUSD';
+  } else if (symbol.length === 6 && (symbol.includes('USD') || symbol.includes('EUR') || symbol.includes('TRY'))) {
+    fullSymbol = `FX:${symbol}`;
+  }
+  
+  // Emtia kontrolleri
+  else if (symbol === 'GOLD' || symbol === 'ALTIN') {
+    fullSymbol = 'TVC:GOLD';
+  } else if (symbol === 'SILVER' || symbol === 'GUMUS') {
+    fullSymbol = 'TVC:SILVER';
+  } else if (symbol === 'OIL' || symbol === 'PETROL') {
+    fullSymbol = 'TVC:USOIL';
+  }
+  
+  // Endeks kontrolleri
+  else if (symbol === 'XU100' || symbol === 'BIST100') {
+    fullSymbol = 'BIST:XU100';
+  } else if (symbol === 'SPX' || symbol === 'SP500') {
+    fullSymbol = 'TVC:SPX';
+  } else if (symbol === 'NASDAQ' || symbol === 'NDX') {
+    fullSymbol = 'TVC:NDX';
+  }
+  
+  // Türk hisse senetleri (varsayılan)
+  else {
+    fullSymbol = `BIST:${symbol}`;
   }
   
   let analysisUrl;
   
   // Modal moduna göre farklı URL'ler
   if (currentModalMode === 'technical') {
-    analysisUrl = `teknik-analiz.html?tvwidgetsymbol=BIST:${symbol}`;
+    analysisUrl = `teknik-analiz.html?tvwidgetsymbol=${fullSymbol}`;
   } else {
-    analysisUrl = `hisse-analizi.html?tvwidgetsymbol=BIST:${symbol}`;
+    analysisUrl = `hisse-analizi.html?tvwidgetsymbol=${fullSymbol}`;
   }
   
   window.open(analysisUrl, '_blank');
