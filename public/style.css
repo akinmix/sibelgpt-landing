@@ -955,24 +955,23 @@ body.theme-finance {
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 99999;
-  width: 100vw;
-  height: 100vh;
-  display: block;
+  background: rgba(0, 0, 0, 0.8) !important;
+  z-index: 99999 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   background: white;
   border-radius: 15px;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   overflow: hidden;
+  margin: 0 auto;
 }
 .modal-header {
   background: var(--theme-primary);
