@@ -87,18 +87,30 @@ updateBanner() {
     const tickersContainer = document.getElementById('banner-tickers');
     if (!tickersContainer || !this.widgetData) return;
 
-    // TradingView gerçek widget'ını ekle
-    const tradingViewHTML = `
-        <div class="tradingview-widget-container" style="display: inline-block; width: 100%;">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-tickers.js" async>
-            ${JSON.stringify(this.widgetData)}
-            </script>
-        </div>
-    `;
-
-    tickersContainer.innerHTML = tradingViewHTML;
+    // Widget container'ı oluştur
+    const widgetContainer = document.createElement('div');
+    widgetContainer.className = 'tradingview-widget-container';
+    widgetContainer.style.display = 'inline-block';
+    widgetContainer.style.width = '100%';
+    
+    const widgetDiv = document.createElement('div');
+    widgetDiv.className = 'tradingview-widget-container__widget';
+    widgetContainer.appendChild(widgetDiv);
+    
+    // Script'i dinamik olarak yükle
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-tickers.js';
+    script.async = true;
+    script.innerHTML = JSON.stringify(this.widgetData);
+    
+    widgetContainer.appendChild(script);
+    
+    // Eski içeriği temizle ve yeni widget'ı ekle
+    tickersContainer.innerHTML = '';
+    tickersContainer.appendChild(widgetContainer);
 }
+
     // Otomatik yenileme başlat
     startAutoRefresh() {
         this.updateInterval = setInterval(() => {
