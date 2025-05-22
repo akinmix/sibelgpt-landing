@@ -142,7 +142,8 @@
       return urlParams.get(param);
     }
     
-    const symbol = getQueryParam('symbol') || 'AAPL';
+    const fullSymbol = getQueryParam('tvwidgetsymbol') || 'BIST:TABGD';
+    const symbol = fullSymbol.split(':')[1]; // BIST:TABGD → TABGD
     document.getElementById('current-symbol').textContent = symbol;
     document.title = `${symbol} Analizi | SibelGPT`;
   </script>
