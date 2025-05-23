@@ -878,9 +878,25 @@ window.addEventListener('beforeunload', () => {
 });
 
 // Supabase bağlantısı
-const supabaseUrl = 'https://qkjyysjbtfxwyyypuhzs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFranl5c2pidGZ4d3l5eXB1aHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzE5MjYsImV4cCI6MjA2MTQwNzkyNn0.k1GvvvoYYqXKPJzx27wBB5ncqPHqnObW_b67spw4c1E';
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Supabase bağlantısı - GÜVENLİ VERSİYON
+let supabase = null;
+
+// Güvenli config'i backend'den al
+async function initializeSupabase() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/config`);
+        const config = await response.json();
+        
+        const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+        supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
+        
+        console.log("Supabase güvenli şekilde başlatıldı");
+    } catch (error) {
+        console.error("Supabase başlatma hatası:", error);
+    }
+}
+
+
 
 // Supabase OTP login işlemi
 async function handleLoginOrSignup() {
