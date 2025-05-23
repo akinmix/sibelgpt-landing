@@ -1174,3 +1174,28 @@ body.theme-finance {
     font-size: 28px;
   }
 }
+  /* İletişim bölümünü daha görünür yap */
+.sidebar-links-group .contact-title {
+  margin-top: 20px;
+  padding-top: 15px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 14px;
+}
+
+.sidebar-links-group a[href^="mailto:"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  margin-bottom: 10px !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.sidebar-links-group a[href^="mailto:"]:hover {
+  background-color: var(--theme-primary) !important;
+  transform: translateY(-2px) !important;
+}
