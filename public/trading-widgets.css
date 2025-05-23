@@ -129,3 +129,32 @@ body.finance-banner-active {
 .banner-tickers::-webkit-scrollbar-thumb:hover {
   background: rgba(255,255,255,0.5);
 }
+/* ===== BANNER AKTİFKEN SAYFA DÜZENİ FİKSLERİ ===== */
+body.finance-banner-active .chat-input-container {
+  margin-bottom: 70px; /* Butonlar için ekstra alan */
+}
+
+body.finance-banner-active .gpt-options {
+  margin-bottom: 15px; /* Butonlar için fazladan boşluk */
+  z-index: 10; /* Banner'ın önünde göster */
+  position: relative; /* z-index için gerekli */
+}
+
+.finance-banner {
+  height: auto; /* İçeriğe göre yüksekliği ayarla */
+  min-height: 40px; /* Minimum yükseklik */
+  box-sizing: border-box; /* Border ve padding'i genişliğe dahil et */
+}
+
+/* Banner açıkken ana içerik alanını ayarla */
+body.finance-banner-active .center-chat-container {
+  height: calc(100% - 50px); /* Banner yüksekliğini hesaba kat */
+  margin-top: 50px; /* Banner kadar yukarıdan boşluk bırak */
+}
+
+/* GPT butonlarının her zaman görünmesini sağla */
+body.finance-banner-active .gpt-button {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
