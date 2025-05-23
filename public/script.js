@@ -675,7 +675,9 @@ function playIntroVideo() {
 }
 
 // Sayfa yüklendiğinde çalışacak kodlar
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
+  // Supabase'i başlat
+  await initializeSupabase();
   // Elementleri seç
   chatBox = document.getElementById("chat-box");
   userInput = document.getElementById("user-input");
