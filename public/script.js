@@ -31,6 +31,7 @@ function setGptMode(mode) {
     const buttons = document.querySelectorAll('.gpt-button');
     buttons.forEach(btn => btn.classList.remove('active'));
     
+    
     // Hisse analizi butonunu yönet
     const stockAnalysisBtn = document.getElementById('stock-analysis-btn');
     const technicalAnalysisBtn = document.getElementById('technical-analysis-btn');
@@ -88,6 +89,8 @@ function setGptMode(mode) {
     // Sohbeti temizle ve yeni moda göre başlat
     clearChat(mode);
 }
+    // Global erişim için
+    window.setGptMode = setGptMode;
 
 // --- Yükleniyor animasyonunu ekleme/kaldırma fonksiyonları ---
 function showLoadingIndicator() {
