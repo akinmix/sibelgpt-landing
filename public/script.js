@@ -935,6 +935,19 @@ window.playBotMessage = playBotMessage;
 window.handleVoiceButtonClick = handleVoiceButtonClick;
 window.stopAudio = stopAudio;
 
+// 🎬 İlan araması kontrol fonksiyonu
+function isPropertySearchQuery(message) {
+    const searchTerms = [
+        'ara', 'bul', 'göster', 'listele', 'var mı', 'ilan', 
+        'satılık', 'kiralık', 'daire', 'ev', 'konut', 'villa',
+        'arıyorum', 'istiyorum', 'bulabilirim', 'önerin',
+        'aramak', 'bulma', 'gösterme', 'listeleme'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return searchTerms.some(term => lowerMessage.includes(term));
+}
+
 // ===== HİSSE ANALİZİ MODAL FONKSİYONLARI =====
 function showStockModal() {
   const modal = document.getElementById('stock-modal');
