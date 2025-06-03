@@ -147,7 +147,13 @@
     </video>
     <button id="play-button">🎤 Dinle</button>
   </div>
-  
+  <!-- Avatar Loading Sistemi -->
+  <div id="loading-video-wrapper" style="display: none;">
+    <video id="loading-video" preload="auto">
+      <source src="loading-avatar.mp4" type="video/mp4" />
+      Tarayıcınız video oynatmayı desteklemiyor.
+    </video>
+  </div>
   <!-- Hisse Analizi Modal -->
 <div id="stock-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
@@ -173,6 +179,7 @@
 
   <script type="module" src="script.js"></script>
   <script src="trading-widgets.js"></script>
+  <script src="avatar-system.js"></script>
 
   <!-- Yapısal Veri (Schema.org) -->
   <script type="application/ld+json">
