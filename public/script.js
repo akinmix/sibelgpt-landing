@@ -13,6 +13,7 @@ let webSearchButton;
 let videoWrapper, introVideo, playButton; 
 let loadingMessageElement = null; // Yükleniyor mesajını takip etmek için
 let currentGptMode = 'real-estate'; // Varsayılan mod
+window.currentGptMode = currentGptMode; // Global erişim için
 
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com"; 
 let currentAudio = null; // Şu anda çalan ses
