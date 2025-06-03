@@ -25,6 +25,7 @@ let currentModalMode = 'stock'; // 'stock' veya 'technical'
 // GPT modu değiştirme fonksiyonu
 function setGptMode(mode) {
     currentGptMode = mode;
+    window.currentGptMode = mode; // Bu satırı ekleyin
     
     // Aktif buton stilini güncelle
     const buttons = document.querySelectorAll('.gpt-button');
