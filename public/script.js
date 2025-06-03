@@ -948,7 +948,7 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
 window.stopAudio = stopAudio;
 
 // 🎬 İlan araması kontrol fonksiyonu
-function isPropertySearchQuery(message) {
+window.isPropertySearchQuery = function(message) {
     const searchTerms = [
         'ara', 'bul', 'göster', 'listele', 'var mı', 'ilan', 
         'satılık', 'kiralık', 'daire', 'ev', 'konut', 'villa',
