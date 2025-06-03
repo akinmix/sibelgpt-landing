@@ -1199,3 +1199,43 @@ body.theme-finance {
   background-color: var(--theme-primary) !important;
   transform: translateY(-2px) !important;
 }
+  /* ===== AVATAR LOADING SİSTEMİ ===== */
+#loading-video-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001; /* Splash'den yüksek */
+    background-color: rgba(0,0,0,0.85);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    display: none;
+    backdrop-filter: blur(5px);
+}
+
+#loading-video {
+    width: 320px;
+    height: auto;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+/* Avatar gösterilirken arka plan bulanıklığı */
+body.avatar-showing {
+    overflow: hidden;
+}
+
+body.avatar-showing .main-layout {
+    filter: blur(3px);
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}
+
+/* Avatar izin modal'ı için özel stiller */
+#avatar-permission-modal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
