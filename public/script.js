@@ -127,7 +127,16 @@ async function performWebSearch() {
     }
     
     appendMessage("Sen", prompt, "user", true);
-    showLoadingIndicator();
+    // 🎬 AVATAR KONTROL: Sadece gayrimenkul + ilan araması
+const isPropertySearch = (currentGptMode === 'real-estate' && isPropertySearchQuery(message));
+
+if (isPropertySearch) {
+  console.log("🏠 Gayrimenkul ilan araması - Avatar gösteriliyor");
+  window.avatarSystem.show();
+} else {
+  console.log("📝 Normal soru - Standart loading");
+  showLoadingIndicator();
+}
     userInput.value = "";
     if (sendArrowButton) {
         sendArrowButton.classList.remove('visible');
@@ -146,7 +155,8 @@ async function performWebSearch() {
         });
         
         console.log("Web araması yanıtı alındı, durum kodu:", response.status);
-        
+        // Avatar ve loading'i gizle
+        window.avatarSystem.hide();
         hideLoadingIndicator();
         
         if (!response.ok) {
@@ -253,6 +263,8 @@ async function sendMessage() {
     appendMessage("SibelGPT", reply, "bot", true); 
 
   } catch (error) {
+      // Avatar ve loading'i gizle
+    window.avatarSystem.hide();
     hideLoadingIndicator();
     appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu veya sunucuya ulaşılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
     console.error("Mesaj gönderirken hata:", error);
