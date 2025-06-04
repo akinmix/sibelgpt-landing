@@ -2,7 +2,7 @@
 class AvatarSystem {
     constructor() {
         this.isActive = false;
-        this.permissionGranted = false;
+        this.permissionGranted = null;
         this.currentVideo = null;
         this.wrapper = null;
     }
