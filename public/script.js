@@ -133,7 +133,7 @@ async function performWebSearch() {
     
     appendMessage("Sen", prompt, "user", true);
     // 🎬 AVATAR KONTROL: Sadece gayrimenkul + ilan araması
-const isPropertySearch = (currentGptMode === 'real-estate' && isPropertySearchQuery(message));
+const isPropertySearch = (currentGptMode === 'real-estate' && isPropertySearchQuery(prompt));
 
 if (isPropertySearch) {
   console.log("🏠 Gayrimenkul ilan araması - Avatar gösteriliyor");
