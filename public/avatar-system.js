@@ -74,14 +74,20 @@ class AvatarSystem {
             document.body.classList.add('avatar-showing');
             this.wrapper.style.display = 'flex';
             
+            // Video ayarları - güçlü mobil uyum
             this.currentVideo.currentTime = 0;
-            this.currentVideo.muted = true; // Her zaman sessiz başlat
-            this.currentVideo.autoplay = true;
-            this.currentVideo.playsInline = true;
+            this.currentVideo.muted = true;
+            this.currentVideo.volume = 0;
+            this.currentVideo.setAttribute('playsinline', '');
+            this.currentVideo.setAttribute('webkit-playsinline', '');
+            this.currentVideo.setAttribute('muted', 'true');
+            this.currentVideo.preload = 'auto';
 
             try {
-                await this.currentVideo.play();
-                console.log(`🎬 Avatar başlatıldı (${this.currentVideo.muted ? 'sessiz' : 'sesli'})`);
+                // Çoklu deneme stratejisi ile video oynatma
+                await this.playVideoWithFallback();
+                
+                console.log('🎬 Avatar başarıyla başlatıldı (sessiz mod)');
                 
                 // 28 saniye sonra otomatik kapat
                 setTimeout(() => {
@@ -95,7 +101,29 @@ class AvatarSystem {
 
             } catch (error) {
                 console.warn('🎬 Avatar oynatma hatası:', error);
-                this.hide();
+                console.log('🎬 Avatar görsel olarak aktif kalıyor...');
+                // Hata durumunda da wrapper'ı açık bırak
+            }
+        }
+    }
+
+    // Video oynatma - fallback stratejisi
+    async playVideoWithFallback() {
+        try {
+            // İlk deneme
+            await this.currentVideo.play();
+        } catch (firstError) {
+            console.log('🎬 İlk deneme başarısız, sessiz modda tekrar deneniyor...');
+            
+            try {
+                // İkinci deneme - tam sessiz
+                this.currentVideo.muted = true;
+                this.currentVideo.volume = 0;
+                await this.currentVideo.play();
+            } catch (secondError) {
+                console.log('🎬 Video oynatılamadı, sadece görsel gösteriliyor');
+                // Video oynatılamasa da wrapper açık kalır
+                throw secondError;
             }
         }
     }
@@ -104,6 +132,7 @@ class AvatarSystem {
     hide() {
         if (this.wrapper && this.currentVideo) {
             this.currentVideo.pause();
+            this.currentVideo.currentTime = 0;
             this.wrapper.style.display = 'none';
             document.body.classList.remove('avatar-showing');
             this.isActive = false;
@@ -115,7 +144,21 @@ class AvatarSystem {
     isShowing() {
         return this.isActive;
     }
+
+    // Manuel gizleme (acil durum için)
+    forceHide() {
+        this.hide();
+        console.log('🎬 Avatar zorla gizlendi');
+    }
 }
 
-// Global avatar instance
+// Global avatar instance oluştur
 window.avatarSystem = new AvatarSystem();
+
+// Console'dan erişim için debug fonksiyonları
+window.avatarDebug = {
+    show: () => window.avatarSystem.show(),
+    hide: () => window.avatarSystem.hide(),
+    isActive: () => window.avatarSystem.isActive,
+    forceHide: () => window.avatarSystem.forceHide()
+};
