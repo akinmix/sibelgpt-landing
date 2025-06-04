@@ -233,7 +233,16 @@ async function sendMessage() {
   if (!message) return;
 
   appendMessage("Sen", message, "user", true);
+
+// Avatar kontrolü
+const isPropertySearch = (currentGptMode === 'real-estate' && isPropertySearchQuery(message));
+
+if (isPropertySearch) {
+  window.avatarSystem.show();
+} else {
   showLoadingIndicator();
+}
+    
   userInput.value = ""; 
   if (sendArrowButton) { 
     sendArrowButton.classList.remove('visible');
@@ -260,7 +269,8 @@ async function sendMessage() {
         conversation_history: historyToSend
       }),
     });
-    
+
+    window.avatarSystem.hide();
     hideLoadingIndicator();
 
     const data = await response.json();
