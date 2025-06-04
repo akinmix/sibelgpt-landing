@@ -75,7 +75,9 @@ class AvatarSystem {
             this.wrapper.style.display = 'flex';
             
             this.currentVideo.currentTime = 0;
-            this.currentVideo.muted = !this.permissionGranted;
+            this.currentVideo.muted = true; // Her zaman sessiz başlat
+            this.currentVideo.autoplay = true;
+            this.currentVideo.playsInline = true;
 
             try {
                 await this.currentVideo.play();
