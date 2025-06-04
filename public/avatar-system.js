@@ -1,4 +1,4 @@
-// avatar-system.js - Avatar Yönetim Modülü
+// avatar-system.js - Avatar Yönetim Modülü (Tam Eksiksiz Versiyon)
 class AvatarSystem {
     constructor() {
         this.isActive = false;
@@ -76,18 +76,28 @@ class AvatarSystem {
             
             // Video ayarları - güçlü mobil uyum
             this.currentVideo.currentTime = 0;
-            this.currentVideo.muted = true;
-            this.currentVideo.volume = 0;
+            this.currentVideo.muted = !this.permissionGranted; // İzin varsa sesli, yoksa sessiz
+            this.currentVideo.volume = this.permissionGranted ? 1.0 : 0;
             this.currentVideo.setAttribute('playsinline', '');
             this.currentVideo.setAttribute('webkit-playsinline', '');
-            this.currentVideo.setAttribute('muted', 'true');
             this.currentVideo.preload = 'auto';
+
+            // DETAYLI SES KONTROLÜ
+            console.log("🔊 İzin durumu:", this.permissionGranted);
+            console.log("🔊 Video muted:", this.currentVideo.muted);
+            console.log("🔊 Video volume:", this.currentVideo.volume);
 
             try {
                 // Çoklu deneme stratejisi ile video oynatma
                 await this.playVideoWithFallback();
                 
-                console.log('🎬 Avatar başarıyla başlatıldı (sessiz mod)');
+                console.log(`🎬 Avatar başlatıldı (${this.currentVideo.muted ? 'sessiz' : 'sesli'})`);
+                
+                // 1 saniye sonra ses kontrolü
+                setTimeout(() => {
+                    console.log("🔊 1 saniye sonra - Video muted:", this.currentVideo.muted);
+                    console.log("🔊 1 saniye sonra - Video volume:", this.currentVideo.volume);
+                }, 1000);
                 
                 // 28 saniye sonra otomatik kapat
                 setTimeout(() => {
