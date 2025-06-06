@@ -233,15 +233,7 @@ async function sendMessage() {
   if (!message) return;
 
   appendMessage("Sen", message, "user", true);
-
-// Avatar kontrolü
-const isPropertySearch = (currentGptMode === 'real-estate' && isPropertySearchQuery(message));
-
-if (isPropertySearch) {
-  window.avatarSystem.show();
-} else {
-  showLoadingIndicator();
-}
+  showLoadingIndicator(); // Önce her zaman standart yükleme animasyonunu göster
     
   userInput.value = ""; 
   if (sendArrowButton) { 
@@ -249,17 +241,11 @@ if (isPropertySearch) {
   }
 
   try {
-    // Sohbet geçmişini hazırla
-    const historyToSend = currentConversation.map(msg => {
-      // 'bot' rolünü 'assistant' olarak değiştir
-      const role = msg.role === 'bot' ? 'assistant' : msg.role;
-      return {
-        role: role,
-        text: msg.text
-      };
-    });
+    const historyToSend = currentConversation.map(msg => ({
+      role: msg.role === 'bot' ? 'assistant' : msg.role,
+      text: msg.text
+    }));
     
-    // Seçili GPT modunu da gönder
     const response = await fetch(`${BACKEND_URL}/chat`, { 
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -270,18 +256,36 @@ if (isPropertySearch) {
       }),
     });
 
-    window.avatarSystem.hide();
-    hideLoadingIndicator();
-
     const data = await response.json();
-    const reply = data.reply || "❌ Bir hata oluştu. Lütfen tekrar deneyin.";
-    appendMessage("SibelGPT", reply, "bot", true); 
+    
+    // --- YENİ MANTIK BURADA ---
+    // Backend'den gelen sinyale göre avatarı göster veya gösterme
+    if (data.is_listing_response === true) {
+        console.log("🏠 Backend'den ilan yanıtı sinyali geldi. Avatar gösteriliyor.");
+        hideLoadingIndicator(); // Standart animasyonu gizle
+        window.avatarSystem.show(); // Avatar animasyonunu başlat
+        
+        // Bu kısım, avatarınızın ne kadar sürdüğüne bağlı.
+        // Eğer avatarınız kısaysa (örneğin 3-4 saniye), cevap hemen gösterilebilir.
+        // Eğer avatarınız uzunsa (10+ saniye), bu yapıyı biraz değiştirmemiz gerekebilir.
+        // Şimdilik avatarın kısa olduğunu varsayıyoruz.
+        
+        // Bir süre bekleyip cevabı yazdırabiliriz (daha akıcı bir deneyim için)
+        setTimeout(() => {
+            appendMessage("SibelGPT", data.reply || "Bir hata oluştu.", "bot", true); 
+            window.avatarSystem.hide(); // Cevap yazılınca avatarı gizle
+        }, 1000); // 1 saniye sonra cevabı göster
+
+    } else {
+        console.log("📝 Normal yanıt. Standart akış devam ediyor.");
+        hideLoadingIndicator(); // Standart animasyonu gizle
+        appendMessage("SibelGPT", data.reply || "Bir hata oluştu.", "bot", true); 
+    }
 
   } catch (error) {
-      // Avatar ve loading'i gizle
-    window.avatarSystem.hide();
     hideLoadingIndicator();
-    appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu veya sunucuya ulaşılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.", "bot", true);
+    window.avatarSystem.hide();
+    appendMessage("SibelGPT", "❌ Bir sunucu hatası oluştu. Lütfen internet bağlantınızı kontrol edin.", "bot", true);
     console.error("Mesaj gönderirken hata:", error);
   }
 }
