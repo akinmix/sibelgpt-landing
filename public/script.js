@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v9.5 (Tüm Fonksiyonlar Entegreli ve Stabil)
+// SibelGPT - script.js - v10 (Tüm Fonksiyonlar Entegreli, Yeniden Yapılandırılmış ve Stabil)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -13,7 +13,7 @@ let currentAudio = null;
 let playingButtonElement = null;
 let currentModalMode = 'stock';
 
-// --- DOM Elementleri (Globalde tanımlanacak) ---
+// --- DOM Elementleri (Globalde tanımlı) ---
 let chatBox, userInput, sendArrowButton, historyList, mainInterface, newChatButton, helpButton;
 let actionMenuToggle, actionMenu, webSearchButton, gorselButton;
 let loginButton, loginModal, loginModalClose, googleLoginButton, emailInput, emailLoginButton;
@@ -21,6 +21,7 @@ let userInfo, userEmail, logoutButton, loginContainer;
 let stockModal, stockModalClose, stockModalCancel, stockModalConfirm, stockSymbolInput;
 let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null;
+
 
 // ==========================================================================
 // 2. ANA UYGULAMA MANTIĞI (Sohbet, Arama, Görsel)
@@ -132,16 +133,12 @@ async function handleGenerateImageClick() {
 // ==========================================================================
 
 function setupAuthEventListeners() {
-    loginButton?.addEventListener('click', () => loginModal.classList.add('visible'));
-    loginModalClose?.addEventListener('click', () => loginModal.classList.remove('visible'));
+    loginButton?.addEventListener('click', () => loginModal?.classList.add('visible'));
+    loginModalClose?.addEventListener('click', () => loginModal?.classList.remove('visible'));
     googleLoginButton?.addEventListener('click', signInWithGoogle);
     emailLoginButton?.addEventListener('click', signInWithEmail);
     logoutButton?.addEventListener('click', signOut);
-    loginModal?.addEventListener('click', (e) => {
-        if (e.target === loginModal) {
-            loginModal.classList.remove('visible');
-        }
-    });
+    loginModal?.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('visible'); });
 }
 
 function updateUserUI(user) {
@@ -181,7 +178,6 @@ async function signOut() {
     if (!supabase) return;
     await supabase.auth.signOut();
 }
-
 
 // ==========================================================================
 // 4. UI ve YARDIMCI FONKSİYONLAR
@@ -329,15 +325,15 @@ async function playBotMessage(text, buttonElement) {
     const audioUrl = URL.createObjectURL(audioBlob);
     currentAudio = new Audio(audioUrl);
     
-    currentAudio.onplay = () => buttonElement.innerHTML = '⏸️';
-    currentAudio.onpause = () => buttonElement.innerHTML = '🔊';
+    currentAudio.onplay = () => { if(playingButtonElement) playingButtonElement.innerHTML = '⏸️'; };
+    currentAudio.onpause = () => { if(playingButtonElement) playingButtonElement.innerHTML = '🔊'; };
     currentAudio.onended = () => {
-      buttonElement.innerHTML = '🔊';
+      if(playingButtonElement) playingButtonElement.innerHTML = '🔊';
       currentAudio = null;
       playingButtonElement = null;
     };
     currentAudio.onerror = () => {
-      buttonElement.innerHTML = '🔊';
+      if(playingButtonElement) playingButtonElement.innerHTML = '🔊';
       alert('Ses çalınamadı');
     };
 
@@ -346,8 +342,10 @@ async function playBotMessage(text, buttonElement) {
     
   } catch (error) {
     console.error('Ses oluşturma hatası:', error);
-    buttonElement.innerHTML = '🔊';
-    buttonElement.disabled = false;
+    if(buttonElement) {
+        buttonElement.innerHTML = '🔊';
+        buttonElement.disabled = false;
+    }
     alert('Ses oluşturulamadı.');
   }
 }
@@ -371,7 +369,7 @@ function handleVoiceButtonClick(event) {
   if (currentAudio && playingButtonElement === button) {
     stopAudio();
   } else {
-    stopAudio(); // Önce diğerini durdur
+    stopAudio();
     playBotMessage(text, button);
   }
 }
@@ -404,7 +402,10 @@ function displayHistory() {
     const conversations = loadConversations();
     historyList.innerHTML = '';
     if (conversations.length === 0) {
-        historyList.innerHTML = '<li>Henüz kaydedilmiş sohbet yok.</li>';
+        const li = document.createElement('li');
+        li.textContent = 'Henüz kaydedilmiş sohbet yok.';
+        li.style.cursor = 'default';
+        historyList.appendChild(li);
     } else {
         conversations.forEach(conv => {
             const modeIcon = { 'real-estate': '🏠', 'mind-coach': '🧠', 'finance': '💰' }[conv.mode] || '💬';
@@ -435,8 +436,8 @@ function loadConversation(chatId) {
     if (conv) {
         setGptMode(conv.mode || 'real-estate');
         chatBox.innerHTML = '';
-        currentConversation = []; // Önce sıfırla
-        conv.messages.forEach(msg => appendMessage(msg.sender, msg.text, msg.role, true)); // Tekrar geçmişe ekle
+        currentConversation = []; 
+        conv.messages.forEach(msg => appendMessage(msg.sender, msg.text, msg.role, true));
     }
 }
 
@@ -447,6 +448,7 @@ function deleteConversation(chatId) {
     saveConversations(conversations);
     handleNewChat();
 }
+
 
 // ==========================================================================
 // 7. HİSSE ANALİZİ MODAL FONKSİYONLARI
@@ -461,7 +463,8 @@ function showStockModal() {
   if(confirmBtn) confirmBtn.textContent = currentModalMode === 'technical' ? 'Teknik Analiz' : 'Analiz Et';
   
   stockModal.style.display = 'flex';
-  stockModal.classList.add('visible');
+  setTimeout(() => stockModal.classList.add('visible'), 10);
+  
   if(stockSymbolInput) {
       stockSymbolInput.focus();
       stockSymbolInput.value = '';
@@ -472,7 +475,7 @@ function hideStockModal() {
   if(stockModal) stockModal.classList.remove('visible');
   setTimeout(() => {
       if(stockModal) stockModal.style.display = 'none';
-  }, 300); // Animasyonun bitmesini bekle
+  }, 300);
 }
 
 function handleStockAnalysis() {
@@ -483,7 +486,6 @@ function handleStockAnalysis() {
   }
   
   let fullSymbol = '';
-  // ... (Sembol işleme mantığı buraya gelecek)
   if (symbol === 'BITCOIN' || symbol === 'BTC') fullSymbol = 'BINANCE:BTCUSD';
   else if (symbol === 'ETHEREUM' || symbol === 'ETH') fullSymbol = 'BINANCE:ETHUSD';
   else if (symbol === 'USDTRY' || symbol === 'USD/TRY') fullSymbol = 'FX:USDTRY';
@@ -504,8 +506,7 @@ function handleStockAnalysis() {
 // 8. BAŞLATMA ve OLAY DİNLEYİCİLERİ
 // ==========================================================================
 
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Adım: Tüm DOM elementlerini seç
+function queryAllElements() {
     chatBox = document.getElementById("chat-box");
     userInput = document.getElementById("user-input");
     sendArrowButton = document.getElementById("send-arrow-button");
@@ -535,18 +536,13 @@ document.addEventListener("DOMContentLoaded", () => {
     videoWrapper = document.getElementById('video-wrapper');
     introVideo = document.getElementById('intro-video');
     playButton = document.getElementById('play-button');
+    console.log("✅ Tüm DOM elementleri seçildi.");
+}
 
-    // 2. Adım: Supabase'i ve Auth sistemini başlat
-    initializeSupabase();
+function setupAllEventListeners() {
+    // Auth Olayları
+    setupAuthEventListeners();
 
-    // 3. Adım: Tüm olay dinleyicilerini ata
-    setupEventListeners();
-    
-    // 4. Adım: Splash ekranını yönet ve uygulamayı başlat
-    startApplication();
-});
-
-function setupEventListeners() {
     // Genel Olaylar
     newChatButton?.addEventListener("click", handleNewChat);
     userInput?.addEventListener("keypress", (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }});
@@ -591,6 +587,8 @@ function setupEventListeners() {
             if (stockSymbolInput) stockSymbolInput.value = symbol.getAttribute('data-symbol');
         });
     });
+
+    console.log("✅ Tüm olay dinleyicileri kuruldu.");
 }
 
 function startApplication() {
@@ -613,8 +611,6 @@ function startApplication() {
     displayHistory();
 }
 
-window.addEventListener('beforeunload', saveCurrentConversation);
-
 async function initializeSupabase() {
     try {
         const response = await fetch(`${BACKEND_URL}/api/config`);
@@ -624,14 +620,9 @@ async function initializeSupabase() {
         supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
         console.log("Supabase güvenli şekilde başlatıldı.");
 
-        // Auth UI olay dinleyicilerini kur
-        setupAuthEventListeners();
-
-        // Sayfa yüklendiğindeki mevcut kullanıcıyı kontrol et
         const { data: { session } } = await supabase.auth.getSession();
         updateUserUI(session?.user ?? null);
 
-        // Auth durumundaki tüm değişiklikleri canlı olarak dinle
         supabase.auth.onAuthStateChange((_event, session) => {
             console.log("Auth durumu değişti:", _event);
             updateUserUI(session?.user ?? null);
@@ -639,9 +630,18 @@ async function initializeSupabase() {
                 displayHistory(); 
             }
         });
-
     } catch (error) {
         console.error("Supabase başlatma hatası:", error);
         alert("Uygulama başlatılırken bir sorun oluştu. Lütfen sayfayı yenileyin.");
     }
 }
+
+// --- Ana Başlatıcı ---
+document.addEventListener("DOMContentLoaded", () => {
+    queryAllElements();
+    setupAllEventListeners();
+    initializeSupabase();
+    startApplication();
+});
+
+window.addEventListener('beforeunload', saveCurrentConversation);
