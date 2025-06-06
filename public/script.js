@@ -1,4 +1,4 @@
-
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 // SibelGPT - script.js - v9.2 (Tüm Fonksiyonlar Entegreli ve Yeniden Yapılandırılmış)
 
 // --- 1. Global Değişkenler ve Durum Yönetimi ---
