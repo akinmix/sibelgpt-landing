@@ -765,18 +765,20 @@ body.theme-finance {
 .email-login-button:hover {
   background-color: var(--theme-secondary);
 }
+
 /* ==========================================================================
-   9. Geliştirilmiş Seslendirme Butonu Stilleri (v2)
+   9. Geliştirilmiş Seslendirme Butonu Stilleri (YENİ)
    ========================================================================== */
 
 .bot-message {
-  /* Butonun doğru konumlanması için sağdan boşluk bırakalım */
+  /* Butonun doğru konumlanması için sağdan biraz boşluk bırakalım */
   padding-right: 60px; 
+  position: relative; /* Butonun `absolute` konumlanması için gerekli */
 }
 
 .voice-button {
   /* Konumlandırma */
-  position: absolute;
+  position: absolute !important;
   top: 12px;
   right: 12px;
   
@@ -788,17 +790,15 @@ body.theme-finance {
   background-color: var(--theme-primary);
   color: white;
   
-  /* İçerik Hizalama */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  
-  /* Davranış ve Animasyon */
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  z-index: 5;
+  /* İçerik Hizalama ve Davranış */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  z-index: 5 !important;
 }
 
 .voice-button:hover {
@@ -810,7 +810,7 @@ body.theme-finance {
 /* Yükleniyor ve Oynatılıyor durumları için özel stiller */
 .voice-button:disabled {
   cursor: default;
-  transform: scale(1);
+  transform: scale(1) !important;
   background-color: #757575 !important;
 }
 
