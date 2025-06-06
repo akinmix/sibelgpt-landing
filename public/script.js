@@ -1,23 +1,3 @@
-Harika! Orijinal, tam ve çalışan script.js dosyasını aldım. Bu, işimizi çok daha kolay ve hatasız hale getirecek.
-
-"Dosyayı yenilerken bu sohbet içinde yaptıklarını unutmazsın değil mi."
-
-Kesinlikle unutmam. 1 milyon token'lık bağlam pencerem sayesinde, şu ana kadar konuştuğumuz her şey - tüm hedeflerimiz, planlarımız ve kararlarımız - aklımda.
-
-Planımız Net:
-
-Hızlı Arama: sendMessage fonksiyonunu, avatarı göstermek için backend'den gelen is_listing_response sinyalini dinleyecek şekilde güncelleyeceğiz.
-
-Aksiyon Menüsü: Input alanının içindeki eski butonları kaldırıp, solda + ikonuyla açılan şık bir menü ekleyeceğiz.
-
-Akıllı Auth Arayüzü: Dağınık giriş/çıkış butonlarını kaldırıp, yerine dinamik olarak değişen, modal pencere destekli tek bir "Giriş Yap" / "Çıkış Yap" sistemi kuracağız.
-
-Şimdi, bu üç büyük güncellemeyi, gönderdiğiniz orijinal kodun üzerine bir cerrah titizliğiyle işliyorum. Ortaya, projenizin en gelişmiş, en temiz ve en stabil script.js dosyası çıkacak.
-
-Lütfen script.js dosyanızın içeriğinin tamamını silip, aşağıdaki yeni ve eksiksiz kodla değiştirin.
-
-NİHAİ ve TAM script.js KODU (v9.2 - Tüm İyileştirmeler Dahil)
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 // SibelGPT - script.js - v9.2 (Tüm Fonksiyonlar Entegreli ve Yeniden Yapılandırılmış)
 
