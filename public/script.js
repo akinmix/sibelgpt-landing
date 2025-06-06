@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v10 (Tüm Fonksiyonlar Entegreli, Yeniden Yapılandırılmış ve Stabil)
+// SibelGPT - script.js - v11 (Tüm Orijinal Fonksiyonlar Korunarak Yeniden Yapılandırıldı)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -13,7 +13,7 @@ let currentAudio = null;
 let playingButtonElement = null;
 let currentModalMode = 'stock';
 
-// --- DOM Elementleri (Globalde tanımlı) ---
+// --- DOM Elementleri ---
 let chatBox, userInput, sendArrowButton, historyList, mainInterface, newChatButton, helpButton;
 let actionMenuToggle, actionMenu, webSearchButton, gorselButton;
 let loginButton, loginModal, loginModalClose, googleLoginButton, emailInput, emailLoginButton;
@@ -22,9 +22,8 @@ let stockModal, stockModalClose, stockModalCancel, stockModalConfirm, stockSymbo
 let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null;
 
-
 // ==========================================================================
-// 2. ANA UYGULAMA MANTIĞI (Sohbet, Arama, Görsel)
+// 2. ANA UYGULAMA MANTIĞI
 // ==========================================================================
 
 async function sendMessage() {
@@ -128,24 +127,23 @@ async function handleGenerateImageClick() {
     }
 }
 
-
 // ==========================================================================
 // 3. AUTH (KULLANICI GİRİŞ) FONKSİYONLARI
 // ==========================================================================
 
 function updateUserUI(user) {
     if (user) {
-        if(userInfo) userInfo.style.display = 'flex';
-        if(loginContainer) loginContainer.style.display = 'none';
-        if(userEmail) userEmail.textContent = user.email.split('@')[0];
+        if (userInfo) userInfo.style.display = 'flex';
+        if (loginContainer) loginContainer.style.display = 'none';
+        if (userEmail) userEmail.textContent = user.email.split('@')[0];
     } else {
-        if(userInfo) userInfo.style.display = 'none';
-        if(loginContainer) loginContainer.style.display = 'flex';
+        if (userInfo) userInfo.style.display = 'none';
+        if (loginContainer) loginContainer.style.display = 'flex';
     }
 }
 
 async function signInWithGoogle() {
-    if (!supabase) return alert('Sistem hazır değil, lütfen birkaç saniye sonra tekrar deneyin.');
+    if (!supabase) return alert('Sistem hazır değil.');
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
     if (error) alert(`Google ile girişte hata: ${error.message}`);
 }
@@ -162,13 +160,29 @@ async function signInWithEmail() {
         alert(`Hata: ${error.message}`);
     } else {
         alert('Giriş linki e-posta adresinize gönderildi. Lütfen gelen kutunuzu kontrol edin.');
-        if(loginModal) loginModal.classList.remove('visible');
+        hideLoginModal();
     }
 }
 
 async function signOut() {
     if (!supabase) return;
     await supabase.auth.signOut();
+}
+
+function showLoginModal() {
+    if (loginModal) {
+        loginModal.style.display = 'flex';
+        setTimeout(() => loginModal.classList.add('visible'), 10);
+    }
+}
+
+function hideLoginModal() {
+    if (loginModal) {
+        loginModal.classList.remove('visible');
+        setTimeout(() => {
+            if (loginModal) loginModal.style.display = 'none';
+        }, 300);
+    }
 }
 
 
@@ -178,6 +192,7 @@ async function signOut() {
 
 function setGptMode(mode) {
     currentGptMode = mode;
+    window.currentGptMode = mode;
     document.body.className = `theme-${mode}`;
     document.querySelectorAll('.gpt-button').forEach(btn => btn.classList.remove('active'));
     const activeButton = document.getElementById(`${mode}-gpt`);
@@ -228,7 +243,7 @@ function showLoadingIndicator() {
     loadingMessageElement.classList.add("message", "bot-message", "loading-indicator");
     loadingMessageElement.innerHTML = `<div class="dots-container"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
     chatBox.appendChild(loadingMessageElement);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    setTimeout(() => { if (chatBox) chatBox.scrollTop = chatBox.scrollHeight; }, 50);
 }
 
 function hideLoadingIndicator() {
@@ -241,7 +256,7 @@ function hideLoadingIndicator() {
 function handleApiError(error, defaultMessage) {
     console.error(defaultMessage, error);
     hideLoadingIndicator();
-    if(window.avatarSystem) window.avatarSystem.hide();
+    if (window.avatarSystem) window.avatarSystem.hide();
     appendMessage("SibelGPT", `❌ ${defaultMessage} Lütfen internet bağlantınızı kontrol edin.`, "bot", true);
 }
 
@@ -278,7 +293,7 @@ function playIntroVideo() {
         playButton.disabled = true;
     }).catch(e => {
         console.warn("Video otomatik oynatılamadı:", e);
-        videoWrapper.style.display = 'none';
+        if(videoWrapper) videoWrapper.style.display = 'none';
     });
     introVideo.onended = () => {
       videoWrapper.classList.add("fade-out");
@@ -299,9 +314,8 @@ function playIntroVideo() {
 // ==========================================================================
 
 async function playBotMessage(text, buttonElement) {
-  if (currentAudio && !currentAudio.paused) {
-    stopAudio();
-  }
+  if (currentAudio && !currentAudio.paused) stopAudio();
+  
   buttonElement.innerHTML = '⏳';
   buttonElement.disabled = true;
   playingButtonElement = buttonElement;
@@ -404,7 +418,7 @@ function displayHistory() {
             const modeIcon = { 'real-estate': '🏠', 'mind-coach': '🧠', 'finance': '💰' }[conv.mode] || '💬';
             const li = document.createElement('li');
             li.dataset.chatId = conv.id;
-            li.innerHTML = `<span>${modeIcon} ${conv.title}</span><button class="delete-history-btn">🗑️</button>`;
+            li.innerHTML = `<span>${modeIcon} ${conv.title || 'Adsız Sohbet'}</span><button class="delete-history-btn">🗑️</button>`;
             historyList.appendChild(li);
         });
     }
@@ -533,13 +547,13 @@ function queryAllElements() {
 }
 
 function setupAllEventListeners() {
-    // Auth Olayları - DÜZELTİLDİ
-    loginButton?.addEventListener('click', () => loginModal?.classList.add('visible'));
-    loginModalClose?.addEventListener('click', () => loginModal?.classList.remove('visible'));
+    // Auth Olayları
+    loginButton?.addEventListener('click', showLoginModal);
+    loginModalClose?.addEventListener('click', hideLoginModal);
     googleLoginButton?.addEventListener('click', signInWithGoogle);
     emailLoginButton?.addEventListener('click', signInWithEmail);
     logoutButton?.addEventListener('click', signOut);
-    loginModal?.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('visible'); });
+    loginModal?.addEventListener('click', (e) => { if (e.target === loginModal) hideLoginModal(); });
 
     // Genel Olaylar
     newChatButton?.addEventListener("click", handleNewChat);
@@ -618,11 +632,9 @@ async function initializeSupabase() {
         supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
         console.log("Supabase güvenli şekilde başlatıldı.");
 
-        // Sayfa yüklendiğindeki mevcut kullanıcıyı kontrol et
         const { data: { session } } = await supabase.auth.getSession();
         updateUserUI(session?.user ?? null);
 
-        // Auth durumundaki tüm değişiklikleri canlı olarak dinle
         supabase.auth.onAuthStateChange((_event, session) => {
             console.log("Auth durumu değişti:", _event);
             updateUserUI(session?.user ?? null);
@@ -630,7 +642,6 @@ async function initializeSupabase() {
                 displayHistory(); 
             }
         });
-
     } catch (error) {
         console.error("Supabase başlatma hatası:", error);
         alert("Uygulama başlatılırken bir sorun oluştu. Lütfen sayfayı yenileyin.");
@@ -640,19 +651,18 @@ async function initializeSupabase() {
 // --- Ana Başlatıcı ---
 document.addEventListener("DOMContentLoaded", () => {
     queryAllElements();
-    setupAllEventListeners(); // Önce TÜM olay dinleyicilerini kur
-    initializeSupabase();   // SONRA Supabase'i ve Auth durumunu kontrol et
+    setupAllEventListeners();
+    initializeSupabase();
     startApplication();
 });
 
 window.addEventListener('beforeunload', saveCurrentConversation);
 
 // Global fonksiyonlar
-window.indirGorsel = (url) => {
-    window.open(url, '_blank');
-};
-window.isPropertySearchQuery = function(message) { // Bu fonksiyon eski koddan kalma ve artık kullanılmıyor, ama zararı yok.
+window.indirGorsel = (url) => { window.open(url, '_blank'); };
+window.isPropertySearchQuery = (message) => {
+    // Bu fonksiyon artık backend tarafından yönetildiği için frontend'de kullanılmasına gerek yok.
+    // Ancak eski kodlardan kalma bir bağımlılık varsa diye burada bırakıyorum.
     const searchTerms = ['ara','bul','göster','ilan','satılık','kiralık','daire','ev','konut','villa','arıyorum'];
-    const lowerMessage = message.toLowerCase();
-    return searchTerms.some(term => lowerMessage.includes(term));
-}
+    return searchTerms.some(term => message.toLowerCase().includes(term));
+};
