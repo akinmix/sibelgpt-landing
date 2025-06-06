@@ -4,127 +4,125 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SibelGPT | Gayrimenkul, Finans ve Zihin Koçluğu Yapay Zeka Asistanı</title>
-  <meta name="google-site-verification" content="JFkSmFCbqm2i9QO6Q-VQNXdnYcFNuyg0CwYPjbeW9-A" />
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
-  
-  <!-- SEO Meta Etiketleri -->
+  <!-- SEO ve Sosyal Medya Meta Etiketleri -->
   <meta name="description" content="SibelGPT - Sibel Kazan Midilli'nin yapay zeka destekli platformu. Gayrimenkul, finans ve zihin koçluğu konularında profesyonel danışmanlık hizmeti.">
   <meta name="keywords" content="SibelGPT, Sibel Kazan Midilli, gayrimenkul danışmanlığı, emlak danışmanı, zihin koçu, finans danışmanı, yapay zeka, Bağdat Caddesi, REMAX, REMAX SONUÇ, teknik analiz, borsa, temel analiz, hisse senedi, thetahealing, numeroloji">
   <meta name="author" content="Sibel Kazan Midilli">
-  
-  <!-- Open Graph Etiketleri -->
+  <meta name="google-site-verification" content="JFkSmFCbqm2i9QO6Q-VQNXdnYcFNuyg0CwYPjbeW9-A" />
   <meta property="og:title" content="SibelGPT | Sibel Kazan Midilli - Gayrimenkul, Finans ve Zihin Koçu">
   <meta property="og:description" content="SibelGPT ile gayrimenkul yatırımları, teknik/temel analiz, borsa, numeroloji ve thetahealing konularında uzman yapay zeka asistanınıza ulaşın">
   <meta property="og:image" content="https://www.sibelgpt.com/sibelgpt-logo.png">
   <meta property="og:url" content="https://www.sibelgpt.com">
   <meta property="og:type" content="website">
-  
-  <!-- Twitter Card Etiketleri -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SibelGPT | Sibel Kazan Midilli">
   <meta name="twitter:description" content="Gayrimenkul, finans ve zihin koçluğu konularında REMAX SONUÇ güvencesiyle yapay zeka destekli danışmanlık">
   <meta name="twitter:image" content="https://www.sibelgpt.com/sibelgpt-logo.png">
   
-  <!-- CSS bağlantıları -->
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  
+  <!-- CSS Dosyaları -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="trading-widgets.css">
   
 </head>
 <body class="theme-real-estate">
 
+  <!-- Başlangıç Splash Ekranı -->
   <div id="splash-screen">
     <img src="intro-logo.png" alt="SibelGPT Logo" class="splash-logo" />
   </div>
 
-  <div class="top-right-buttons" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+  <!-- Sağ Üst Köşe Kullanıcı Butonları -->
+  <div class="top-right-buttons">
     <button id="google-login" class="auth-button">🔐 Google ile Giriş Yap</button>
     <button class="auth-button register-button">🖂 E-posta ile Giriş / Üye Ol</button>
-    <div id="kullanici-maili-alani" style="margin-top: 8px; font-size: 13px; color: #ccc;"></div>
-    <button id="logout-button" class="auth-button" style="margin-top: 6px;">Çıkış Yap</button>
-    <button id="help-button" class="auth-button" style="margin-top: 6px; background-color: #d32f2f; color: white; border-color: #d32f2f;" title="Yardım">
-  <i class="fas fa-question-circle"></i> Yardım
-</button>
+    <div id="kullanici-maili-alani"></div>
+    <button id="logout-button" class="auth-button">Çıkış Yap</button>
+    <button id="help-button" class="auth-button help-btn" title="Yardım">
+      <i class="fas fa-question-circle"></i> Yardım
+    </button>
   </div>
 
+  <!-- Ana Arayüz -->
   <div class="main-layout" style="display: none;" id="main-interface">
+    
+    <!-- Sol Sidebar -->
     <div class="sidebar">
       <div class="sidebar-header">
-        <span>SibelGPT</span>
         <img src="/sibelgpt-logo.png" alt="SibelGPT Logo" class="app-logo">
+        <span>SibelGPT</span>
       </div>
       <div class="new-chat-button">
         <button><i class="fas fa-plus"></i> Yeni Sohbet</button>
       </div>
       <div class="history">
-        <h2>Geçmiş</h2>
+        <h2>Geçmiş Sohbetler</h2>
         <ul id="history-list">
-          <li>Henüz kaydedilmiş sohbet yok.</li>
+          <!-- Geçmiş sohbetler buraya dinamik olarak eklenecek -->
         </ul>
       </div>
-      
-    <div class="sidebar-links-group">
-  <!-- SibelGPT İstanbul Konut İlanları Endeksi (kırmızı) -->
-  <a href="/dashboard.html" target="_blank" class="konut-endeks-link">
-    <i class="fas fa-chart-line"></i> SibelGPT İstanbul Konut İlanları Endeksi
-  </a>
-  
-  <!-- Diğer linkler -->
-  <a href="https://www.sibelizim.com" target="_blank">
-    <i class="fas fa-external-link-alt"></i> sibelizim.com
-  </a>
-  <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank">
-    <i class="fas fa-external-link-alt"></i> sahibinden.com ilanlarım
-  </a>
-  <a href="https://www.remax.com.tr/danisman/17865/sibel-midilli" target="_blank">
-    <i class="fas fa-external-link-alt"></i> remaxsonuç.com ilanlarım
-  </a>
-  
-  <!-- İletişim başlığı -->
-  <h3 class="contact-title">İLETİŞİM</h3>
-  
-  <!-- Mail adresi -->
-  <a href="mailto:info@sibelizim.com" title="E-posta Gönder">
-    <i class="fas fa-envelope"></i> sibel@sibelizim.com
-  </a>
-  </div>
-</div>
+      <div class="sidebar-links-group">
+        <a href="/dashboard.html" target="_blank" class="konut-endeks-link">
+          <i class="fas fa-chart-line"></i> İstanbul Konut Endeksi
+        </a>
+        <a href="https://www.sibelizim.com" target="_blank">
+          <i class="fas fa-external-link-alt"></i> sibelizim.com
+        </a>
+        <a href="https://remaxsonuc.sahibinden.com/?userId=aUyJ2WoZonEq4TNnSyuVeag" target="_blank">
+          <i class="fas fa-external-link-alt"></i> sahibinden.com İlanlarım
+        </a>
+        <h3 class="contact-title">İLETİŞİM</h3>
+        <a href="mailto:sibel@sibelizim.com" title="E-posta Gönder">
+          <i class="fas fa-envelope"></i> sibel@sibelizim.com
+        </a>
+      </div>
+    </div>
 
+    <!-- Ana İçerik Alanı -->
     <div class="content-area">
-      <!-- Ortadaki Chat Container -->
       <div class="center-chat-container">
-        <!-- Chat mesajlaşma alanı -->
+        
+        <!-- Sohbet Mesajları Alanı -->
         <div class="chat-container" id="chat-box">
-          <!-- Mesajlar dinamik olarak buraya eklenecek -->
+          <!-- Mesajlar buraya dinamik olarak eklenecek -->
         </div>
 
-        <!-- Alt kısım: Input ve butonlar -->
+        <!-- Mesaj Giriş Alanı ve Butonlar -->
         <div class="chat-input-container">
-          <!-- Sohbet girişi -->
           <div class="chat-input">
-            <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
-
-            <div class="input-wrapper">
-              <button id="send-arrow-button" title="Gönder">
-                <i class="fas fa-arrow-up"></i>
+            
+            <!-- YENİ AKSIYON MENÜSÜ -->
+            <div class="action-menu-wrapper">
+              <button id="action-menu-toggle" class="action-menu-button" title="Ek Eylemler">
+                <i class="fas fa-plus"></i>
               </button>
-              <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
-              
-              <!-- Sağ taraftaki simge butonları -->
-              <div class="icon-buttons">
-                <button class="icon-button" id="web-search-button" title="Web Araması">
+              <div id="action-menu" class="action-menu">
+                <button id="web-search-button" class="action-menu-item">
                   <i class="fas fa-globe"></i>
+                  <span>Web Araması</span>
                 </button>
-                <button class="icon-button" id="gorsel-buton" title="Görsel Oluştur">
+                <button id="gorsel-buton" class="action-menu-item">
                   <i class="fas fa-brush"></i>
+                  <span>Görsel Oluştur</span>
                 </button>
               </div>
             </div>
+            
+            <img src="avatar-sibelgpt.png" class="avatar" alt="SibelGPT Avatar" />
+
+            <div class="input-wrapper">
+              <input type="text" id="user-input" placeholder="Sorunuzu yazın..." />
+              <button id="send-arrow-button" title="Gönder">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+            </div>
           </div>
           
-          <!-- GPT Seçenekleri Butonları --> 
+          <!-- GPT Mod Seçenekleri --> 
           <div class="gpt-options">
             <button id="real-estate-gpt" class="gpt-button active">🏠 Gayrimenkul GPT</button>
             <button id="mind-coach-gpt" class="gpt-button">🧠 Zihin Koçu GPT</button>
@@ -133,50 +131,49 @@
             <button id="technical-analysis-btn" class="gpt-button" style="display:none;">📈 Teknik Analiz</button>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
 
-  
-    
-  
-
+  <!-- Yüzen Video ve Modal Pencereler -->
   <div id="video-wrapper">
-    <video id="intro-video">
+    <video id="intro-video" playsinline>
       <source src="talking-avatar.mp4" type="video/mp4" />
     </video>
     <button id="play-button">🎤 Dinle</button>
   </div>
-  <!-- Avatar Loading Sistemi -->
+
   <div id="loading-video-wrapper" style="display: none;">
-    <video id="loading-video" preload="auto">
+    <video id="loading-video" preload="auto" playsinline muted loop>
       <source src="loading-avatar.mp4" type="video/mp4" />
       Tarayıcınız video oynatmayı desteklemiyor.
     </video>
   </div>
-  <!-- Hisse Analizi Modal -->
-<div id="stock-modal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>📊 Hisse Analizi</h3>
-      <button class="modal-close" id="modal-close">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p>Hangi hisse için detaylı analiz istiyorsunuz?</p>
-      <input type="text" id="stock-symbol-input" placeholder="Örn: AAPL, GOOGL, THYAO" />
-      <div class="symbol-examples">
-        <span class="example-symbol" data-symbol="THYAO">THYAO</span>
-        <span class="example-symbol" data-symbol="GARAN">GARAN</span>
-        <span class="example-symbol" data-symbol="AKBNK">AKBNK</span>
+
+  <div id="stock-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>📊 Hisse Analizi</h3>
+        <button class="modal-close" id="modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Hangi hisse için detaylı analiz istiyorsunuz?</p>
+        <input type="text" id="stock-symbol-input" placeholder="Örn: AAPL, GOOGL, THYAO" />
+        <div class="symbol-examples">
+          <span class="example-symbol" data-symbol="THYAO">THYAO</span>
+          <span class="example-symbol" data-symbol="GARAN">GARAN</span>
+          <span class="example-symbol" data-symbol="AKBNK">AKBNK</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-cancel">İptal</button>
+        <button id="modal-confirm">Analiz Et</button>
       </div>
     </div>
-    <div class="modal-footer">
-      <button id="modal-cancel">İptal</button>
-      <button id="modal-confirm">Analiz Et</button>
-    </div>
   </div>
-</div>
 
+  <!-- JavaScript Dosyaları -->
   <script type="module" src="script.js"></script>
   <script src="trading-widgets.js"></script>
   <script src="avatar-system.js"></script>
@@ -190,15 +187,8 @@
     "url": "https://www.sibelgpt.com",
     "description": "Gayrimenkul, Zihin Koçluğu ve Finans alanlarında yapay zeka destekli danışmanlık platformu",
     "applicationCategory": "BusinessApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "TRY"
-    },
-    "author": {
-      "@type": "Person",
-      "name": "Sibel Kazan Midilli"
-    }
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TRY" },
+    "author": { "@type": "Person", "name": "Sibel Kazan Midilli" }
   }
   </script>
 </body>
