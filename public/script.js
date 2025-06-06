@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v10 (Tüm Fonksiyonlar Entegreli, Yeniden Yapılandırılmış ve Stabil)
+// SibelGPT - script.js - v9.7 (Tüm Fonksiyonlar Entegreli ve Auth Buton Hatası Giderildi)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -21,7 +21,6 @@ let userInfo, userEmail, logoutButton, loginContainer;
 let stockModal, stockModalClose, stockModalCancel, stockModalConfirm, stockSymbolInput;
 let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null;
-
 
 // ==========================================================================
 // 2. ANA UYGULAMA MANTIĞI (Sohbet, Arama, Görsel)
@@ -128,18 +127,10 @@ async function handleGenerateImageClick() {
     }
 }
 
+
 // ==========================================================================
 // 3. AUTH (KULLANICI GİRİŞ) FONKSİYONLARI
 // ==========================================================================
-
-function setupAuthEventListeners() {
-    loginButton?.addEventListener('click', () => loginModal?.classList.add('visible'));
-    loginModalClose?.addEventListener('click', () => loginModal?.classList.remove('visible'));
-    googleLoginButton?.addEventListener('click', signInWithGoogle);
-    emailLoginButton?.addEventListener('click', signInWithEmail);
-    logoutButton?.addEventListener('click', signOut);
-    loginModal?.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('visible'); });
-}
 
 function updateUserUI(user) {
     if (user) {
@@ -178,6 +169,7 @@ async function signOut() {
     if (!supabase) return;
     await supabase.auth.signOut();
 }
+
 
 // ==========================================================================
 // 4. UI ve YARDIMCI FONKSİYONLAR
@@ -449,7 +441,6 @@ function deleteConversation(chatId) {
     handleNewChat();
 }
 
-
 // ==========================================================================
 // 7. HİSSE ANALİZİ MODAL FONKSİYONLARI
 // ==========================================================================
@@ -620,9 +611,14 @@ async function initializeSupabase() {
         supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
         console.log("Supabase güvenli şekilde başlatıldı.");
 
+        // Auth UI olay dinleyicilerini kur (Supabase hazır olduktan sonra)
+        setupAuthEventListeners();
+
+        // Sayfa yüklendiğindeki mevcut kullanıcıyı kontrol et
         const { data: { session } } = await supabase.auth.getSession();
         updateUserUI(session?.user ?? null);
 
+        // Auth durumundaki tüm değişiklikleri canlı olarak dinle
         supabase.auth.onAuthStateChange((_event, session) => {
             console.log("Auth durumu değişti:", _event);
             updateUserUI(session?.user ?? null);
@@ -630,6 +626,7 @@ async function initializeSupabase() {
                 displayHistory(); 
             }
         });
+
     } catch (error) {
         console.error("Supabase başlatma hatası:", error);
         alert("Uygulama başlatılırken bir sorun oluştu. Lütfen sayfayı yenileyin.");
@@ -645,3 +642,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener('beforeunload', saveCurrentConversation);
+
+window.indirGorsel = (url) => {
+    window.open(url, '_blank');
+};
