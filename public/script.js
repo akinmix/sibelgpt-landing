@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v12 (Tüm Fonksiyonlar Entegreli, Auth & Ses Butonu Düzeltmeleri Dahil)
+// SibelGPT - script.js - v12 (Tüm Fonksiyonlar Entegreli ve Stabil)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -221,7 +221,6 @@ function appendMessage(sender, text, role, addToHistory = false) {
     
     if (role === 'bot') {
         const plainText = contentDiv.innerText.replace(`${sender}:`, '').trim();
-        // Link içeren veya çok kısa mesajları seslendirme
         if (plainText.length > 15 && !plainText.includes('http')) { 
             const voiceButton = document.createElement('button');
             voiceButton.className = 'voice-button';
@@ -312,13 +311,11 @@ function playIntroVideo() {
 }
 
 // ==========================================================================
-// 5. SES FONKSİYONLARI (AKILLI İKONLARLA GÜNCELLENDİ)
+// 5. SES FONKSİYONLARI
 // ==========================================================================
 
 async function playBotMessage(text, buttonElement) {
-  if (currentAudio && !currentAudio.paused) {
-    stopAudio();
-  }
+  if (currentAudio && !currentAudio.paused) stopAudio();
   
   buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   buttonElement.disabled = true;
@@ -601,20 +598,34 @@ function setupAllEventListeners() {
 
 function startApplication() {
     const splashScreen = document.getElementById("splash-screen");
+
+    const showMainInterface = () => {
+        if (mainInterface) {
+            mainInterface.style.display = "flex";
+            setTimeout(() => {
+                mainInterface.style.opacity = 1;
+                if (userInput) userInput.focus();
+                
+                // Karşılama avatarını göster
+                if (videoWrapper) {
+                    videoWrapper.style.display = "flex";
+                }
+            }, 100);
+        }
+    };
+
     if (splashScreen) {
         setTimeout(() => {
             splashScreen.style.opacity = 0;
-            if(mainInterface) mainInterface.style.display = "flex";
             setTimeout(() => {
-                if(splashScreen) splashScreen.style.display = "none";
-                if(mainInterface) mainInterface.style.opacity = 1;
-                if(userInput) userInput.focus();
+                splashScreen.style.display = "none";
+                showMainInterface();
             }, 600);
         }, 3500);
     } else {
-        if(mainInterface) { mainInterface.style.display = "flex"; mainInterface.style.opacity = 1; }
-        if(userInput) userInput.focus();
+        showMainInterface();
     }
+    
     setGptMode('real-estate');
     displayHistory();
 }
@@ -658,7 +669,6 @@ window.addEventListener('beforeunload', saveCurrentConversation);
 window.indirGorsel = (url) => { window.open(url, '_blank'); };
 window.isPropertySearchQuery = (message) => {
     // Bu fonksiyon artık backend tarafından yönetildiği için frontend'de kullanılmasına gerek yok.
-    // Ancak eski kodlardan kalma bir bağımlılık varsa diye burada bırakıyorum.
     const searchTerms = ['ara','bul','göster','ilan','satılık','kiralık','daire','ev','konut','villa','arıyorum'];
     return searchTerms.some(term => message.toLowerCase().includes(term));
 };
