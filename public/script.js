@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v9.8 (ReferenceError Düzeltildi, Stabil Sürüm)
+// SibelGPT - script.js - v10 (Tüm Fonksiyonlar Entegreli, Yeniden Yapılandırılmış ve Stabil)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -442,6 +442,7 @@ function deleteConversation(chatId) {
     handleNewChat();
 }
 
+
 // ==========================================================================
 // 7. HİSSE ANALİZİ MODAL FONKSİYONLARI
 // ==========================================================================
@@ -531,9 +532,8 @@ function queryAllElements() {
     console.log("✅ Tüm DOM elementleri seçildi.");
 }
 
-// DÜZELTİLMİŞ FONKSİYON: Bu, bir önceki kodda hata veren fonksiyonun doğru ismidir.
 function setupAllEventListeners() {
-    // Auth Olayları
+    // Auth Olayları - DÜZELTİLDİ
     loginButton?.addEventListener('click', () => loginModal?.classList.add('visible'));
     loginModalClose?.addEventListener('click', () => loginModal?.classList.remove('visible'));
     googleLoginButton?.addEventListener('click', signInWithGoogle);
@@ -618,10 +618,6 @@ async function initializeSupabase() {
         supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
         console.log("Supabase güvenli şekilde başlatıldı.");
 
-        // Auth UI olay dinleyicilerini kur (Supabase hazır olduktan sonra)
-        // Düzeltme: Fonksiyon adı setupAllEventListeners içinde zaten çağrılıyor.
-        // Bu yüzden burada tekrar çağırmaya gerek yok, sadece emin olalım.
-
         // Sayfa yüklendiğindeki mevcut kullanıcıyı kontrol et
         const { data: { session } } = await supabase.auth.getSession();
         updateUserUI(session?.user ?? null);
@@ -644,13 +640,19 @@ async function initializeSupabase() {
 // --- Ana Başlatıcı ---
 document.addEventListener("DOMContentLoaded", () => {
     queryAllElements();
-    setupAllEventListeners();
-    initializeSupabase();
+    setupAllEventListeners(); // Önce TÜM olay dinleyicilerini kur
+    initializeSupabase();   // SONRA Supabase'i ve Auth durumunu kontrol et
     startApplication();
 });
 
 window.addEventListener('beforeunload', saveCurrentConversation);
 
+// Global fonksiyonlar
 window.indirGorsel = (url) => {
     window.open(url, '_blank');
 };
+window.isPropertySearchQuery = function(message) { // Bu fonksiyon eski koddan kalma ve artık kullanılmıyor, ama zararı yok.
+    const searchTerms = ['ara','bul','göster','ilan','satılık','kiralık','daire','ev','konut','villa','arıyorum'];
+    const lowerMessage = message.toLowerCase();
+    return searchTerms.some(term => lowerMessage.includes(term));
+}
