@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v9.7 (Tüm Fonksiyonlar Entegreli ve Auth Buton Hatası Giderildi)
+// SibelGPT - script.js - v9.8 (ReferenceError Düzeltildi, Stabil Sürüm)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -21,6 +21,7 @@ let userInfo, userEmail, logoutButton, loginContainer;
 let stockModal, stockModalClose, stockModalCancel, stockModalConfirm, stockSymbolInput;
 let videoWrapper, introVideo, playButton;
 let loadingMessageElement = null;
+
 
 // ==========================================================================
 // 2. ANA UYGULAMA MANTIĞI (Sohbet, Arama, Görsel)
@@ -530,9 +531,15 @@ function queryAllElements() {
     console.log("✅ Tüm DOM elementleri seçildi.");
 }
 
+// DÜZELTİLMİŞ FONKSİYON: Bu, bir önceki kodda hata veren fonksiyonun doğru ismidir.
 function setupAllEventListeners() {
     // Auth Olayları
-    setupAuthEventListeners();
+    loginButton?.addEventListener('click', () => loginModal?.classList.add('visible'));
+    loginModalClose?.addEventListener('click', () => loginModal?.classList.remove('visible'));
+    googleLoginButton?.addEventListener('click', signInWithGoogle);
+    emailLoginButton?.addEventListener('click', signInWithEmail);
+    logoutButton?.addEventListener('click', signOut);
+    loginModal?.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('visible'); });
 
     // Genel Olaylar
     newChatButton?.addEventListener("click", handleNewChat);
@@ -589,7 +596,7 @@ function startApplication() {
             splashScreen.style.opacity = 0;
             if(mainInterface) mainInterface.style.display = "flex";
             setTimeout(() => {
-                splashScreen.style.display = "none";
+                if(splashScreen) splashScreen.style.display = "none";
                 if(mainInterface) mainInterface.style.opacity = 1;
                 if(userInput) userInput.focus();
             }, 600);
@@ -612,7 +619,8 @@ async function initializeSupabase() {
         console.log("Supabase güvenli şekilde başlatıldı.");
 
         // Auth UI olay dinleyicilerini kur (Supabase hazır olduktan sonra)
-        setupAuthEventListeners();
+        // Düzeltme: Fonksiyon adı setupAllEventListeners içinde zaten çağrılıyor.
+        // Bu yüzden burada tekrar çağırmaya gerek yok, sadece emin olalım.
 
         // Sayfa yüklendiğindeki mevcut kullanıcıyı kontrol et
         const { data: { session } } = await supabase.auth.getSession();
@@ -622,7 +630,7 @@ async function initializeSupabase() {
         supabase.auth.onAuthStateChange((_event, session) => {
             console.log("Auth durumu değişti:", _event);
             updateUserUI(session?.user ?? null);
-            if (_event === 'SIGNED_IN') {
+            if (_event === 'SIGNED_IN' || _event === 'SIGNED_OUT') {
                 displayHistory(); 
             }
         });
