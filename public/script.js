@@ -1,6 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// SibelGPT - script.js - v11 (Tüm Orijinal Fonksiyonlar Korunarak Yeniden Yapılandırıldı)
+// SibelGPT - script.js - v12 (Tüm Fonksiyonlar Entegreli, Auth & Ses Butonu Düzeltmeleri Dahil)
 
 // --- 1. Global Değişkenler ---
 const BACKEND_URL = "https://sibelgpt-backend.onrender.com";
@@ -218,12 +218,14 @@ function appendMessage(sender, text, role, addToHistory = false) {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = `<strong>${sender}:</strong><br>${text}`;
     messageElem.appendChild(contentDiv);
+    
     if (role === 'bot') {
         const plainText = contentDiv.innerText.replace(`${sender}:`, '').trim();
-        if (plainText.length > 10) {
+        // Link içeren veya çok kısa mesajları seslendirme
+        if (plainText.length > 15 && !plainText.includes('http')) { 
             const voiceButton = document.createElement('button');
             voiceButton.className = 'voice-button';
-            voiceButton.innerHTML = '🔊';
+            voiceButton.innerHTML = '<i class="fas fa-volume-up"></i>';
             voiceButton.title = 'Mesajı seslendir';
             voiceButton.onclick = (e) => handleVoiceButtonClick(e);
             voiceButton.setAttribute('data-text', plainText);
@@ -310,13 +312,15 @@ function playIntroVideo() {
 }
 
 // ==========================================================================
-// 5. SES FONKSİYONLARI
+// 5. SES FONKSİYONLARI (AKILLI İKONLARLA GÜNCELLENDİ)
 // ==========================================================================
 
 async function playBotMessage(text, buttonElement) {
-  if (currentAudio && !currentAudio.paused) stopAudio();
+  if (currentAudio && !currentAudio.paused) {
+    stopAudio();
+  }
   
-  buttonElement.innerHTML = '⏳';
+  buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   buttonElement.disabled = true;
   playingButtonElement = buttonElement;
 
@@ -324,7 +328,7 @@ async function playBotMessage(text, buttonElement) {
     const response = await fetch(`${BACKEND_URL}/generate-speech`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim() })
+      body: JSON.stringify({ text: text })
     });
     if (!response.ok) throw new Error('Ses oluşturulamadı');
     
@@ -332,16 +336,11 @@ async function playBotMessage(text, buttonElement) {
     const audioUrl = URL.createObjectURL(audioBlob);
     currentAudio = new Audio(audioUrl);
     
-    currentAudio.onplay = () => { if(playingButtonElement) playingButtonElement.innerHTML = '⏸️'; };
-    currentAudio.onpause = () => { if(playingButtonElement) playingButtonElement.innerHTML = '🔊'; };
-    currentAudio.onended = () => {
-      if(playingButtonElement) playingButtonElement.innerHTML = '🔊';
-      currentAudio = null;
-      playingButtonElement = null;
-    };
+    currentAudio.onplay = () => { if(playingButtonElement) playingButtonElement.innerHTML = '<i class="fas fa-pause"></i>'; };
+    currentAudio.onended = () => stopAudio();
     currentAudio.onerror = () => {
-      if(playingButtonElement) playingButtonElement.innerHTML = '🔊';
       alert('Ses çalınamadı');
+      stopAudio();
     };
 
     await currentAudio.play();
@@ -349,11 +348,8 @@ async function playBotMessage(text, buttonElement) {
     
   } catch (error) {
     console.error('Ses oluşturma hatası:', error);
-    if(buttonElement) {
-        buttonElement.innerHTML = '🔊';
-        buttonElement.disabled = false;
-    }
     alert('Ses oluşturulamadı.');
+    stopAudio();
   }
 }
 
@@ -361,12 +357,13 @@ function stopAudio() {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
+    currentAudio = null;
   }
   if (playingButtonElement) {
-    playingButtonElement.innerHTML = '🔊';
+    playingButtonElement.innerHTML = '<i class="fas fa-volume-up"></i>';
+    playingButtonElement.disabled = false;
+    playingButtonElement = null;
   }
-  currentAudio = null;
-  playingButtonElement = null;
 }
 
 function handleVoiceButtonClick(event) {
@@ -455,7 +452,6 @@ function deleteConversation(chatId) {
     saveConversations(conversations);
     handleNewChat();
 }
-
 
 // ==========================================================================
 // 7. HİSSE ANALİZİ MODAL FONKSİYONLARI
@@ -577,7 +573,7 @@ function setupAllEventListeners() {
     webSearchButton?.addEventListener('click', () => { performWebSearch(); closeActionMenu(); });
     gorselButton?.addEventListener('click', () => { handleGenerateImageClick(); closeActionMenu(); });
     document.addEventListener('click', (e) => {
-        if (actionMenuToggle && actionMenu && !actionMenuToggle.contains(e.target) && !actionMenu.contains(e.target)) {
+        if (actionMenuToggle && actionMenu && !actionMenuToggle.contains(e.target) && !actionMenuToggle.contains(e.target)) {
             closeActionMenu();
         }
     });
