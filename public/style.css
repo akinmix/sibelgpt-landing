@@ -565,3 +565,203 @@ body.theme-finance {
   .action-menu-button { width: 38px; height: 38px; }
   .top-right-buttons { flex-direction: row; }
 }
+/* ==========================================================================
+   8. Kullanıcı Giriş Alanı ve Modal Stilleri (YENİ)
+   ========================================================================== */
+
+/* Sağ Üst Alanın Genel Kapsayıcısı */
+.user-area {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Kullanıcı Bilgisi ve Çıkış Butonu (Giriş yapıldığında görünür) */
+#user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  padding: 5px 5px 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color-light-alpha);
+}
+#user-email {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Genel Auth Buton Stili (Giriş/Çıkış/Yardım) */
+.user-area .auth-button {
+  padding: 8px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap; /* Metnin aşağı kaymasını engelle */
+}
+.user-area .auth-button:hover {
+  border-color: var(--theme-primary);
+  color: var(--text-color-light);
+  background-color: var(--theme-primary);
+  transform: translateY(-1px);
+}
+
+/* Yardım Butonu Özel Stili */
+.user-area .help-btn {
+  padding: 8px 10px; /* Sadece ikon için daha dar */
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.user-area .help-btn:hover {
+  background-color: #c62828;
+  border-color: #c62828;
+}
+
+/* --- Giriş Modal Stilleri --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-content {
+  background: #2a2a2e;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color-light-alpha);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.visible .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color-light-alpha);
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color-light);
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.modal-close:hover {
+  color: var(--text-color-light);
+}
+
+.modal-body {
+  padding: 25px 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.modal-body p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.social-login-button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+.social-login-button.google {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+.social-login-button.google:hover {
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.social-login-button i {
+  font-size: 18px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-color-light-alpha);
+  margin: 10px 0;
+}
+
+#email-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #333;
+  color: var(--text-color-light);
+  font-size: 14px;
+}
+#email-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.email-login-button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: var(--theme-primary);
+  color: var(--text-color-light);
+  transition: background-color 0.2s ease;
+}
+.email-login-button:hover {
+  background-color: var(--theme-secondary);
+}
